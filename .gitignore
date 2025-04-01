@@ -4,6 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 node_modules/*
+package-lock.json
+package.json
 
 # User-specific files
 *.rsuser
