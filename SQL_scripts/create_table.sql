@@ -24,7 +24,7 @@ CREATE TABLE Game (
     boardgamepublisher TEXT,
     boardgameartist TEXT,
     boardgamedesigner TEXT,
-    FOREIGN KEY (id_category) REFERENCES Category(id_category)
+    FOREIGN KEY (id_category) REFERENCES Category(id_category) ON DELETE CASCADE
 );
 
 -- Table Rules
@@ -35,7 +35,7 @@ CREATE TABLE Rules (
     minplayingtime INT,
     maxplayingtime INT,
     minage INT CHECK (minage >= 0),
-    FOREIGN KEY (id_game) REFERENCES Game(id_game),
+    FOREIGN KEY (id_game) REFERENCES Game(id_game) ON DELETE CASCADE,
     CHECK (minplayers <= maxplayers),
     CHECK (minplayingtime IS NULL OR maxplayingtime IS NULL OR minplayingtime <= maxplayingtime)
 );
@@ -47,7 +47,7 @@ CREATE TABLE Rate (
     average DECIMAL(4,2) CHECK (average BETWEEN 0 AND 10),
     bayes_average DECIMAL(4,2) CHECK (bayes_average BETWEEN 0 AND 10),
     users_rated INT CHECK (users_rated >= 0),
-    FOREIGN KEY (id_game) REFERENCES Game(id_game)
+    FOREIGN KEY (id_game) REFERENCES Game(id_game) ON DELETE CASCADE
 );
 
 -- Table User
@@ -66,7 +66,7 @@ CREATE TABLE Log (
     id_game INT NOT NULL,
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (date <= CURRENT_TIMESTAMP),
     FOREIGN KEY (id_user) REFERENCES User(id_user),
-    FOREIGN KEY (id_game) REFERENCES Game(id_game)
+    FOREIGN KEY (id_game) REFERENCES Game(id_game) -- no ON DELETE CASCADE to keep the logs after the deletions of entries.
 );
 
 
