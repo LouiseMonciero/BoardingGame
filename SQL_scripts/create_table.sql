@@ -3,13 +3,13 @@ CREATE DATABASE BoardingGames;
 USE BoardingGames;
 
 -- Table Category
-CREATE TABLE Category (
+CREATE TABLE Categories (
     id_category INT PRIMARY KEY,
     category VARCHAR(255) NOT NULL
 );
 
 -- Table Game
-CREATE TABLE Game (
+CREATE TABLE Games (
     id_game INT PRIMARY KEY,
     name VARCHAR(255) NOT NULL CHECK (LENGTH(name) > 0),
     year INT,
@@ -41,7 +41,7 @@ CREATE TABLE Rules (
 );
 
 -- Table Rate
-CREATE TABLE Rate (
+CREATE TABLE Rates (
     id_game INT PRIMARY KEY,
     rank INT,
     average DECIMAL(4,2) CHECK (average BETWEEN 0 AND 10),
@@ -51,7 +51,7 @@ CREATE TABLE Rate (
 );
 
 -- Table User
-CREATE TABLE User (
+CREATE TABLE Users (
     id_user INT PRIMARY KEY,
     name_user VARCHAR(100) NOT NULL UNIQUE,
     password_user VARCHAR(255) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE User (
 );
 
 -- Table Log
-CREATE TABLE Log (
+CREATE TABLE Logs (
     id_log INT PRIMARY KEY,
     description_log TEXT NOT NULL,
     id_user INT NOT NULL,
