@@ -7,8 +7,8 @@ CREATE TABLE Rules(
    id_rules INT PRIMARY KEY,
    minplayers INT,
    maxplayers INT,
-   minplayingtime INT,
-   maxplayingtime INT,
+   minplaytime INT,
+   maxplaytime INT,
    minage INT CHECK (minage >= 0)
 );
 
@@ -26,14 +26,14 @@ CREATE TABLE Users(
 
 CREATE TABLE Games(
    id_game INT PRIMARY KEY,
-   name VARCHAR(100) NOT NULL CHECK (LENGTH(name) > 0),
+   name_game VARCHAR(100) NOT NULL CHECK (LENGTH(name) > 0),
    year_game YEAR,
-   URL VARCHAR(100),
-   thumbnail VARCHAR(100),
+   url VARCHAR(100),
+   thumbnail TEXT,
    description TEXT,
    boardgamemechanic TEXT,
    boardgamefamily TEXT,
-   boardgameexpension TEXT,
+   boardgameexpansion TEXT,
    boardgameimplementation TEXT,
    boardgamepublisher TEXT,
    boardgameartist TEXT,
@@ -45,7 +45,7 @@ CREATE TABLE Games(
 CREATE TABLE Rates(
    id_game INT,
    id_rate INT,
-   rank_rate INT,
+   rank INT,
    average DECIMAL(15,2),
    users_rated DECIMAL(15,2),
    PRIMARY KEY(id_game, id_rate),
