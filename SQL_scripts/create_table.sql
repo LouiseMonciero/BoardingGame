@@ -1,3 +1,4 @@
+-- Active: 1743769586279@@127.0.0.1@3306@BoardingGames
 DROP DATABASE IF EXISTS BoardingGames;
 CREATE DATABASE BoardingGames;
 USE BoardingGames;

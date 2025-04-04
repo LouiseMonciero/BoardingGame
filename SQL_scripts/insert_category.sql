@@ -1,3 +1,4 @@
+-- Active: 1743769586279@@127.0.0.1@3306@BoardingGames
 INSERT INTO Categories (id_category, category)
     VALUES (1, 'Abstract Strategy');
 INSERT INTO Categories (id_category, category)
