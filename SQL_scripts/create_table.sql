@@ -27,7 +27,7 @@ CREATE TABLE Users(
 CREATE TABLE Games(
    id_game INT PRIMARY KEY,
    name_game VARCHAR(100) NOT NULL CHECK (LENGTH(name) > 0),
-   year_game YEAR,
+   year_game INT,
    url VARCHAR(100),
    thumbnail TEXT,
    description TEXT,

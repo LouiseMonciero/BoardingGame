@@ -77,8 +77,4 @@ INSERT INTO Categories (id_category, category) VALUES
 (75, 'American Indian Wars'),
 (76, 'Game System'),
 (77, 'American Civil War'),
-(78, 'American Revolutionary War'),
-(79, 'Expansion for Base-game'),
-(80, 'Vietnam War'),
-(81, 'Book'),
-(82, 'Korean War');
+(78, 'American Revolutionary War');
