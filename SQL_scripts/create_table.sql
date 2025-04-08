@@ -65,13 +65,14 @@ CREATE TABLE Belongs(
 CREATE TABLE Logs(
    id_game INT,
    id_user INT,
-   id_log INT,
+   id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
    PRIMARY KEY(id_log),
    FOREIGN KEY(id_game) REFERENCES Games(id_game),
    FOREIGN KEY(id_user) REFERENCES Users(id_user)
 );
+
 
 CREATE TABLE Favorites(
    id_game INT, 
