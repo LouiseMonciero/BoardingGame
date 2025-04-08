@@ -1,4 +1,3 @@
--- Active: 1743769586279@@127.0.0.1@3306@BoardingGames
 DROP DATABASE IF EXISTS BoardingGames;
 CREATE DATABASE BoardingGames;
 USE BoardingGames;
@@ -26,7 +25,7 @@ CREATE TABLE Users(
 
 CREATE TABLE Games(
    id_game INT PRIMARY KEY,
-   name_game VARCHAR(100) NOT NULL CHECK (LENGTH(name) > 0),
+   name_game VARCHAR(100) NOT NULL,
    year_game INT,
    url VARCHAR(100),
    thumbnail TEXT,
@@ -39,8 +38,10 @@ CREATE TABLE Games(
    boardgameartist TEXT,
    boardgamedesigner TEXT,
    id_rules INT NOT NULL,
-   FOREIGN KEY(id_rules) REFERENCES Rules(id_rules)
+   FOREIGN KEY(id_rules) REFERENCES Rules(id_rules),
+   CHECK (LENGTH(name_game) > 0)
 );
+
 
 CREATE TABLE Rates(
    id_game INT,
