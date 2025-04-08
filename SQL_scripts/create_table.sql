@@ -46,7 +46,7 @@ CREATE TABLE Games(
 CREATE TABLE Rates(
    id_game INT,
    id_rate INT,
-   rank INT,
+   `rank` INT,
    average DECIMAL(15,2),
    users_rated DECIMAL(15,2),
    PRIMARY KEY(id_game, id_rate),
@@ -291,9 +291,9 @@ CREATE PROCEDURE Transactions_Rate_Game(
 )
 BEGIN
   START TRANSACTION;
-    INSERT INTO Rates (id_game, id_rate, rank, average, users_rated)
+    INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated)
     VALUES (p_id_game, p_id_rate, p_rank, p_rank, 1)
-    ON DUPLICATE KEY UPDATE rank = p_rank;
+    ON DUPLICATE KEY UPDATE `rank` = p_rank;
 
     UPDATE Rates
     SET average = (SELECT Ft_Get_Average_Rating(p_id_game))
@@ -317,7 +317,7 @@ CREATE FUNCTION Ft_Get_Average_Rating(gid INT) RETURNS DECIMAL(15,2)
 DETERMINISTIC
 BEGIN
   DECLARE avg_rating DECIMAL(15,2);
-  SELECT AVG(rank) INTO avg_rating FROM Rates WHERE id_game = gid;
+  SELECT AVG(`rank`) INTO avg_rating FROM Rates WHERE id_game = gid;
   RETURN avg_rating;
 END//
 DELIMITER ;
