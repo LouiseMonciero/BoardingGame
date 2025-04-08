@@ -1,4 +1,3 @@
--- Active: 1743769586279@@127.0.0.1@3306@BoardingGames
 DROP DATABASE IF EXISTS BoardingGames;
 CREATE DATABASE BoardingGames;
 USE BoardingGames;
@@ -26,7 +25,7 @@ CREATE TABLE Users(
 
 CREATE TABLE Games(
    id_game INT PRIMARY KEY,
-   name_game VARCHAR(100) NOT NULL CHECK (LENGTH(name) > 0),
+   name_game VARCHAR(100) NOT NULL,
    year_game INT,
    url VARCHAR(100),
    thumbnail TEXT,
@@ -39,13 +38,15 @@ CREATE TABLE Games(
    boardgameartist TEXT,
    boardgamedesigner TEXT,
    id_rules INT NOT NULL,
-   FOREIGN KEY(id_rules) REFERENCES Rules(id_rules)
+   FOREIGN KEY(id_rules) REFERENCES Rules(id_rules),
+   CHECK (LENGTH(name_game) > 0)
 );
+
 
 CREATE TABLE Rates(
    id_game INT,
    id_rate INT,
-   rank INT,
+   `rank` INT,
    average DECIMAL(15,2),
    users_rated DECIMAL(15,2),
    PRIMARY KEY(id_game, id_rate),
@@ -64,13 +65,14 @@ CREATE TABLE Belongs(
 CREATE TABLE Logs(
    id_game INT,
    id_user INT,
-   id_log INT,
+   id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
    PRIMARY KEY(id_log),
    FOREIGN KEY(id_game) REFERENCES Games(id_game),
    FOREIGN KEY(id_user) REFERENCES Users(id_user)
 );
+
 
 CREATE TABLE Favorites(
    id_game INT, 
@@ -290,9 +292,9 @@ CREATE PROCEDURE Transactions_Rate_Game(
 )
 BEGIN
   START TRANSACTION;
-    INSERT INTO Rates (id_game, id_rate, rank, average, users_rated)
+    INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated)
     VALUES (p_id_game, p_id_rate, p_rank, p_rank, 1)
-    ON DUPLICATE KEY UPDATE rank = p_rank;
+    ON DUPLICATE KEY UPDATE `rank` = p_rank;
 
     UPDATE Rates
     SET average = (SELECT Ft_Get_Average_Rating(p_id_game))
@@ -316,7 +318,7 @@ CREATE FUNCTION Ft_Get_Average_Rating(gid INT) RETURNS DECIMAL(15,2)
 DETERMINISTIC
 BEGIN
   DECLARE avg_rating DECIMAL(15,2);
-  SELECT AVG(rank) INTO avg_rating FROM Rates WHERE id_game = gid;
+  SELECT AVG(`rank`) INTO avg_rating FROM Rates WHERE id_game = gid;
   RETURN avg_rating;
 END//
 DELIMITER ;

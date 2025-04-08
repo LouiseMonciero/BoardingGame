@@ -1,4 +1,4 @@
-INSERT INTO Rates (id_game, id_rate, rank, average, users_rated) VALUES
+INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES
 (30549, 105, 106, 7.59, 108975),
 (822, 189, 190, 7.42, 108738),
 (13, 428, 429, 7.14, 108024),
