@@ -1,0 +1,95 @@
+body {
+    background-color: #fff6e9;
+    color: #333;
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Sidebar Filters */
+.filters {
+    width: 220px;
+    background-color: #f5eedd;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.filter {
+    margin-bottom: 20px;
+}
+
+.filter h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.filter label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Content Section */
+.content {
+    flex: 1;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.search-bar input {
+    width: 60%;
+    padding: 10px 15px;
+    border: 2px solid #b86d40;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #b86d40;
+    border: none;
+    color: white;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+}
+
+/* Game Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+}
+
+.game-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.game-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.game-card h4 {
+    margin: 10px 0 5px;
+    font-size: 14px;
+}
+
+.stars {
+    color: #ffcc00;
+    font-size: 16px;
+}

@@ -3,7 +3,69 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
+        <script src="/assets/js/alpine-components/header.js"></script>
+        <script src="/assets/js/alpine-components/library.js"></script>
+        <link rel="stylesheet" href="/assets/css/common.css" />
+        <link rel="stylesheet" href="/assets/css/library.css" />
+        <title>Bibliothèque</title>
     </head>
-    <body></body>
+    <body>
+        <div class="header" x-data="header">
+            <div class="header-logo">
+                <a href="/accueil.html"
+                    ><img
+                        src="/assets/img/logo.png"
+                        alt="logo"
+                        width="64px"
+                        height="64px"
+                        style="border-radius: 15px"
+                /></a>
+            </div>
+            <div class="header-links">
+                <template x-for="link in links" :key="link.href">
+                    <a :href="link.href" x-text="link.text"></a>
+                </template>
+            </div>
+        </div>
+
+        <main x-data="library">
+            <aside class="filters">
+                <div class="filter">
+                    <h3>Prix : 0 - 99€</h3>
+                </div>
+                <div class="filter">
+                    <h3>Catégorie</h3>
+                    <label><input type="checkbox" /> Stratégie</label>
+                    <label><input type="checkbox" /> Party Game</label>
+                    <label><input type="checkbox" /> Jeu de rôle</label>
+                    <label><input type="checkbox" /> Family friendly</label>
+                </div>
+                <div class="filter">
+                    <h3>Joueurs : 1 - 5</h3>
+                </div>
+                <div class="filter">
+                    <h3>Difficulté</h3>
+                    <label><input type="checkbox" /> Débutant</label>
+                </div>
+            </aside>
+
+            <section class="content">
+                <div class="search-bar"></div>
+
+                <div class="grid">
+                    <template x-for="game in filteredGames" :key="game.id">
+                        <div class="game-card">
+                            <img :src="game.image" :alt="game.title" />
+                            <h4 x-text="game.title"></h4>
+                            <div class="stars" x-text="game.stars"></div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </main>
+    </body>
 </html>
