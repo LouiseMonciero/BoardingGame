@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-require('dotenv').config(); // Charger les variables d'environnement
+require('dotenv').config(); // Charger les variables d'environnement , si besoin dans un bahs executer : $npm install dotenv
 
 const app = express();
 app.use(cors());
@@ -26,6 +26,11 @@ app.get('/api/games', (req, res) => {
         res.json(results);
     });
 });
+
+// Routes pour les jeux
+const gameRoutes = require('./routes/games');
+app.use('/api/games', gameRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
