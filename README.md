@@ -2,18 +2,22 @@
 
 A website to have boarding games
 
-## Installation Font-end
+## Running the project localy
+
+## Installation Front-end
 
 -   npm install alpinjs
     ou
 -   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-## Installation Back-end
+## Install/Run Back-end
+
+Dans le sous dossier whatdoyouwannaplay/server/
 
 1. Lancer les commandes suivantes :
 
 -   npm init -y
--   npm install express mysql2 cors
+-   npm install express mysql2 cors dotenv
 -   npm install --save-dev nodemon
 
 2. Ajouter cela a package.json
@@ -27,7 +31,8 @@ A website to have boarding games
 
 3. Lancer le serveur avec :
 
--   npm run dev
+-   npm run dev (en mode developpement)
+-   npm run start (sinon)
 
 ## DataBase Usage
 
