@@ -19,18 +19,13 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
-// Exemple : liste des jeux
-app.get('/api/games', (req, res) => {
-    db.query('SELECT * FROM Games', (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results);
-    });
-});
 
 // Routes pour les jeux
-const gameRoutes = require('./routes/games');
-app.use('/api/games', gameRoutes);
+const gamesRoutes = require('./routes/games');
+const usersRoutes = require('./routes/users');
 
+app.use('/api/games', gamesRoutes);
+app.use('api/users/', usersRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
