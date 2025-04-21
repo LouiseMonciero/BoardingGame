@@ -31,11 +31,11 @@ const usersLibraryRoutes = require('./routes/users_library');
 
 
 app.use('/api/games', gamesRoutes);
-app.use('api/users/', usersRoutes);
-app.use('api/users/', logsRoutes);
-app.use('api/users/', ratesRoutes);
-app.use('api/users/', categoriesRoutes);
-app.use('api/userslibrary/', usersLibraryRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/logs', logsRoutes);
+app.use('/api/rates', ratesRoutes);
+app.use('/api/categories', categoriesRoutes);
+app.use('/api/userslibrary', usersLibraryRoutes);
 
 
 const PORT = process.env.PORT || 3000;
