@@ -18,6 +18,16 @@ router.get('/', (req, res) => {
     });
 });
 
+// GET /api/games/search => Procedure_Search_Games
+router.get('/search', (req, res) => {
+    const { category, min_rating, rank_max } = req.query;
+    //console.log(req.query);
+    db.query('CALL Procedure_Search_Games(?, ?, ?)', [category, min_rating, rank_max], (err, results) => {
+        if (err) return res.status(500).json({ error: err, message: "erreur procedure search games" });
+        res.json(results);
+    });
+});
+
 // GET /api/games/:id => View_GameDetails
 router.get('/:id', (req, res) => {
     const id = req.params.id;

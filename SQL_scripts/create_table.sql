@@ -42,7 +42,6 @@ CREATE TABLE Games(
    CHECK (LENGTH(name_game) > 0)
 );
 
-
 CREATE TABLE Rates(
    id_game INT,
    id_rate INT,
@@ -72,7 +71,6 @@ CREATE TABLE Logs(
    FOREIGN KEY(id_game) REFERENCES Games(id_game),
    FOREIGN KEY(id_user) REFERENCES Users(id_user)
 );
-
 
 CREATE TABLE Favorites(
    id_game INT, 
@@ -217,9 +215,9 @@ BEGIN
   JOIN Belongs b ON g.id_game = b.id_game
   JOIN Categories c ON b.id_category = c.id_category
   JOIN Rates r ON g.id_game = r.id_game
-  WHERE c.category LIKE CONCAT('%', p_category, '%')
-    AND r.average >= p_min_rating
-    AND r.rank <= p_rank_max;
+  WHERE (p_category IS NULL OR c.category LIKE CONCAT('%', p_category, '%')) -- si category == NULL, pas de filtre
+    AND (p_min_rating IS NULL OR r.average >= p_min_rating)
+    AND (p_rank_max IS NULL OR r.rank <= p_rank_max);
 END//
 
 CREATE PROCEDURE Procedure_Get_Game_Info(
