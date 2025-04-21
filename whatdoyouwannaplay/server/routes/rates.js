@@ -1,15 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2');
-require('dotenv').config();
-
-// Connexion à la base de données
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
+const db = require('../config/db');
 
 // POST /api/rates/:id_game => transaction SQL Transactions_Rate_Game (id de game)
 router.post('/:id_game', (req, res) => {

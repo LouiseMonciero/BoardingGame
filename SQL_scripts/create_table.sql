@@ -17,9 +17,9 @@ CREATE TABLE Categories(
 );
 
 CREATE TABLE Users(
-   id_user INT PRIMARY KEY,
+   id_user INT PRIMARY KEY AUTO_INCREMENT,
    username VARCHAR(50) UNIQUE,
-   password_user VARCHAR(50),
+   password_user VARCHAR(255) NOT NULL,
    level_permission VARCHAR(50)
 );
 
@@ -62,13 +62,13 @@ CREATE TABLE Belongs(
 );
 
 CREATE TABLE Logs(
-   id_game INT,
+   id_game INT NULL,
    id_user INT NULL,
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
    PRIMARY KEY(id_log),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game),
+   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
    FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
 
@@ -124,7 +124,7 @@ BEGIN
   VALUES (NEW.id_game, NULL, 'Update game', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_Game_Delete
+CREATE TRIGGER Trigger_Log_Game_Delete -- PAS OK !!!!
 AFTER DELETE ON Games
 FOR EACH ROW
 BEGIN
@@ -140,7 +140,7 @@ BEGIN
   VALUES (NEW.id_user, NULL, 'Create user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_Delete
+CREATE TRIGGER Trigger_Log_User_Delete -- PAS OK !!!
 AFTER DELETE ON Users
 FOR EACH ROW
 BEGIN
@@ -148,7 +148,7 @@ BEGIN
   VALUES (OLD.id_user, NULL, 'Delete user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_PermissionChange
+CREATE TRIGGER Trigger_Log_User_PermissionChange -- PAS OK !!!!
 AFTER UPDATE ON Users
 FOR EACH ROW
 BEGIN
@@ -198,11 +198,13 @@ CREATE PROCEDURE Procedure_Delete_Game(
   IN p_id_game INT
 )
 BEGIN
+  SET FOREIGN_KEY_CHECKS = 0;
   DELETE FROM Favorites WHERE id_game = p_id_game;
   DELETE FROM Belongs WHERE id_game = p_id_game;
   DELETE FROM Rates WHERE id_game = p_id_game;
   DELETE FROM Logs WHERE id_game = p_id_game;
   DELETE FROM Games WHERE id_game = p_id_game;
+  SET FOREIGN_KEY_CHECKS = 1;
 END//
 
 CREATE PROCEDURE Procedure_Search_Games(
@@ -237,13 +239,12 @@ BEGIN
 END//
 
 CREATE PROCEDURE Procedure_Create_User(
-  IN p_id_user INT,
   IN p_username VARCHAR(50),
-  IN p_password_user VARCHAR(50),
+  IN p_password_user VARCHAR(255),
   IN p_level_permission VARCHAR(50)
 )
 BEGIN
-  INSERT INTO Users VALUES (p_id_user, p_username, p_password_user, p_level_permission);
+  INSERT INTO Users(username, password_user, level_permission) VALUES (p_username, p_password_user, p_level_permission);
 END//
 
 CREATE PROCEDURE Procedure_Delete_User(

@@ -1,5 +1,5 @@
-INSERT INTO Users (id_user, username, password_user, level_permission) VALUES 
-(0, 'Louise', '12345678', 'user'),
-(1, 'Fafou', '12345678', 'admin'),
-(2, 'Parpaing', '12345678', 'user'),
-(3, 'Tiph', '12345678', 'admin');
+INSERT INTO Users (username, password_user, level_permission) VALUES 
+('Louise', '12345678', 'user'),
+('Fafou', '12345678', 'admin'),
+('Parpaing', '12345678', 'user'),
+('Tiph', '12345678', 'admin');

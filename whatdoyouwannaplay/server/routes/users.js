@@ -1,14 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
-require('dotenv').config();
-
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
+const db = require('../config/db');
 
 // GET /api/users => vue SQL View_Users
 router.get('/', (req, res) => {
@@ -27,22 +20,6 @@ router.get('/admins', (req, res) => {
             return res.status(500).json({ error: err });
         }
         res.json(results);
-    });
-});
-
-// POST /api/users => procédure stockée Procedure_Create_User
-router.post('/', (req, res) => {
-    const { id_user, username, password_user, level_permission } = req.body;
-    db.query('CALL Procedure_Create_User(?, ?, ?, ?)', [
-        id_user,
-        username,
-        password_user,
-        level_permission,
-    ], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({ message: 'Utilisateur créé' });
     });
 });
 
