@@ -26,6 +26,7 @@ const usersRoutes = require('./routes/users');
 const logsRoutes = require('./routes/logs');
 const ratesRoutes = require('./routes/rates');
 const categoriesRoutes = require('./routes/categories');
+const usersLibraryRoutes = require('./routes/users_library');
 
 
 
@@ -34,7 +35,8 @@ app.use('api/users/', usersRoutes);
 app.use('api/users/', logsRoutes);
 app.use('api/users/', ratesRoutes);
 app.use('api/users/', categoriesRoutes);
+app.use('api/userslibrary/', usersLibraryRoutes);
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
+app.listen(PORT || 3000, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));

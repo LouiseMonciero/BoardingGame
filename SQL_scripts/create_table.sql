@@ -220,7 +220,7 @@ BEGIN
     AND (p_rank_max IS NULL OR r.rank <= p_rank_max);
 END//
 
-CREATE PROCEDURE Procedure_Get_Game_Info(
+CREATE PROCEDURE Procedure_Get_Game_Info( -- not used yet
   IN p_id_game INT
 )
 BEGIN
@@ -283,7 +283,7 @@ DELIMITER ;
 -- Création des transactions
 
 DELIMITER //
-CREATE PROCEDURE Transactions_Rate_Game(
+CREATE PROCEDURE Transactions_Rate_Game( -- TO TESTTTTTT
   IN p_id_game INT,
   IN p_id_rate INT,
   IN p_rank INT
@@ -312,7 +312,7 @@ BEGIN
   RETURN role;
 END//
 
-CREATE FUNCTION Ft_Get_Average_Rating(gid INT) RETURNS DECIMAL(15,2)
+CREATE FUNCTION Ft_Get_Average_Rating(gid INT) RETURNS DECIMAL(15,2) -- used in Transactions_Rate_Game
 DETERMINISTIC
 BEGIN
   DECLARE avg_rating DECIMAL(15,2);
