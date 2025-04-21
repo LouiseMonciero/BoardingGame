@@ -17,9 +17,9 @@ CREATE TABLE Categories(
 );
 
 CREATE TABLE Users(
-   id_user INT PRIMARY KEY,
+   id_user INT PRIMARY KEY AUTO_INCREMENT,
    username VARCHAR(50) UNIQUE,
-   password_user VARCHAR(50),
+   password_user VARCHAR(255) NOT NULL,
    level_permission VARCHAR(50)
 );
 
@@ -239,13 +239,12 @@ BEGIN
 END//
 
 CREATE PROCEDURE Procedure_Create_User(
-  IN p_id_user INT,
   IN p_username VARCHAR(50),
-  IN p_password_user VARCHAR(50),
+  IN p_password_user VARCHAR(255),
   IN p_level_permission VARCHAR(50)
 )
 BEGIN
-  INSERT INTO Users VALUES (p_id_user, p_username, p_password_user, p_level_permission);
+  INSERT INTO Users(username, password_user, level_permission) VALUES (p_username, p_password_user, p_level_permission);
 END//
 
 CREATE PROCEDURE Procedure_Delete_User(

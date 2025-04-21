@@ -30,22 +30,6 @@ router.get('/admins', (req, res) => {
     });
 });
 
-// POST /api/users => procédure stockée Procedure_Create_User
-router.post('/', (req, res) => {
-    const { id_user, username, password_user, level_permission } = req.body;
-    db.query('CALL Procedure_Create_User(?, ?, ?, ?)', [
-        id_user,
-        username,
-        password_user,
-        level_permission,
-    ], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({ message: 'Utilisateur créé' });
-    });
-});
-
 // DELETE /api/users/:id => procédure stockée Procedure_Delete_User
 router.delete('/:id', (req, res) => {
     const id_user = req.params.id;

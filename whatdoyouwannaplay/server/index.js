@@ -2,10 +2,17 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 require('dotenv').config(); // Charger les variables d'environnement , si besoin dans un bahs executer : $npm install dotenv
+const logger = require('morgan'); // ?
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt'); // on remet ???
+const jwt = require('jsonwebtoken'); // on remet
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(logger('dev'));
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -27,7 +34,7 @@ const logsRoutes = require('./routes/logs');
 const ratesRoutes = require('./routes/rates');
 const categoriesRoutes = require('./routes/categories');
 const usersLibraryRoutes = require('./routes/users_library');
-
+const authRoutes = require('./routes/auth');
 
 
 app.use('/api/games', gamesRoutes);
@@ -36,6 +43,8 @@ app.use('/api/logs', logsRoutes);
 app.use('/api/rates', ratesRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
+app.use('/api/auth', authRoutes);
+
 
 
 const PORT = process.env.PORT || 3000;

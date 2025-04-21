@@ -17,7 +17,7 @@ Dans le sous dossier whatdoyouwannaplay/server/
 1. Lancer les commandes suivantes :
 
 -   npm init -y
--   npm install express mysql2 cors dotenv
+-   npm install express mysql2 cors dotenv bcrypt jsonwebtoken morgan
 -   npm install --save-dev nodemon
 
 2. Ajouter cela a package.json
