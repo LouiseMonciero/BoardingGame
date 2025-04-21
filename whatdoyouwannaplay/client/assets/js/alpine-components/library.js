@@ -1,38 +1,53 @@
-document.addEventListener('alpine:init', () => {
-    Alpine.data('library', () => ({
-        searchQuery: '',
-        games: [
-            {
-                id: 1,
-                title: 'Monopoly',
-                image: 'https://via.placeholder.com/100',
-                stars: '⭐⭐⭐⭐',
-            },
-            {
-                id: 2,
-                title: 'Risk',
-                image: 'https://via.placeholder.com/100',
-                stars: '⭐⭐⭐',
-            },
-            {
-                id: 3,
-                title: 'Loup-Garous',
-                image: 'https://via.placeholder.com/100',
-                stars: '⭐⭐⭐⭐⭐',
-            },
-            // Add more game objects or fetch from DB/API
-        ],
-        filteredGames: [],
-        init() {
-            this.filteredGames = this.games;
-        },
-        filterGames() {
-            const query = this.searchQuery.toLowerCase();
-            this.filteredGames = this.games.filter((game) =>
-                game.title.toLowerCase().includes(query)
-            );
-        },
-    }));
-});
+// client/assets/js/alpine-components/library.js
 
-// implémenter ici les filtres + peupler dynamiquement la page à partir de la BDD
+document.addEventListener("alpine:init", () => {
+    Alpine.data("library", () => ({
+      games: [],
+      searchTerm: "",
+      selectedCategory: "",
+      categories: [],
+  
+      async init() {
+        await this.fetchCategories();
+        await this.fetchAllGames();
+      },
+  
+      async fetchAllGames() {
+        try {
+          const response = await fetch("http://localhost:5500/api/games");
+          if (!response.ok) throw new Error("Erreur lors de la récupération des jeux");
+          const data = await response.json();
+          this.games = data;
+        } catch (error) {
+          console.error("Erreur lors du chargement des jeux :", error);
+        }
+      },
+  
+      async fetchCategories() {
+        try {
+          const response = await fetch("http://localhost:5500/api/categories");
+          if (!response.ok) throw new Error("Erreur lors de la récupération des catégories");
+          const data = await response.json();
+          this.categories = data;
+        } catch (error) {
+          console.error("Erreur lors du chargement des catégories :", error);
+        }
+      },
+  
+      async searchGames() {
+        try {
+          const query = new URLSearchParams();
+          if (this.searchTerm.trim()) query.append("search", this.searchTerm);
+          if (this.selectedCategory) query.append("category", this.selectedCategory);
+  
+          const response = await fetch(`http://localhost:5500/api/games?${query.toString()}`);
+          if (!response.ok) throw new Error("Erreur lors de la recherche");
+          const data = await response.json();
+          this.games = data;
+        } catch (error) {
+          console.error("Erreur lors de la recherche des jeux :", error);
+        }
+      },
+    }));
+  });
+  
