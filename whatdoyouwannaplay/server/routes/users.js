@@ -1,14 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
-require('dotenv').config();
-
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
+const db = require('../config/db');
 
 // GET /api/users => vue SQL View_Users
 router.get('/', (req, res) => {
