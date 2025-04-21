@@ -250,9 +250,11 @@ CREATE PROCEDURE Procedure_Delete_User(
   IN p_id_user INT
 )
 BEGIN
+  SET FOREIGN_KEY_CHECKS = 0;
   DELETE FROM Favorites WHERE id_user = p_id_user;
   -- DELETE FROM Logs WHERE id_user = p_id_user;
   DELETE FROM Users WHERE id_user = p_id_user;
+  SET FOREIGN_KEY_CHECKS = 1;
 END//
 
 CREATE PROCEDURE Procedure_Change_User_Permission(

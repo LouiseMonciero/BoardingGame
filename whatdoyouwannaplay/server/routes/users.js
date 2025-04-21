@@ -31,7 +31,7 @@ router.get('/admins', (req, res) => {
 });
 
 // POST /api/users => procédure stockée Procedure_Create_User
-router.post('/users', (req, res) => {
+router.post('/', (req, res) => {
     const { id_user, username, password_user, level_permission } = req.body;
     db.query('CALL Procedure_Create_User(?, ?, ?, ?)', [
         id_user,
@@ -47,30 +47,40 @@ router.post('/users', (req, res) => {
 });
 
 // DELETE /api/users/:id => procédure stockée Procedure_Delete_User
-router.delete('/users/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const id_user = req.params.id;
-    db.query('CALL Procedure_Delete_User(?)', [id_user], (err) => {
+    db.query('CALL Procedure_Delete_User(?)', [id_user], (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ message: 'Utilisateur supprimé' });
+        var message = ""
+        if (results.changedRows === 0) {
+            message = "Aucun utilisateur n'a été supprimé";
+        } else {
+            message = 'Utilisateur supprimé'; // PAS OK AU NIVEAU DES MESSAGES DE RETOURS !!!
+        }
+        res.json({ results: results, message: message });
     });
 });
 
 // PUT /api/users/:id/permission => procédure stockée Procedure_Change_User_Permission
-router.put('/users/:id/permission', (req, res) => {
+router.put('/:id/permission', (req, res) => {
     const id_user = req.params.id;
-    const { new_permission } = req.body;
-    db.query('CALL Procedure_Change_User_Permission(?, ?)', [id_user, new_permission], (err) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: 'Permission modifiée' });
-    });
+    if (req.body !== undefined) {
+        const { new_permission } = req.body;
+        db.query('CALL Procedure_Change_User_Permission(?, ?)', [id_user, new_permission], (err) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ message: 'Permission modifiée' }); // PAS OK (ex; si aucun utilisateur existe il va quand meme dire "ok")
+        });
+    } else {
+        res.json({ message: 'Veuillez remplir le body de la requete' });
+    }
 });
 
 // GET /api/users/:id/permission => fonction SQL Ft_Check_Permission
-router.get('/users/:id/permission', (req, res) => {
+router.get('/:id/permission', (req, res) => {
     const id_user = req.params.id;
     db.query('SELECT Ft_Check_Permission(?) AS permission', [id_user], (err, results) => {
         if (err) {
