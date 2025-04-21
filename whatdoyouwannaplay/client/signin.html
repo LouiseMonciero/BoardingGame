@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./assets/css/common.css" />
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
+        <script src="./assets/js/alpine-components/header.js"></script>
+        <title>SignIn</title>
+    </head>
+    <body>
+        <div class="header" x-data="header">
+            <div class="header-logo">
+                <a href="/accueil.html"
+                    ><img
+                        src="./assets/img/logo.png"
+                        alt="logo"
+                        width="64px"
+                        height="64px"
+                        style="border-radius: 15px"
+                /></a>
+            </div>
+            <div class="header-links">
+                <template x-for="link in links" :key="link.href">
+                    <a :href="link.href" x-text="link.text"></a>
+                </template>
+            </div>
+        </div>
+        <div class="content">
+            <h1>Sign In</h1>
+            <form class="content">
+                <div>
+                    <input type="text" placeholder="Identifiant" />
+                    <input type="text" placeholder="Mot de passe" />
+                    <input type="submit" text="Connexion" />
+                </div>
+            </form>
+            <div class="content">
+                <a href="login.html">Se connecter</a>
+            </div>
+        </div>
+    </body>
+</html>
