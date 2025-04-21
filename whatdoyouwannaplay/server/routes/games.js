@@ -88,10 +88,18 @@ router.put('/:id', (req, res) => {
 // DELETE /api/games/:id => Procedure_Delete_Game
 router.delete('/:id', (req, res) => {
     const id_game = req.params.id;
-    db.query('CALL Procedure_Delete_Game(?)', [id_game], (err, results) => {
+
+    db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, results) => {
         if (err) return res.status(500).json({ error: err });
-        res.json({ message: 'Jeu supprimé avec succès' });
+        if (results.length === 0) return res.status(404).json({ error: 'Jeu introuvable' });
+
+        db.query('CALL Procedure_Delete_Game(?)', [id_game], (err, results) => {
+            if (err) return res.status(500).json({ error: err });
+            res.json({ message: 'Jeu supprimé avec succès' });
+        });
+
     });
+
 });
 
 module.exports = router;
