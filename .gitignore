@@ -42,7 +42,7 @@ bld/
 #wwwroot/
 
 # .env files
-.env
+*.env
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
@@ -408,3 +408,4 @@ FodyWeavers.xsd
 
 # Ignore dataset folder 
 dataset/
+whatdoyouwannaplay/server/.env
