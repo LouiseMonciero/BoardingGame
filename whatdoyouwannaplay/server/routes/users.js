@@ -49,30 +49,39 @@ router.post('/', (req, res) => {
 // DELETE /api/users/:id => procédure stockée Procedure_Delete_User
 router.delete('/:id', (req, res) => {
     const id_user = req.params.id;
-    db.query('CALL Procedure_Delete_User(?)', [id_user], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        var message = ""
-        if (results.changedRows === 0) {
-            message = "Aucun utilisateur n'a été supprimé";
-        } else {
-            message = 'Utilisateur supprimé'; // PAS OK AU NIVEAU DES MESSAGES DE RETOURS !!!
-        }
-        res.json({ results: results, message: message });
+
+    db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        if (results.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
+
+        db.query('CALL Procedure_Delete_User(?)', [id_user], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            const message = 'Utilisateur supprimé';
+            res.json({ results: results, message: message });
+        });
     });
+
 });
 
 // PUT /api/users/:id/permission => procédure stockée Procedure_Change_User_Permission
 router.put('/:id/permission', (req, res) => {
     const id_user = req.params.id;
+
     if (req.body !== undefined) {
         const { new_permission } = req.body;
-        db.query('CALL Procedure_Change_User_Permission(?, ?)', [id_user, new_permission], (err) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ message: 'Permission modifiée' }); // PAS OK (ex; si aucun utilisateur existe il va quand meme dire "ok")
+
+        db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
+            if (err) return res.status(500).json({ error: err });
+            if (results.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
+
+            db.query('CALL Procedure_Change_User_Permission(?, ?)', [id_user, new_permission], (err) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                res.json({ message: 'Permission modifiée' });
+            });
         });
     } else {
         res.json({ message: 'Veuillez remplir le body de la requete' });
@@ -82,12 +91,19 @@ router.put('/:id/permission', (req, res) => {
 // GET /api/users/:id/permission => fonction SQL Ft_Check_Permission
 router.get('/:id/permission', (req, res) => {
     const id_user = req.params.id;
-    db.query('SELECT Ft_Check_Permission(?) AS permission', [id_user], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ permission: results[0].permission });
+
+    db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        if (results.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
+
+        db.query('SELECT Ft_Check_Permission(?) AS permission', [id_user], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ permission: results[0].permission });
+        });
     });
+
 });
 
 module.exports = router;
