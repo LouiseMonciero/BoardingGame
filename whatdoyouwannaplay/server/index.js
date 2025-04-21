@@ -23,9 +23,18 @@ db.connect(err => {
 // Routes pour les jeux
 const gamesRoutes = require('./routes/games');
 const usersRoutes = require('./routes/users');
+const logsRoutes = require('./routes/logs');
+const ratesRoutes = require('./routes/rates');
+const categoriesRoutes = require('./routes/categories');
+
+
 
 app.use('/api/games', gamesRoutes);
 app.use('api/users/', usersRoutes);
+app.use('api/users/', logsRoutes);
+app.use('api/users/', ratesRoutes);
+app.use('api/users/', categoriesRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
