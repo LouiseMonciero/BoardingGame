@@ -63,13 +63,13 @@ CREATE TABLE Belongs(
 
 CREATE TABLE Logs(
    id_game INT,
-   id_user INT,
+   id_user INT NULL,
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
    PRIMARY KEY(id_log),
    FOREIGN KEY(id_game) REFERENCES Games(id_game),
-   FOREIGN KEY(id_user) REFERENCES Users(id_user)
+   FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
 
 CREATE TABLE Favorites(
@@ -251,7 +251,7 @@ CREATE PROCEDURE Procedure_Delete_User(
 )
 BEGIN
   DELETE FROM Favorites WHERE id_user = p_id_user;
-  DELETE FROM Logs WHERE id_user = p_id_user;
+  -- DELETE FROM Logs WHERE id_user = p_id_user;
   DELETE FROM Users WHERE id_user = p_id_user;
 END//
 
