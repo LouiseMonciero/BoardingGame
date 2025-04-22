@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const { checkBody } = require('../middlewares');
+const { checkBody, isOwner } = require('../middlewares');
 
 // POST /api/library => ajoute un jeu à la bibliothèque d’un utilisateur (Procedure_Add_Game_To_UserLibrary)
-router.post('/', checkBody(['id_user', 'id_game']), (req, res) => {
-    const { id_user, id_game } = req.body;
+router.post('/:id', isOwner, checkBody(['id_game']), (req, res) => {
+    const id_user = req.params.id;
+    const { id_game } = req.body;
 
     db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, results) => {
         if (err) return res.status(500).json({ error: err });
@@ -19,13 +20,11 @@ router.post('/', checkBody(['id_user', 'id_game']), (req, res) => {
         });
 
     });
-
-
 });
 
-// GET /api/library/:id_user => récupère les jeux d’un utilisateur (Procedure_User_Library)
-router.get('/:id_user', (req, res) => {
-    const id_user = req.params.id_user;
+// GET /api/library/:id => récupère les jeux d’un utilisateur (Procedure_User_Library)
+router.get('/:id', isOwner, (req, res) => {
+    const id_user = req.params.id;
 
     db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
         if (err) return res.status(500).json({ error: err });

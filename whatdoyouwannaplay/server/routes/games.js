@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-const { verifyToken, checkBody } = require('../middlewares');
+const { checkBody, isAdmin } = require('../middlewares');
 
 
 // GET /api/games => View_Games
@@ -59,7 +59,7 @@ router.post('/', checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'descr
     });
 
 // PUT /api/games/:id => Procedure_Update_Game
-router.put('/:id', checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'description',
+router.put('/:id', isAdmin, checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'description',
     'boardgamemechanic', 'boardgamefamily', 'boardgameexpansion',
     'boardgameimplementation', 'boardgamepublisher', 'boardgameartist',
     'boardgamedesigner', 'id_rules']), (req, res) => {
@@ -86,7 +86,7 @@ router.put('/:id', checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'des
     });
 
 // DELETE /api/games/:id => Procedure_Delete_Game
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isAdmin, (req, res) => {
     const id_game = req.params.id;
 
     db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, results) => {
@@ -99,7 +99,6 @@ router.delete('/:id', (req, res) => {
         });
 
     });
-
 });
 
 module.exports = router;

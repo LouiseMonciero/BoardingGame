@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const { checkBody } = require('../middlewares');
+const { checkBody, isAdmin, isOwner } = require('../middlewares');
 
 // GET /api/users => vue SQL View_Users
-router.get('/', (req, res) => {
+router.get('/', isAdmin, (req, res) => {
     db.query('SELECT * FROM View_Users', (err, results) => {
         if (err) {
             return res.status(500).json({ error: err });
@@ -24,7 +24,7 @@ router.get('/admins', (req, res) => {
 });
 
 // DELETE /api/users/:id => procédure stockée Procedure_Delete_User
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isOwner, (req, res) => {
     const id_user = req.params.id;
 
     db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
@@ -43,7 +43,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // PUT /api/users/:id/permission => procédure stockée Procedure_Change_User_Permission
-router.put('/:id/permission', checkBody(['new_permission']), (req, res) => {
+router.put('/:id/permission', isAdmin, checkBody(['new_permission']), (req, res) => {
     const id_user = req.params.id;
     const { new_permission } = req.body;
 
@@ -61,7 +61,7 @@ router.put('/:id/permission', checkBody(['new_permission']), (req, res) => {
 });
 
 // GET /api/users/:id/permission => fonction SQL Ft_Check_Permission
-router.get('/:id/permission', (req, res) => {
+router.get('/:id/permission', isOwner, (req, res) => {
     const id_user = req.params.id;
 
     db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {

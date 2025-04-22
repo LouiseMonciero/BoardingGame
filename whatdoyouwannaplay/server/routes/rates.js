@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const { checkBody } = require('../middlewares');
+const { checkBody, isAdmin } = require('../middlewares');
 
 // POST /api/rates/:id_game => transaction SQL Transactions_Rate_Game (id de game)
 router.post('/:id_game', checkBody(['id_user', 'rating']), (req, res) => {
@@ -21,7 +21,7 @@ router.post('/:id_game', checkBody(['id_user', 'rating']), (req, res) => {
 });
 
 // DELETE /api/rates/:id_game => procédure stockée Procedure_Delete_Rate
-router.delete('/:id_game', (req, res) => {
+router.delete('/:id_game', isAdmin, (req, res) => {
     const id_rate = req.params.id;
 
     db.query('CALL Procedure_Delete_Rate(?)', [id_rate], (err) => {

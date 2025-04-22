@@ -18,7 +18,7 @@ router.get('/check', (req, res) => {
             return res.sendStatus(400);
         }
 
-        const { status, message, payload } = verifyToken(token, secretKey);
+        const { status, message, payload } = verifyToken(token);
         if (status !== 200) {
             return res.status(status).json({ message });
         }

@@ -32,8 +32,8 @@ const categoriesRoutes = require('./routes/categories');
 const usersLibraryRoutes = require('./routes/users_library');
 const authRoutes = require('./routes/auth');
 
-//app.use('/api/games', gamesRoutes);
-//app.use('/api/users', usersRoutes);
+app.use('/api/games', gamesRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/rates', ratesRoutes);
 app.use('/api/categories', categoriesRoutes);
