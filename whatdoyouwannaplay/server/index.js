@@ -1,12 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-require('dotenv').config(); // Charger les variables d'environnement , si besoin dans un bahs executer : $npm install dotenv
-const logger = require('morgan'); // ?
+require('dotenv').config();
+const logger = require('morgan');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt'); // on remet ???
-const jwt = require('jsonwebtoken'); // on remet
-
 
 const app = express();
 app.use(cors());
@@ -26,7 +23,6 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
-
 // Routes pour les jeux
 const gamesRoutes = require('./routes/games');
 const usersRoutes = require('./routes/users');
@@ -36,16 +32,13 @@ const categoriesRoutes = require('./routes/categories');
 const usersLibraryRoutes = require('./routes/users_library');
 const authRoutes = require('./routes/auth');
 
-
-app.use('/api/games', gamesRoutes);
-app.use('/api/users', usersRoutes);
+//app.use('/api/games', gamesRoutes);
+//app.use('/api/users', usersRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/rates', ratesRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
-
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT || 3000, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));

@@ -4,7 +4,7 @@ const db = require('../config/db');
 const { checkBody } = require('../middlewares');
 
 // POST /api/rates/:id_game => transaction SQL Transactions_Rate_Game (id de game)
-router.post('/:id_game', checkBody([id_user, rating]), (req, res) => {
+router.post('/:id_game', checkBody(['id_user', 'rating']), (req, res) => {
     const id_game = req.params.id_game;
     const { id_user, rating } = req.body;
     db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, results) => {

@@ -43,7 +43,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // PUT /api/users/:id/permission => procédure stockée Procedure_Change_User_Permission
-router.put('/:id/permission', checkBody([new_permission]), (req, res) => {
+router.put('/:id/permission', checkBody(['new_permission']), (req, res) => {
     const id_user = req.params.id;
     const { new_permission } = req.body;
 

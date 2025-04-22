@@ -33,10 +33,10 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/games => Procedure_Create_Game (à adapter selon les paramètres que tu choisis)
-router.post('/', checkBody([name_game, year_game, url, thumbnail, description,
-    boardgamemechanic, boardgamefamily, boardgameexpansion,
-    boardgameimplementation, boardgamepublisher, boardgameartist,
-    boardgamedesigner, id_rules]), (req, res) => {
+router.post('/', checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'description',
+    'boardgamemechanic', 'boardgamefamily', 'boardgameexpansion',
+    'boardgameimplementation', 'boardgamepublisher', 'boardgameartist',
+    'boardgamedesigner', 'id_rules']), (req, res) => {
         const {
             name_game, year_game, url, thumbnail, description,
             boardgamemechanic, boardgamefamily, boardgameexpansion,
@@ -59,10 +59,10 @@ router.post('/', checkBody([name_game, year_game, url, thumbnail, description,
     });
 
 // PUT /api/games/:id => Procedure_Update_Game
-router.put('/:id', checkBody([name_game, year_game, url, thumbnail, description,
-    boardgamemechanic, boardgamefamily, boardgameexpansion,
-    boardgameimplementation, boardgamepublisher, boardgameartist,
-    boardgamedesigner, id_rules]), (req, res) => {
+router.put('/:id', checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'description',
+    'boardgamemechanic', 'boardgamefamily', 'boardgameexpansion',
+    'boardgameimplementation', 'boardgamepublisher', 'boardgameartist',
+    'boardgamedesigner', 'id_rules']), (req, res) => {
         const id_game = req.params.id;
         const {
             name_game, year_game, url, thumbnail, description,

@@ -4,7 +4,7 @@ const db = require('../config/db');
 const { checkBody } = require('../middlewares');
 
 // POST /api/library => ajoute un jeu à la bibliothèque d’un utilisateur (Procedure_Add_Game_To_UserLibrary)
-router.post('/', checkBody([id_user, id_game]), (req, res) => {
+router.post('/', checkBody(['id_user', 'id_game']), (req, res) => {
     const { id_user, id_game } = req.body;
 
     db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, results) => {
