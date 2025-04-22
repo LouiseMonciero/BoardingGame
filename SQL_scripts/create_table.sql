@@ -323,3 +323,17 @@ BEGIN
   RETURN avg_rating;
 END//
 DELIMITER ;
+
+-- Création des indexes
+CREATE INDEX idx_name_game ON Games(name_game);
+CREATE INDEX idx_year_game ON Games(year_game);
+
+CREATE INDEX idx_rate_game ON Rates(id_game);
+CREATE INDEX idx_rate_rank ON Rates(rank);
+CREATE INDEX idx_rate_avg ON Rates(average);
+
+CREATE INDEX idx_belongs_category ON Belongs(id_category);
+
+CREATE INDEX idx_users_permission ON Users(level_permission);
+
+CREATE INDEX idx_logs_date ON Logs(date_log);
