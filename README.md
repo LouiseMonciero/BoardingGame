@@ -43,6 +43,7 @@ The sql srcipts to build the database can be found in SQL_scripts. They can be r
 1. create_table.sql
 2. insert_rules.sql
 3. insert_games.sql
-4. insert_rates.sql
-5. insert_categories.sql
-6. insert_belongs.sql
+4. insert_user.sql
+5. insert_rates.sql
+6. insert_categories.sql
+7. insert_belongs.sql

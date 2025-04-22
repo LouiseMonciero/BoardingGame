@@ -82,7 +82,7 @@ CREATE TABLE Favorites(
 -- Création des vues
 
 CREATE VIEW View_Games AS
-SELECT g.id_game, g.name_game, r.average, g.thumbnail
+SELECT g.id_game, g.name_game, r.average, r.users_rated, r.rank, g.thumbnail
 FROM Games g
 LEFT JOIN Rates r ON g.id_game = r.id_game;
 
@@ -208,18 +208,58 @@ BEGIN
 END//
 
 CREATE PROCEDURE Procedure_Search_Games(
+  IN p_search_term VARCHAR(100),
   IN p_category VARCHAR(100),
   IN p_min_rating DECIMAL(15,2),
-  IN p_rank_max INT
+  IN p_min_rank INT,
+  IN p_max_rank INT,
+  IN p_min_players INT,
+  IN p_max_players INT,
+  IN p_min_playtime INT,
+  IN p_max_playtime INT,
+  IN p_min_age INT,
+  IN p_min_year INT,
+  IN p_max_year INT,
+  IN p_min_reviews INT
 )
 BEGIN
-  SELECT g.* FROM Games g
-  JOIN Belongs b ON g.id_game = b.id_game
-  JOIN Categories c ON b.id_category = c.id_category
+  -- Debug: Affiche les paramètres reçus
+  SELECT CONCAT('Search term: ', IFNULL(p_search_term, 'NULL')) AS debug;
+  SELECT 
+    g.id_game,
+    g.name_game,
+    g.year_game,
+    g.thumbnail,
+    g.description,
+    r.average AS rating,
+    r.rank,
+    r.users_rated,
+    rules.minplayers,
+    rules.maxplayers,
+    rules.minplaytime,
+    rules.maxplaytime,
+    rules.minage,
+    GROUP_CONCAT(DISTINCT c.category SEPARATOR ', ') AS categories
+  FROM Games g
   JOIN Rates r ON g.id_game = r.id_game
-  WHERE (p_category IS NULL OR c.category LIKE CONCAT('%', p_category, '%')) -- si category == NULL, pas de filtre
+  JOIN Rules rules ON g.id_rules = rules.id_rules
+  LEFT JOIN Belongs b ON g.id_game = b.id_game
+  LEFT JOIN Categories c ON b.id_category = c.id_category
+  WHERE (p_search_term IS NULL OR g.name_game LIKE CONCAT('%', p_search_term, '%'))
+    AND (p_category IS NULL OR c.category LIKE CONCAT('%', p_category, '%'))
     AND (p_min_rating IS NULL OR r.average >= p_min_rating)
-    AND (p_rank_max IS NULL OR r.rank <= p_rank_max);
+    AND (p_min_rank IS NULL OR r.rank >= p_min_rank)
+    AND (p_max_rank IS NULL OR r.rank <= p_max_rank)
+    AND (p_min_players IS NULL OR rules.minplayers >= p_min_players)
+    AND (p_max_players IS NULL OR rules.maxplayers <= p_max_players)
+    AND (p_min_playtime IS NULL OR rules.minplaytime >= p_min_playtime)
+    AND (p_max_playtime IS NULL OR rules.maxplaytime <= p_max_playtime)
+    AND (p_min_age IS NULL OR rules.minage >= p_min_age)
+    AND (p_min_year IS NULL OR g.year_game >= p_min_year)
+    AND (p_max_year IS NULL OR g.year_game <= p_max_year)
+    AND (p_min_reviews IS NULL OR r.users_rated >= p_min_reviews)
+  GROUP BY g.id_game
+  ORDER BY r.rank ASC;
 END//
 
 CREATE PROCEDURE Procedure_Get_Game_Info( -- not used yet
@@ -329,7 +369,7 @@ CREATE INDEX idx_name_game ON Games(name_game);
 CREATE INDEX idx_year_game ON Games(year_game);
 
 CREATE INDEX idx_rate_game ON Rates(id_game);
-CREATE INDEX idx_rate_rank ON Rates(rank);
+CREATE INDEX idx_rate_rank ON Rates(`rank`);
 CREATE INDEX idx_rate_avg ON Rates(average);
 
 CREATE INDEX idx_belongs_category ON Belongs(id_category);

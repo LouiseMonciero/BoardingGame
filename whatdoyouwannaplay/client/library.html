@@ -35,32 +35,99 @@
         <main x-data="library" class="container">
             <!-- Sidebar Filters -->
             <aside class="filters">
+                <!-- Filtre de recherche par nom -->
+                <div class="filter">
+                    <h3>Recherche</h3>
+                    <input type="text" x-model="searchTerm" placeholder="Nom du jeu...">
+                </div>
+                
+                <!-- Filtre par catégorie -->
                 <div class="filter">
                     <h3>Catégorie</h3>
-                    <select x-model="selectedCategory" @change="searchGames">
+                    <select x-model="selectedCategory">
                         <option value="">Toutes</option>
                         <template x-for="category in categories" :key="category.id_category">
-                            <option :value="category.name_category" x-text="category.name_category"></option>
+                            <option :value="category.category" x-text="category.category"></option>
                         </template>
                     </select>
+                </div>
+                
+                <!-- Filtres de notation et classement -->
+                <div class="filter-group">
+                    <h3>Note minimale</h3>
+                    <input type="number" x-model="minRating" min="0" max="10" step="0.1" placeholder="0">
+                </div>
+                
+                <div class="filter-group">
+                    <h3>Classement</h3>
+                    <div class="range-inputs">
+                        <input type="number" x-model="minRank" placeholder="Min" min="1">
+                        <span>à</span>
+                        <input type="number" x-model="maxRank" placeholder="Max" min="1">
+                    </div>
+                </div>
+                
+                <!-- Filtres joueurs et durée -->
+                <div class="filter-group">
+                    <h3>Nombre de joueurs</h3>
+                    <div class="range-inputs">
+                        <input type="number" x-model="minPlayers" placeholder="Min" min="1">
+                        <span>à</span>
+                        <input type="number" x-model="maxPlayers" placeholder="Max" min="1">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h3>Temps de jeu (minutes)</h3>
+                    <div class="range-inputs">
+                        <input type="number" x-model="minPlaytime" placeholder="Min" min="0">
+                        <span>à</span>
+                        <input type="number" x-model="maxPlaytime" placeholder="Max" min="0">
+                    </div>
+                </div>
+                
+                <!-- Autres filtres -->
+                <div class="filter">
+                    <h3>Âge minimum</h3>
+                    <input type="number" x-model="minAge" min="0" placeholder="0">
+                </div>
+                
+                <div class="filter-group">
+                    <h3>Année de publication</h3>
+                    <div class="range-inputs">
+                        <input type="number" x-model="minYear" placeholder="Min" min="1900">
+                        <span>à</span>
+                        <input type="number" x-model="maxYear" placeholder="Max" min="1900">
+                    </div>
+                </div>
+                
+                <div class="filter">
+                    <h3>Nombre min d'avis</h3>
+                    <input type="number" x-model="minReviews" min="0" placeholder="0">
+                </div>
+                
+                <!-- Boutons d'action -->
+                <div class="filter-actions">
+                    <button @click="applyFilters" class="btn-primary">Appliquer</button>
+                    <button @click="resetFilters" class="btn-secondary">Réinitialiser</button>
                 </div>
             </aside>
 
             <!-- Main Section -->
             <section class="content">
-                <!-- Search Bar -->
-                <div class="search-bar">
-                    <input type="text" x-model="searchTerm" placeholder="Chercher un jeu..." @input.debounce.500ms="searchGames" />
+                <!-- Indicateur de chargement -->
+                <div x-show="isLoading" class="loading-indicator">
+                    Chargement en cours...
                 </div>
-
+        
                 <!-- Game Grid -->
-                <div class="grid">
+                <div class="grid" x-show="!isLoading">
                     <template x-for="game in games" :key="game.id_game">
                         <div class="game-card">
                             <img :src="game.thumbnail || 'https://via.placeholder.com/100'" :alt="game.name_game" />
                             <h4 x-text="game.name_game"></h4>
                             <div class="stars">
-                                <template x-for="n in Math.round(game.average_rating || 0)">
+                                <template x-for="n in formatRating(game.average)" :key="n">
                                     <span>⭐</span>
                                 </template>
                             </div>

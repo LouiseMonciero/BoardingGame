@@ -14,10 +14,42 @@ router.get('/', (req, res) => {
 });
 
 // GET /api/games/search => Procedure_Search_Games
+// router.get('/search', (req, res) => {
+//     const params = [
+//         req.query.search_term || null,
+//         req.query.category || null,
+//         req.query.min_rating ? parseFloat(req.query.min_rating) : null,
+//         req.query.min_rank ? parseInt(req.query.min_rank) : null,
+//         req.query.max_rank ? parseInt(req.query.max_rank) : null,
+//         req.query.min_players ? parseInt(req.query.min_players) : null,
+//         req.query.max_players ? parseInt(req.query.max_players) : null,
+//         req.query.min_playtime ? parseInt(req.query.min_playtime) : null,
+//         req.query.max_playtime ? parseInt(req.query.max_playtime) : null,
+//         req.query.min_age ? parseInt(req.query.min_age) : null,
+//         req.query.min_year ? parseInt(req.query.min_year) : null,
+//         req.query.max_year ? parseInt(req.query.max_year) : null,
+//         req.query.min_reviews ? parseInt(req.query.min_reviews) : null
+//     ];
+
+//     console.log("Procedure params:", params); // Debug log
+
+//     db.query('CALL Procedure_Search_Games(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', params, (err, results) => {
+//         if (err) {
+//             console.error("SQL Error:", err);
+//             return res.status(500).json({ 
+//                 error: err.message,
+//                 sql: err.sql,
+//                 params: params
+//             });
+//         }
+//         res.json(results[0] || []);
+//     });
+// });
+
 router.get('/search', (req, res) => {
-    const { category, min_rating, rank_max } = req.query;
-    db.query('CALL Procedure_Search_Games(?, ?, ?)', [category, min_rating, rank_max], (err, results) => {
-        if (err) return res.status(500).json({ error: err, message: "erreur procedure search games" });
+    let sql = `SELECT * FROM Games WHERE name_game LIKE ?`;
+    db.query(sql, [`%${req.query.search_term || ''}%`], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
         res.json(results);
     });
 });
