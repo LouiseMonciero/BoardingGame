@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
 const db = require('../config/db');
+const { checkBody } = require('../middlewares');
 
 // GET /api/users => vue SQL View_Users
 router.get('/', (req, res) => {
@@ -43,26 +44,21 @@ router.delete('/:id', (req, res) => {
 });
 
 // PUT /api/users/:id/permission => procédure stockée Procedure_Change_User_Permission
-router.put('/:id/permission', (req, res) => {
+router.put('/:id/permission', checkBody([new_permission]), (req, res) => {
     const id_user = req.params.id;
+    const { new_permission } = req.body;
 
-    if (req.body !== undefined) {
-        const { new_permission } = req.body;
+    db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        if (results.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
 
-        db.query('SELECT * FROM View_Users WHERE id_user = ?', [id_user], (err, results) => {
-            if (err) return res.status(500).json({ error: err });
-            if (results.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
-
-            db.query('CALL Procedure_Change_User_Permission(?, ?)', [id_user, new_permission], (err) => {
-                if (err) {
-                    return res.status(500).json({ error: err.message });
-                }
-                res.json({ message: 'Permission modifiée' });
-            });
+        db.query('CALL Procedure_Change_User_Permission(?, ?)', [id_user, new_permission], (err) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ message: 'Permission modifiée' });
         });
-    } else {
-        res.json({ message: 'Veuillez remplir le body de la requete' });
-    }
+    });
 });
 
 // GET /api/users/:id/permission => fonction SQL Ft_Check_Permission
