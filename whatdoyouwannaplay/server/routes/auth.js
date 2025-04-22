@@ -23,7 +23,7 @@ router.get('/check', (req, res) => {
             return res.status(status).json({ message });
         }
 
-        db.query('SELECT * FROM users WHERE id = ?', [payload.id], (err, results) => {
+        db.query('SELECT * FROM users WHERE id_user = ?', [payload.id], (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
             if (!results || results.length === 0) return res.sendStatus(404);
             return res.status(200).json({ data: results[0] });
