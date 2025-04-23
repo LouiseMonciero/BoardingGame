@@ -156,7 +156,8 @@ input[type="submit"] {
     margin-top: 4rem;
 }
 
-.content a {
+.content a,
+button {
     background-color: #a8774d;
     color: white;
     padding: 0.6rem 2rem;
