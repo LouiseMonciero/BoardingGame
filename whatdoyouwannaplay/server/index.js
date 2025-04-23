@@ -23,11 +23,7 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
-app.use(cors({
-    origin: 'http://localhost:5500',
-    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-    allowedHeaders: ['Content-Type','Authorization']
-  }));
+app.use(cors());
 
 // Routes pour les jeux
 const gamesRoutes = require('./routes/games');
