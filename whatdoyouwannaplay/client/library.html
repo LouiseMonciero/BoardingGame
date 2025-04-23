@@ -129,6 +129,10 @@
                 <div x-show="isLoading" class="loading-indicator">
                     Chargement en cours...
                 </div>
+
+                <div x-show="usingCache" class="cache-badge">
+                    🟢 Mode éco - Données en cache
+                </div>
         
                 <!-- Game Grid -->
                 <div class="grid" x-show="!isLoading">
