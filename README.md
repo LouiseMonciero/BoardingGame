@@ -26,7 +26,7 @@ Dans le sous dossier whatdoyouwannaplay/server/
 "scripts": {
   "start": "node app.js",
   "dev": "nodemon app.js"
-}
+},
 ```
 
 3. Lancer le serveur avec :
@@ -47,3 +47,5 @@ The sql srcipts to build the database can be found in SQL_scripts. They can be r
 5. insert_rates.sql
 6. insert_categories.sql
 7. insert_belongs.sql
+
+Or run ```init_all.sql```
