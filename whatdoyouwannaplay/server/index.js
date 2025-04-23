@@ -23,6 +23,8 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
+app.use(cors());
+
 // Routes pour les jeux
 const gamesRoutes = require('./routes/games');
 const usersRoutes = require('./routes/users');

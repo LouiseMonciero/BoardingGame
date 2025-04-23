@@ -30,11 +30,21 @@
             </div>
         </div>
         <div class="content">
-            <h1>Login</h1>
-            <form class="content">
+            <h1>Connexion</h1>
+            <form class="content" id="login_form">
                 <div>
-                    <input type="text" placeholder="Identifiant" />
-                    <input type="text" placeholder="Mot de passe" />
+                    <input
+                        type="text"
+                        placeholder="Identifiant"
+                        id="user_id"
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Mot de passe"
+                        id="user_password"
+                        required
+                    />
                     <input type="submit" text="Connexion" />
                 </div>
             </form>
@@ -42,5 +52,36 @@
                 <a href="signin.html">Première connexion</a>
             </div>
         </div>
+
+        <script>
+            document
+                .getElementById("login_form")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById("user_id").value;
+                    const password =
+                        document.getElementById("user_password").value;
+
+                    const res = await fetch(
+                        "http://localhost:3000/api/auth/login",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ username, password }),
+                        }
+                    );
+
+                    if (!res.ok) {
+                        const err = await res.json();
+                        return alert(
+                            `Erreur : ${err.message || res.statusText}`
+                        );
+                    }
+
+                    const { token } = await res.json();
+                    localStorage.setItem("auth_token", token);
+                    window.location.href = "accueil.html";
+                });
+        </script>
     </body>
 </html>
