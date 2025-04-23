@@ -17,8 +17,9 @@ async function login(event) {
         return;
     }
 
-    const { token } = await response.json();
-    localStorage.setItem("auth_token", token);
+    const { sessionToken: token } = await response.json();
+    console.log(token);
+    localStorage.setItem("token", token);
     window.location.href = "accueil.html";
 }
 

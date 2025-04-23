@@ -2,7 +2,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('header', () => ({
         links: [],
         init() {
-            const isLoggedIn = localStorage.getItem("auth_token") !== null;
+            const isLoggedIn = localStorage.getItem("token") !== null;
 
             this.links = [
                 { text: 'Accueil', href: './accueil.html' },
