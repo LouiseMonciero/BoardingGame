@@ -7,6 +7,7 @@
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
         ></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="./assets/js/alpine-components/header.js"></script>
         <link rel="stylesheet" href="./assets/css/common.css" />
         <title>Login</title>
@@ -45,7 +46,7 @@
                         id="user_password"
                         required
                     />
-                    <input type="submit" value="Connexion" />
+                    <input type="submit" text="Connexion" />
                 </div>
             </form>
             <div class="content">
@@ -55,33 +56,27 @@
 
         <script>
             document
-                .getElementById("login_form")
-                .addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const username = document.getElementById("user_id").value;
-                    const password =
-                        document.getElementById("user_password").value;
-
-                    const res = await fetch(
-                        "http://localhost:3000/api/auth/login",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ username, password }),
-                        }
-                    );
-
-                    if (!res.ok) {
-                        const err = await res.json();
-                        return alert(
-                            `Erreur : ${err.message || res.statusText}`
-                        );
-                    }
-
-                    const { sessionToken } = await res.json();
-                    localStorage.setItem('auth_token', sessionToken);
-                    window.location.href = "accueil.html";
-                });
-        </script>
+              .getElementById("login_form")
+              .addEventListener("submit", async (e) => {
+                e.preventDefault();
+          
+                const username = document.getElementById("user_id").value;
+                const password = document.getElementById("user_password").value;
+          
+                try {
+                  const res = await axios.post(
+                    "http://localhost:3000/api/auth/login",
+                    { username, password }
+                  );
+                  const { sessionToken } = res.data;
+                  localStorage.setItem("auth_token", sessionToken);
+          
+                  window.location.href = "accueil.html";
+                } catch (err) {
+                  const msg = err.response?.data?.message || err.message;
+                  alert(`Erreur : ${msg}`);
+                }
+              });
+          </script>
     </body>
 </html>
