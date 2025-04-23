@@ -14,13 +14,17 @@ A website to have boarding games
 
 Dans le sous dossier whatdoyouwannaplay/server/
 
-1. Lancer les commandes suivantes :
+```
+cd .\whatdoyouwannaplay\server\
+```
+
+1. Exécuter les commandes suivantes :
 
 -   npm init -y
 -   npm install express mysql2 cors dotenv bcrypt jsonwebtoken morgan
 -   npm install --save-dev nodemon
 
-2. Ajouter cela a package.json
+2. Modifier les scripts de lancement dans package.json situé dans .\whatdoyouwannaplay\server\
 
 ```
 "scripts": {
