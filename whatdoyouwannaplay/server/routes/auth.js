@@ -12,6 +12,7 @@ const saltRounds = 10;
 const secretKey = process.env.SECRET_KEY;
 
 router.get('/check', (req, res) => {
+    console.log(req.headers['authorization'].split(' ')[1]);
     if (req.headers['authorization']) {
         const token = req.headers['authorization'].split(' ')[1];
         if (!token) {

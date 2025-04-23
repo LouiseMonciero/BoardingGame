@@ -156,11 +156,17 @@ input[type="submit"] {
     margin-top: 4rem;
 }
 
-.content a {
+.content a,
+button {
     background-color: #a8774d;
     color: white;
     padding: 0.6rem 2rem;
     text-decoration: none;
     border-radius: 10px;
     font-size: 1rem;
+}
+
+/* FORMS */
+#formMessage {
+    color: red;
 }

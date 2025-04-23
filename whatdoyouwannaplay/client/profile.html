@@ -9,6 +9,7 @@
         ></script>
         <script src="./assets/js/alpine-components/header.js"></script>
         <link rel="stylesheet" href="./assets/css/common.css" />
+        <script src="./assets/js/profile.js"></script>
         <title>Profile</title>
     </head>
     <style>
@@ -57,8 +58,12 @@
                 /></a>
             </div>
             <div class="header-links">
-                <template x-for="link in links" :key="link.href">
-                    <a :href="link.href" x-text="link.text"></a>
+                <template x-for="link in links" :key="link.text">
+                    <a
+                        :href="link.href"
+                        x-text="link.text"
+                        x-bind:onclick="link.onclick || null"
+                    ></a>
                 </template>
             </div>
         </div>
@@ -66,7 +71,7 @@
             <div id="top">
                 <div>
                     <img src="./assets/img/avatar68.svg" alt="avatar" />
-                    <h4>Pseudo</h4>
+                    <h4 id="username"></h4>
                 </div>
                 <div>
                     <h5>vos</h5>
