@@ -52,53 +52,63 @@
                     </select>
                 </div>
                 
-                <!-- Filtres de notation et classement -->
+                <!-- Remplacez les inputs min/max par des dual sliders -->
                 <div class="filter-group">
-                    <h3>Note minimale</h3>
-                    <input type="number" x-model="minRating" min="0" max="10" step="0.1" placeholder="0">
-                </div>
-                
-                <div class="filter-group">
-                    <h3>Classement</h3>
-                    <div class="range-inputs">
-                        <input type="number" x-model="minRank" placeholder="Min" min="1">
-                        <span>à</span>
-                        <input type="number" x-model="maxRank" placeholder="Max" min="1">
-                    </div>
-                </div>
-                
-                <!-- Filtres joueurs et durée -->
-                <div class="filter-group">
-                    <h3>Nombre de joueurs</h3>
-                    <div class="range-inputs">
-                        <input type="number" x-model="minPlayers" placeholder="Min" min="1">
-                        <span>à</span>
-                        <input type="number" x-model="maxPlayers" placeholder="Max" min="1">
+                    <h3>Classement (entre <span x-text="minRank"></span> et <span x-text="maxRank"></span>)</h3>
+                    <div class="dual-container" id="rank-slider">
+                        <input type="range" x-model="minRank" class="dual dual-min"
+                               min="1" max="100" value="1"
+                               @input="updateDualSlider($event, 'minRank', 'maxRank', 'rank-slider', 'rank-bar')">
+                        <input type="range" x-model="maxRank" class="dual dual-max"
+                               min="1" max="100" value="100"
+                               @input="updateDualSlider($event, 'maxRank', 'minRank', 'rank-slider', 'rank-bar')">
+                        <div class="dual-bar" id="rank-bar"></div>
                     </div>
                 </div>
                 
                 <div class="filter-group">
-                    <h3>Temps de jeu (minutes)</h3>
-                    <div class="range-inputs">
-                        <input type="number" x-model="minPlaytime" placeholder="Min" min="0">
-                        <span>à</span>
-                        <input type="number" x-model="maxPlaytime" placeholder="Max" min="0">
+                    <h3>Nombre de joueurs (entre <span x-text="minPlayers"></span> et <span x-text="maxPlayers"></span>)</h3>
+                    <div class="dual-container" id="players-slider">
+                        <input type="range" x-model="minPlayers" class="dual dual-min"
+                               min="1" max="10" value="1"
+                               @input="updateDualSlider($event, 'minPlayers', 'maxPlayers', 'players-slider', 'players-bar')">
+                        <input type="range" x-model="maxPlayers" class="dual dual-max"
+                               min="1" max="10" value="10"
+                               @input="updateDualSlider($event, 'maxPlayers', 'minPlayers', 'players-slider', 'players-bar')">
+                        <div class="dual-bar" id="players-bar"></div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3>Temps de jeu (minutes) (entre <span x-text="minPlaytime"></span> et <span x-text="maxPlaytime"></span>)</h3>
+                    <div class="dual-container" id="playtime-slider">
+                        <input type="range" x-model="minPlaytime" class="dual dual-min"
+                               min="1" max="100" value="1"
+                               @input="updateDualSlider($event, 'minPlaytime', 'maxPlaytime', 'playtime-slider', 'playtime-bar')">
+                        <input type="range" x-model="maxPlaytime" class="dual dual-max"
+                               min="1" max="100" value="100"
+                               @input="updateDualSlider($event, 'maxPlaytime', 'minPlaytime', 'playtime-slider', 'playtime-bar')">
+                        <div class="dual-bar" id="playtime-bar"></div>
                     </div>
                 </div>
                 
+                <div class="filter-group">
+                    <h3>Année de publication (entre <span x-text="minYear"></span> et <span x-text="maxYear"></span>)</h3>
+                    <div class="dual-container" id="year-slider">
+                        <input type="range" x-model="minYear" class="dual dual-min"
+                               min="1" max="10" value="1"
+                               @input="updateDualSlider($event, 'minYear', 'maxYear', 'year-slider', 'year-bar')">
+                        <input type="range" x-model="maxYear" class="dual dual-max"
+                               min="1" max="10" value="10"
+                               @input="updateDualSlider($event, 'maxYear', 'minYear', 'year-slider', 'year-bar')">
+                        <div class="dual-bar" id="year-bar"></div>
+                    </div>
+                </div>
+
                 <!-- Autres filtres -->
                 <div class="filter">
                     <h3>Âge minimum</h3>
                     <input type="number" x-model="minAge" min="0" placeholder="0">
-                </div>
-                
-                <div class="filter-group">
-                    <h3>Année de publication</h3>
-                    <div class="range-inputs">
-                        <input type="number" x-model="minYear" placeholder="Min" min="1900">
-                        <span>à</span>
-                        <input type="number" x-model="maxYear" placeholder="Max" min="1900">
-                    </div>
                 </div>
                 
                 <div class="filter">
@@ -130,6 +140,9 @@
                                 <template x-for="n in formatRating(game.average/2)" :key="n">
                                     <span>⭐</span>
                                 </template>
+                            </div>
+                            <div class="full-rate">
+                                <span x-text="game.average + '/10'"></span>
                             </div>
                             <h4 x-text="formatRating(game.users_rated) + ' ratings'" style="color: blue;"></h3>
                         </div>

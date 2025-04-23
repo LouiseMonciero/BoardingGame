@@ -1,59 +1,136 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("library", () => ({
-      games: [],
-      categories: [],
-      isLoading: false,
-      
-      // Filtres
-      searchTerm: "",
-      selectedCategory: "",
-      minRating: null,
-      minRank: null,
-      maxRank: null,
-      minPlayers: null,
-      maxPlayers: null,
-      minPlaytime: null,
-      maxPlaytime: null,
-      minAge: null,
-      minYear: null,
-      maxYear: null,
-      minReviews: null,
-      
-      // Initialisation
-      async init() {
-          await this.fetchCategories();
-          await this.fetchAllGames(); // Charger tous les jeux au départ
-      },
-      
-      // Récupérer tous les jeux (sans filtres)
-      async fetchAllGames() {
-          this.isLoading = true;
-          try {
-              const response = await fetch("http://localhost:5500/api/games");
-              if (!response.ok) throw new Error("Erreur lors de la récupération des jeux");
-              const data = await response.json();
-              this.games = data;
-          } catch (error) {
-              console.error("Erreur:", error);
-              alert("Impossible de charger les jeux");
-          } finally {
-              this.isLoading = false;
-          }
-      },
-      
-      // Récupérer les catégories
-      async fetchCategories() {
-          try {
-              const response = await fetch("http://localhost:5500/api/categories");
-              if (!response.ok) throw new Error("Erreur de chargement des catégories");
-              this.categories = await response.json();
-          } catch (error) {
-              console.error("Erreur:", error);
-          }
-      },
-      
-      // Appliquer les filtres
-      async applyFilters() {
+    // Valeurs initiales
+    minRank: 1,
+    maxRank: 100,
+    minPlayers: 1,
+    maxPlayers: 10,
+    minPlaytime: 0,
+    maxPlaytime: 300,
+    minYear: 1900,
+    maxYear: new Date().getFullYear(),
+    minRating: null,
+    minAge: null,
+    minReviews: null,
+    searchTerm: "",
+    selectedCategory: "",
+    games: [],
+    categories: [],
+    isLoading: false,
+
+    // Initialisation
+    async init() {
+        await this.fetchCategories();
+        await this.fetchAllGames();
+        // Initialise les sliders après le rendu
+        this.$nextTick(() => {
+            this.initSliders();
+        });
+    },
+
+    // Méthode pour initialiser les sliders
+    initSliders() {
+        this.updateDualSlider(null, 'minRank', 'maxRank', 'rank-slider', 'rank-bar');
+        this.updateDualSlider(null, 'minPlayers', 'maxPlayers', 'players-slider', 'players-bar');
+        // Ajoutez les autres sliders ici
+    },
+
+    // Méthode générique pour gérer les dual sliders
+    updateDualSlider(event, currentProp, otherProp, containerId, barId) {
+        const active = event ? event.target : null;
+        const min = currentProp.includes('min') ? this[currentProp] : this[otherProp];
+        const max = currentProp.includes('max') ? this[currentProp] : this[otherProp];
+        const container = document.getElementById(containerId);
+        const bar = document.getElementById(barId);
+
+        // Empêche les curseurs de se croiser
+        if (active) {
+            if (currentProp.includes('min') && min >= max) {
+                this[otherProp] = min + 1;
+                if (this[otherProp] > this.getMaxValue(currentProp)) {
+                    this[otherProp] = this.getMaxValue(currentProp);
+                }
+            } else if (currentProp.includes('max') && max <= min) {
+                this[otherProp] = max - 1;
+                if (this[otherProp] < this.getMinValue(currentProp)) {
+                    this[otherProp] = this.getMinValue(currentProp);
+                }
+            }
+        }
+
+        // Met à jour la barre de sélection
+        if (container && bar) {
+            const minValue = currentProp.includes('min') ? this[currentProp] : this[otherProp];
+            const maxValue = currentProp.includes('max') ? this[currentProp] : this[otherProp];
+            const maxRange = this.getMaxValue(currentProp);
+            
+            const minRel = minValue / maxRange;
+            const maxRel = maxValue / maxRange;
+            const totalWidth = container.clientWidth - 18;
+            
+            const left = totalWidth * minRel + 9;
+            const width = totalWidth * maxRel + 9 - left;
+            
+            bar.style.left = left + "px";
+            bar.style.width = width + "px";
+        }
+
+        // Déclenche la recherche si c'est une interaction utilisateur
+        if (event) {
+            this.applyFilters();
+        }
+    },
+
+    // Helper pour obtenir les valeurs max
+    getMaxValue(prop) {
+        const ranges = {
+            'Rank': 100,
+            'Players': 10,
+            'Playtime': 300,
+            'Year': new Date().getFullYear()
+        };
+        return ranges[prop.replace(/min|max/, '')];
+    },
+
+    // Helper pour obtenir les valeurs min
+    getMinValue(prop) {
+        const ranges = {
+            'Rank': 1,
+            'Players': 1,
+            'Playtime': 0,
+            'Year': 1900
+        };
+        return ranges[prop.replace(/min|max/, '')];
+    },
+
+    async fetchAllGames() {
+        this.isLoading = true;
+        try {
+            const response = await fetch("http://localhost:5500/api/games");
+            if (!response.ok) throw new Error("Erreur lors de la récupération des jeux");
+            const data = await response.json();
+            this.games = data;
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert("Impossible de charger les jeux");
+        } finally {
+            this.isLoading = false;
+        }
+    },
+    
+    // Récupérer les catégories
+    async fetchCategories() {
+        try {
+            const response = await fetch("http://localhost:5500/api/categories");
+            if (!response.ok) throw new Error("Erreur de chargement des catégories");
+            this.categories = await response.json();
+        } catch (error) {
+            console.error("Erreur:", error);
+        }
+    },
+    
+    // Appliquer les filtres
+    async applyFilters() {
         this.isLoading = true;
         try {
             const params = new URLSearchParams();
@@ -72,7 +149,7 @@ document.addEventListener("alpine:init", () => {
             if (this.minYear) params.append("min_year", this.minYear);
             if (this.maxYear) params.append("max_year", this.maxYear);
             if (this.minReviews) params.append("min_reviews", this.minReviews);
-    
+
             const url = `http://localhost:5500/api/games/search?${params.toString()}`;
             console.log("Request URL:", url); // Debug log
             
@@ -92,29 +169,30 @@ document.addEventListener("alpine:init", () => {
             this.isLoading = false;
         }
     },
-      
-      // Réinitialiser les filtres et charger tous les jeux
-      resetFilters() {
-          this.searchTerm = "";
-          this.selectedCategory = "";
-          this.minRating = null;
-          this.minRank = null;
-          this.maxRank = null;
-          this.minPlayers = null;
-          this.maxPlayers = null;
-          this.minPlaytime = null;
-          this.maxPlaytime = null;
-          this.minAge = null;
-          this.minYear = null;
-          this.maxYear = null;
-          this.minReviews = null;
-          
-          this.fetchAllGames(); // Charger tous les jeux après réinitialisation
-      },
-      
-      // Formatage des étoiles pour l'affichage
-      formatRating(rating) {
-          return Math.round(rating || 0);
-      }
+    
+    // Réinitialiser les filtres et charger tous les jeux
+    resetFilters() {
+        this.searchTerm = "";
+        this.selectedCategory = "";
+        this.minRating = null;
+        this.minRank = 1;
+        this.maxRank = 100;
+        this.minPlayers = 1;
+        this.maxPlayers = 10;
+        this.minPlaytime = 0;
+        this.maxPlaytime = 300;
+        this.minAge = null;
+        this.minYear = 1900;
+        this.maxYear = new Date().getFullYear();
+        this.minReviews = null;
+        
+        this.fetchAllGames(); // Charger tous les jeux après réinitialisation
+        this.$nextTick(() => this.initSliders());
+    },
+    
+    // Formatage des étoiles pour l'affichage
+    formatRating(rating) {
+        return Math.round(rating || 0);
+    }
   }));
 });
