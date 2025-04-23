@@ -45,7 +45,7 @@
                         id="user_password"
                         required
                     />
-                    <input type="submit" text="Connexion" />
+                    <input type="submit" value="Connexion" />
                 </div>
             </form>
             <div class="content">
@@ -78,8 +78,8 @@
                         );
                     }
 
-                    const { token } = await res.json();
-                    localStorage.setItem("auth_token", token);
+                    const { sessionToken } = await res.json();
+                    localStorage.setItem('auth_token', sessionToken);
                     window.location.href = "accueil.html";
                 });
         </script>

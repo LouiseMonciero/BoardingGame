@@ -6,10 +6,15 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(logger('dev'));
+
+app.use(cors({
+    origin: 'http://127.0.0.1:5500',
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization']
+  }));
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -22,8 +27,6 @@ db.connect(err => {
     if (err) throw err;
     console.log('Connected to MySQL');
 });
-
-app.use(cors());
 
 // Routes pour les jeux
 const gamesRoutes = require('./routes/games');
@@ -43,4 +46,4 @@ app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT || 3000, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
