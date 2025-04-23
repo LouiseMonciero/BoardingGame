@@ -47,16 +47,6 @@ router.get('/search', (req, res) => {
     });
 });
 
-/*
-router.get('/search', (req, res) => {
-    let sql = `SELECT * FROM Games WHERE name_game LIKE ?`;
-    db.query(sql, [`%${req.query.search_term || ''}%`], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results);
-    });
-});
-*/
-
 // GET /api/games/:id => View_GameDetails
 router.get('/:id', (req, res) => {
     const id = req.params.id;

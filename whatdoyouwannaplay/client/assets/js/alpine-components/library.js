@@ -33,7 +33,6 @@ document.addEventListener("alpine:init", () => {
               if (!response.ok) throw new Error("Erreur lors de la récupération des jeux");
               const data = await response.json();
               this.games = data;
-              console.log(data);
           } catch (error) {
               console.error("Erreur:", error);
               alert("Impossible de charger les jeux");

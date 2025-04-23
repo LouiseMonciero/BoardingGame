@@ -92,6 +92,8 @@ body {
 .stars {
     color: #ffcc00;
     font-size: 16px;
+    display: flex;
+    justify-content: center;
 }
 
 .filters {

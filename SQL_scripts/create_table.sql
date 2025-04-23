@@ -231,7 +231,7 @@ BEGIN
     g.year_game,
     g.thumbnail,
     g.description,
-    r.average AS rating,
+    r.average,
     r.rank,
     r.users_rated,
     rules.minplayers,

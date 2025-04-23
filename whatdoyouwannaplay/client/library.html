@@ -127,12 +127,18 @@
                             <img :src="game.thumbnail || 'https://via.placeholder.com/100'" :alt="game.name_game" />
                             <h4 x-text="game.name_game"></h4>
                             <div class="stars">
-                                <template x-for="n in formatRating(game.average)" :key="n">
+                                <template x-for="n in formatRating(game.average/2)" :key="n">
                                     <span>⭐</span>
                                 </template>
                             </div>
+                            <h4 x-text="formatRating(game.users_rated) + ' ratings'" style="color: blue;"></h3>
                         </div>
                     </template>
+                </div>
+
+                <!-- Message si aucun jeu trouvé -->
+                <div x-show="!isLoading && games.length === 0" class="no-results">
+                    Aucun jeu trouvé avec les critères de recherche.
                 </div>
             </section>
         </main>
