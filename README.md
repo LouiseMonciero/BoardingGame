@@ -14,19 +14,23 @@ A website to have boarding games
 
 Dans le sous dossier whatdoyouwannaplay/server/
 
-1. Lancer les commandes suivantes :
+```
+cd .\whatdoyouwannaplay\server\
+```
+
+1. Exécuter les commandes suivantes :
 
 -   npm init -y
 -   npm install express mysql2 cors dotenv bcrypt jsonwebtoken morgan
 -   npm install --save-dev nodemon
 
-2. Ajouter cela a package.json
+2. Modifier les scripts de lancement dans package.json situé dans .\whatdoyouwannaplay\server\
 
 ```
 "scripts": {
   "start": "node app.js",
   "dev": "nodemon app.js"
-}
+},
 ```
 
 3. Lancer le serveur avec :
@@ -47,3 +51,5 @@ The sql srcipts to build the database can be found in SQL_scripts. They can be r
 5. insert_rates.sql
 6. insert_categories.sql
 7. insert_belongs.sql
+
+Or run ```init_all.sql```
