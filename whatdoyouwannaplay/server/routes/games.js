@@ -42,18 +42,39 @@ router.get('/search', (req, res) => {
                 params: params
             });
         }
-        //console.log(results.length());
         res.json(results[1] || []);
     });
 });
 
-// GET /api/games/:id => View_GameDetails
+// GET /api/games/:id => Procedure_Get_Game_Info (qui utilise View_GameDetails)
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-    db.query('SELECT * FROM View_GameDetails WHERE id_game = ?', [id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        if (results.length === 0) return res.status(404).json({ error: 'Jeu non trouvé' });
-        res.json(results[0]);
+    
+    db.query('CALL Procedure_Get_Game_Info(?)', [id], (err, results) => {
+        if (err) {
+            console.error("SQL Error:", err);
+            return res.status(500).json({ 
+                error: err.message,
+                sql: err.sql
+            });
+        }
+        
+        // La procédure stockée retourne les résultats dans un tableau à deux dimensions
+        // Le premier élément contient les métadonnées, le second contient les résultats
+        if (results[0].length === 0) {
+            return res.status(404).json({ error: 'Jeu non trouvé' });
+        }
+        
+        const game = results[0][0];
+        
+        // Formatage des données pour les listes
+        if (game.boardgamemechanic) game.mechanics = game.boardgamemechanic.split(',');
+        if (game.boardgamepublisher) game.publishers = game.boardgamepublisher.split(',');
+        if (game.boardgameartist) game.artists = game.boardgameartist.split(',');
+        if (game.boardgamedesigner) game.designers = game.boardgamedesigner.split(',');
+        if (game.categories) game.categories = game.categories.split(', ');
+        
+        res.json(game);
     });
 });
 
