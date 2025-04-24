@@ -9,7 +9,6 @@
         ></script>
         <script src="./assets/js/alpine-components/header.js"></script>
         <link rel="stylesheet" href="./assets/css/common.css" />
-        <script src="./assets/js/profile.js"></script>
         <title>Profile</title>
     </head>
     <style>
@@ -73,17 +72,19 @@
                     <img src="./assets/img/avatar68.svg" alt="avatar" />
                     <h4 id="username"></h4>
                 </div>
+            </div>
+            <div class="content">
+                <h5>vos</h5>
+                <h3>Jeux</h3>
+            </div>
+            <div id="bottom">
                 <div>
-                    <h5>vos</h5>
-                    <h3>Jeux</h3>
-                </div>
-                <div id="search-bar">
-                    <form>
-                        <input placeholder="Chercher un jeu..." />
-                        <input type="submit" text="loupe" />
-                    </form>
+                    <button onclick="delete_account()">
+                        Supprimer mon compte
+                    </button>
                 </div>
             </div>
         </main>
+        <script src="./assets/js/profile.js"></script>
     </body>
 </html>

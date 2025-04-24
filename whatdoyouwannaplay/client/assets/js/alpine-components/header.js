@@ -21,6 +21,6 @@ document.addEventListener('alpine:init', () => {
 
 // Fonction de déconnexion globale
 function logout() {
-    localStorage.removeItem("auth_token");
+    localStorage.removeItem("token");
     window.location.href = "login.html";
 }

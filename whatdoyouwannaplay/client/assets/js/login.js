@@ -2,7 +2,7 @@
 async function login(event) {
     event.preventDefault();
 
-    const username = document.getElementById("user_id").value.trim();
+    const username = document.getElementById("id_user").value.trim();
     const password = document.getElementById("user_password").value.trim();
 
     const response = await fetch("http://localhost:3000/api/auth/login", {
@@ -11,15 +11,17 @@ async function login(event) {
         body: JSON.stringify({ username, password }),
     });
 
-    if (!response.ok) {
+    if (!(response.status === 200)) {
         const error = await response.json();
         alert(`Erreur : ${error.message || response.statusText}`);
         return;
     }
 
-    const { sessionToken: token } = await response.json();
-    console.log(token);
+    const { sessionToken: token, userId, level_permission } = await response.json();
     localStorage.setItem("token", token);
+    localStorage.setItem("id_user", userId);
+    localStorage.setItem("username", username);
+    localStorage.setItem("level_permission", level_permission);
     window.location.href = "accueil.html";
 }
 
