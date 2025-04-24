@@ -19,19 +19,17 @@ async function signin(event) {
             body: JSON.stringify(credentials)
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
+            document.getElementById("formMessage").innerHTML = "Création du compte réussi.";
+            // login automatiquement
             const data = await response.json();
-            localStorage.setItem("token", data);
-            //console.log("Connexion réussie :", data);
-            // redirection ou message à l'utilisateur ici
+            //localStorage.setItem("token", data);
         } else {
-            //console.error("Erreur de connexion :", response.status);
-            alert("Identifiants incorrects.");
+            document.getElementById("formMessage").innerHTML = "<p><strong>Cet identifiant est déjà pris.</strong><p>";
         }
     } catch (error) {
-        console.error("Erreur réseau :", error);
-        alert("Impossible de contacter le serveur.");
+        console.error(error);
+        document.getElementById("formMessage").innerHTML = "<p><strong>Impossible de contacter le serveur.</strong><p>";
     }
-
     return false;
 }

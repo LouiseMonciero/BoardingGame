@@ -87,9 +87,17 @@ FROM Games g
 LEFT JOIN Rates r ON g.id_game = r.id_game;
 
 CREATE VIEW View_GameDetails AS
-SELECT g.*, r.minplayers, r.maxplayers, r.minplaytime, r.maxplaytime, r.minage
+SELECT
+  g.id_game, g.name_game, g.year_game, g.thumbnail, g.description, g.boardgamemechanic, g.boardgamepublisher, g.boardgameartist, g.boardgamedesigner,
+  r.minplayers, r.maxplayers, r.minplaytime, r.maxplaytime, r.minage,
+  rt.average, rt.users_rated, rt.rank,
+  GROUP_CONCAT(DISTINCT c.category SEPARATOR ', ') AS categories
 FROM Games g
-JOIN Rules r ON g.id_rules = r.id_rules;
+JOIN Rules r ON g.id_rules = r.id_rules
+LEFT JOIN Rates rt ON g.id_game = rt.id_game
+LEFT JOIN Belongs b ON g.id_game = b.id_game
+LEFT JOIN Categories c ON b.id_category = c.id_category
+GROUP BY g.id_game;
 
 CREATE VIEW View_Logs_Users AS
 SELECT l.*, u.username
@@ -230,7 +238,6 @@ BEGIN
     g.name_game,
     g.year_game,
     g.thumbnail,
-    g.description,
     r.average,
     r.rank,
     r.users_rated,
@@ -262,11 +269,11 @@ BEGIN
   ORDER BY r.rank ASC;
 END//
 
-CREATE PROCEDURE Procedure_Get_Game_Info( -- not used yet
+CREATE PROCEDURE Procedure_Get_Game_Info(
   IN p_id_game INT
 )
 BEGIN
-  SELECT * FROM Games WHERE id_game = p_id_game;
+  SELECT * FROM View_GameDetails WHERE id_game = p_id_game;
 END//
 
 CREATE PROCEDURE Procedure_User_Library(

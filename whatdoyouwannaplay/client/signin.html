@@ -8,7 +8,7 @@
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
         ></script>
-        <script src="./assets/js/signin.js"></script>
+        <script src="./assets/js/signup.js"></script>
         <script src="./assets/js/alpine-components/header.js"></script>
         <title>SignIn</title>
     </head>
@@ -25,8 +25,12 @@
                 /></a>
             </div>
             <div class="header-links">
-                <template x-for="link in links" :key="link.href">
-                    <a :href="link.href" x-text="link.text"></a>
+                <template x-for="link in links" :key="link.text">
+                    <a
+                        :href="link.href"
+                        x-text="link.text"
+                        x-bind:onclick="link.onclick || null"
+                    ></a>
                 </template>
             </div>
         </div>

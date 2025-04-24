@@ -8,6 +8,7 @@
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
         ></script>
         <script src="./assets/js/alpine-components/header.js"></script>
+        <script src="./assets/js/login.js"></script>
         <link rel="stylesheet" href="./assets/css/common.css" />
         <title>Login</title>
     </head>
@@ -24,19 +25,27 @@
                 /></a>
             </div>
             <div class="header-links">
-                <template x-for="link in links" :key="link.href">
-                    <a :href="link.href" x-text="link.text"></a>
+                <template x-for="link in links" :key="link.text">
+                    <a
+                        :href="link.href"
+                        x-text="link.text"
+                        x-bind:onclick="link.onclick || null"
+                    ></a>
                 </template>
             </div>
         </div>
         <div class="content">
             <h1>Connexion</h1>
-            <form class="content" id="login_form">
+            <form
+                class="content"
+                id="login_form"
+                onsubmit="return login(event)"
+            >
                 <div>
                     <input
                         type="text"
                         placeholder="Identifiant"
-                        id="user_id"
+                        id="id_user"
                         required
                     />
                     <input
@@ -45,43 +54,12 @@
                         id="user_password"
                         required
                     />
-                    <input type="submit" text="Connexion" />
+                    <button type="submit">Connexion</button>
                 </div>
             </form>
             <div class="content">
                 <a href="signin.html">Première connexion</a>
             </div>
         </div>
-
-        <script>
-            document
-                .getElementById("login_form")
-                .addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const username = document.getElementById("user_id").value;
-                    const password =
-                        document.getElementById("user_password").value;
-
-                    const res = await fetch(
-                        "http://localhost:3000/api/auth/login",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ username, password }),
-                        }
-                    );
-
-                    if (!res.ok) {
-                        const err = await res.json();
-                        return alert(
-                            `Erreur : ${err.message || res.statusText}`
-                        );
-                    }
-
-                    const { token } = await res.json();
-                    localStorage.setItem("auth_token", token);
-                    window.location.href = "accueil.html";
-                });
-        </script>
     </body>
 </html>

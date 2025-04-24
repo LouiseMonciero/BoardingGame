@@ -57,8 +57,12 @@
                 /></a>
             </div>
             <div class="header-links">
-                <template x-for="link in links" :key="link.href">
-                    <a :href="link.href" x-text="link.text"></a>
+                <template x-for="link in links" :key="link.text">
+                    <a
+                        :href="link.href"
+                        x-text="link.text"
+                        x-bind:onclick="link.onclick || null"
+                    ></a>
                 </template>
             </div>
         </div>
@@ -66,19 +70,21 @@
             <div id="top">
                 <div>
                     <img src="./assets/img/avatar68.svg" alt="avatar" />
-                    <h4>Pseudo</h4>
+                    <h4 id="username"></h4>
                 </div>
+            </div>
+            <div class="content">
+                <h5>vos</h5>
+                <h3>Jeux</h3>
+            </div>
+            <div id="bottom">
                 <div>
-                    <h5>vos</h5>
-                    <h3>Jeux</h3>
-                </div>
-                <div id="search-bar">
-                    <form>
-                        <input placeholder="Chercher un jeu..." />
-                        <input type="submit" text="loupe" />
-                    </form>
+                    <button onclick="delete_account()">
+                        Supprimer mon compte
+                    </button>
                 </div>
             </div>
         </main>
+        <script src="./assets/js/profile.js"></script>
     </body>
 </html>

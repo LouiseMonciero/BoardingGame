@@ -115,8 +115,12 @@
                 /></a>
             </div>
             <div class="header-links">
-                <template x-for="link in links" :key="link.href">
-                    <a :href="link.href" x-text="link.text"></a>
+                <template x-for="link in links" :key="link.text">
+                    <a
+                        :href="link.href"
+                        x-text="link.text"
+                        x-bind:onclick="link.onclick || null"
+                    ></a>
                 </template>
             </div>
         </div>
@@ -179,28 +183,25 @@
                 </div>
             </div>
             <div
-                class="whygreen"
+                class="content"
                 style="max-width: 800px; margin: 2rem auto; padding: 0 1rem"
             >
                 <h1>Why Green</h1>
                 <p>
                     Nous avons conçu cette application avec une approche
                     GreenIT, en intégrant dès le départ des choix techniques qui
-                    réduisent l’empreinte environnementale de ce projet
+                    réduisent l’empreinte environnementale :
                 </p>
 
                 <h2>Conception sobre</h2>
                 <ul>
                     <li>
-                        Interface <strong>simple</strong>, centrée sur les
-                        besoins essentiels.
+                        Interface simple, centrée sur les besoins essentiels.
                     </li>
-                    <li>
-                        Webdesign <strong>minimalistes</strong> et réfléchi.
-                    </li>
+                    <li>Webdesign minimaliste et réfléchi.</li>
                 </ul>
 
-                <h2>Technologies légères</h2>
+                <h2>Technos légères</h2>
                 <ul>
                     <li>
                         Utilisation de <strong>Alpine.js</strong> uniquement,
@@ -227,17 +228,16 @@
 
                 <h2>Base de données et logs</h2>
                 <ul>
-                    <li>
-                        Utilisation d’index pour réduire l'impact énergétique
-                        des recherches.
-                    </li>
+                    <li>Utilisation d’index sur les champs clés.</li>
                     <li>Résultats mis en cache lorsque possible.</li>
-                    <li>
-                        Logs allégés avec
-                        <a href="https://www.npmjs.com/package/morgan">morgan</a
-                        >.
-                    </li>
+                    <li>Logs allégés avec Morgan.</li>
                 </ul>
+
+                <p>
+                    Cette démarche nous permet d’avoir une application
+                    performante, claire pour l’utilisateur et respectueuse des
+                    ressources matérielles et énergétiques.
+                </p>
             </div>
             <div id="right-side">
                 <div id="search-bar">

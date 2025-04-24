@@ -165,3 +165,8 @@ button {
     border-radius: 10px;
     font-size: 1rem;
 }
+
+/* FORMS */
+#formMessage {
+    color: red;
+}

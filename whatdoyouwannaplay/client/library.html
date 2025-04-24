@@ -1,138 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        ></script>
-        <script src="./assets/js/alpine-components/header.js"></script>
-        <script src="./assets/js/alpine-components/library.js"></script>
-        <link rel="stylesheet" href="./assets/css/common.css" />
-        <link rel="stylesheet" href="./assets/css/library.css" />
-        <title>Bibliothèque</title>
-    </head>
-    <body>
-        <div class="header" x-data="header">
-            <div class="header-logo">
-                <a href="./accueil.html"
-                    ><img
-                        src="./assets/img/logo.png"
-                        alt="logo"
-                        width="64px"
-                        height="64px"
-                        style="border-radius: 15px"
-                /></a>
-            </div>
-            <div class="header-links">
-                <template x-for="link in links" :key="link.href">
-                    <a :href="link.href" x-text="link.text"></a>
-                </template>
-            </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="./assets/js/alpine-components/header.js"></script>
+    <script src="./assets/js/library.js"></script>
+    <link rel="stylesheet" href="./assets/css/common.css"/>
+    <link rel="stylesheet" href="./assets/css/library.css"/>
+    <title>Bibliothèque</title>
+</head>
+<body>
+    <div class="header" x-data="header">
+        <div class="header-logo">
+            <a href="./accueil.html"
+                ><img
+                    src="./assets/img/logo.png"
+                    alt="logo"
+                    width="64px"
+                    height="64px"
+                    style="border-radius: 15px"
+            /></a>
         </div>
+        <div class="header-links">
+            <template x-for="link in links" :key="link.text">
+                <a
+                    :href="link.href"
+                    x-text="link.text"
+                    x-bind:onclick="link.onclick || null"
+                ></a>
+            </template>
+        </div>
+    </div>
 
-        <main x-data="library" class="container">
-            <!-- Sidebar Filters -->
-            <aside class="filters">
-                <!-- Filtre de recherche par nom -->
-                <div class="filter">
-                    <h3>Recherche</h3>
-                    <input type="text" x-model="searchTerm" placeholder="Nom du jeu...">
+    <main x-data="library" class="container">
+        <!-- Sidebar Filters -->
+        <aside class="filters">
+            <!-- Filtre de recherche par nom -->
+            <div class="filter">
+                <h3>Recherche</h3>
+                <input type="text" x-model="searchTerm" placeholder="Nom du jeu...">
+            </div>
+            
+            <!-- Filtre par catégorie -->
+            <div class="filter">
+                <h3>Catégorie</h3>
+                <select x-model="selectedCategory">
+                    <option value="">Toutes</option>
+                    <template x-for="category in categories" :key="category.id_category">
+                        <option :value="category.category" x-text="category.category"></option>
+                    </template>
+                </select>
+            </div>
+            
+            <!-- Remplacez les inputs min/max par des dual sliders -->
+            <div class="filter-group">
+                <h3>Classement (entre <span x-text="minRank"></span> et <span x-text="maxRank"></span>)</h3>
+                <div class="dual-container" id="rank-slider">
+                    <input type="range" x-model="minRank" class="dual dual-min"
+                            min="1" max="100" value="1"
+                            @input="updateDualSlider($event, 'minRank', 'maxRank', 'rank-slider', 'rank-bar')">
+                    <input type="range" x-model="maxRank" class="dual dual-max"
+                            min="1" max="100" value="100"
+                            @input="updateDualSlider($event, 'maxRank', 'minRank', 'rank-slider', 'rank-bar')">
+                    <div class="dual-bar" id="rank-bar"></div>
                 </div>
-                
-                <!-- Filtre par catégorie -->
-                <div class="filter">
-                    <h3>Catégorie</h3>
-                    <select x-model="selectedCategory">
-                        <option value="">Toutes</option>
-                        <template x-for="category in categories" :key="category.id_category">
-                            <option :value="category.category" x-text="category.category"></option>
-                        </template>
-                    </select>
+            </div>
+            
+            <div class="filter-group">
+                <h3>Nombre de joueurs (entre <span x-text="minPlayers"></span> et <span x-text="maxPlayers"></span>)</h3>
+                <div class="dual-container" id="players-slider">
+                    <input type="range" x-model="minPlayers" class="dual dual-min"
+                            min="1" max="10" value="1"
+                            @input="updateDualSlider($event, 'minPlayers', 'maxPlayers', 'players-slider', 'players-bar')">
+                    <input type="range" x-model="maxPlayers" class="dual dual-max"
+                            min="1" max="10" value="10"
+                            @input="updateDualSlider($event, 'maxPlayers', 'minPlayers', 'players-slider', 'players-bar')">
+                    <div class="dual-bar" id="players-bar"></div>
                 </div>
-                
-                <!-- Remplacez les inputs min/max par des dual sliders -->
-                <div class="filter-group">
-                    <h3>Classement (entre <span x-text="minRank"></span> et <span x-text="maxRank"></span>)</h3>
-                    <div class="dual-container" id="rank-slider">
-                        <input type="range" x-model="minRank" class="dual dual-min"
-                               min="1" max="100" value="1"
-                               @input="updateDualSlider($event, 'minRank', 'maxRank', 'rank-slider', 'rank-bar')">
-                        <input type="range" x-model="maxRank" class="dual dual-max"
-                               min="1" max="100" value="100"
-                               @input="updateDualSlider($event, 'maxRank', 'minRank', 'rank-slider', 'rank-bar')">
-                        <div class="dual-bar" id="rank-bar"></div>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <h3>Nombre de joueurs (entre <span x-text="minPlayers"></span> et <span x-text="maxPlayers"></span>)</h3>
-                    <div class="dual-container" id="players-slider">
-                        <input type="range" x-model="minPlayers" class="dual dual-min"
-                               min="1" max="10" value="1"
-                               @input="updateDualSlider($event, 'minPlayers', 'maxPlayers', 'players-slider', 'players-bar')">
-                        <input type="range" x-model="maxPlayers" class="dual dual-max"
-                               min="1" max="10" value="10"
-                               @input="updateDualSlider($event, 'maxPlayers', 'minPlayers', 'players-slider', 'players-bar')">
-                        <div class="dual-bar" id="players-bar"></div>
-                    </div>
-                </div>
+            </div>
 
-                <div class="filter-group">
-                    <h3>Temps de jeu (minutes) (entre <span x-text="minPlaytime"></span> et <span x-text="maxPlaytime"></span>)</h3>
-                    <div class="dual-container" id="playtime-slider">
-                        <input type="range" x-model="minPlaytime" class="dual dual-min"
-                               min="1" max="100" value="1"
-                               @input="updateDualSlider($event, 'minPlaytime', 'maxPlaytime', 'playtime-slider', 'playtime-bar')">
-                        <input type="range" x-model="maxPlaytime" class="dual dual-max"
-                               min="1" max="100" value="100"
-                               @input="updateDualSlider($event, 'maxPlaytime', 'minPlaytime', 'playtime-slider', 'playtime-bar')">
-                        <div class="dual-bar" id="playtime-bar"></div>
-                    </div>
+            <div class="filter-group">
+                <h3>Temps de jeu (minutes) (entre <span x-text="minPlaytime"></span> et <span x-text="maxPlaytime"></span>)</h3>
+                <div class="dual-container" id="playtime-slider">
+                    <input type="range" x-model="minPlaytime" class="dual dual-min"
+                            min="1" max="100" value="1"
+                            @input="updateDualSlider($event, 'minPlaytime', 'maxPlaytime', 'playtime-slider', 'playtime-bar')">
+                    <input type="range" x-model="maxPlaytime" class="dual dual-max"
+                            min="1" max="100" value="100"
+                            @input="updateDualSlider($event, 'maxPlaytime', 'minPlaytime', 'playtime-slider', 'playtime-bar')">
+                    <div class="dual-bar" id="playtime-bar"></div>
                 </div>
-                
-                <div class="filter-group">
-                    <h3>Année de publication (entre <span x-text="minYear"></span> et <span x-text="maxYear"></span>)</h3>
-                    <div class="dual-container" id="year-slider">
-                        <input type="range" x-model="minYear" class="dual dual-min"
-                               min="1" max="10" value="1"
-                               @input="updateDualSlider($event, 'minYear', 'maxYear', 'year-slider', 'year-bar')">
-                        <input type="range" x-model="maxYear" class="dual dual-max"
-                               min="1" max="10" value="10"
-                               @input="updateDualSlider($event, 'maxYear', 'minYear', 'year-slider', 'year-bar')">
-                        <div class="dual-bar" id="year-bar"></div>
-                    </div>
+            </div>
+            
+            <div class="filter-group">
+                <h3>Année de publication (entre <span x-text="minYear"></span> et <span x-text="maxYear"></span>)</h3>
+                <div class="dual-container" id="year-slider">
+                    <input type="range" x-model="minYear" class="dual dual-min"
+                            min="1" max="10" value="1"
+                            @input="updateDualSlider($event, 'minYear', 'maxYear', 'year-slider', 'year-bar')">
+                    <input type="range" x-model="maxYear" class="dual dual-max"
+                            min="1" max="10" value="10"
+                            @input="updateDualSlider($event, 'maxYear', 'minYear', 'year-slider', 'year-bar')">
+                    <div class="dual-bar" id="year-bar"></div>
                 </div>
+            </div>
 
-                <!-- Autres filtres -->
-                <div class="filter">
-                    <h3>Âge minimum</h3>
-                    <input type="number" x-model="minAge" min="0" placeholder="0">
-                </div>
-                
-                <div class="filter">
-                    <h3>Nombre min d'avis</h3>
-                    <input type="number" x-model="minReviews" min="0" placeholder="0">
-                </div>
-                
-                <!-- Boutons d'action -->
-                <div class="filter-actions">
-                    <button @click="applyFilters" class="btn-primary">Appliquer</button>
-                    <button @click="resetFilters" class="btn-secondary">Réinitialiser</button>
-                </div>
-            </aside>
+            <!-- Autres filtres -->
+            <div class="filter">
+                <h3>Âge minimum</h3>
+                <input type="number" x-model="minAge" min="0" placeholder="0">
+            </div>
+            
+            <div class="filter">
+                <h3>Nombre min d'avis</h3>
+                <input type="number" x-model="minReviews" min="0" placeholder="0">
+            </div>
+            
+            <!-- Boutons d'action -->
+            <div class="filter-actions">
+                <button @click="applyFilters" class="btn-primary">Appliquer</button>
+                <button @click="resetFilters" class="btn-secondary">Réinitialiser</button>
+            </div>
+        </aside>
 
-            <!-- Main Section -->
-            <section class="content">
-                <!-- Indicateur de chargement -->
-                <div x-show="isLoading" class="loading-indicator">
-                    Chargement en cours...
-                </div>
-        
-                <!-- Game Grid -->
-                <div class="grid" x-show="!isLoading">
-                    <template x-for="game in games" :key="game.id_game">
+        <!-- Main Section -->
+        <section class="content">
+            <!-- Indicateur de chargement -->
+            <div x-show="isLoading" class="loading-indicator">
+                Chargement en cours...
+            </div>
+
+            <div x-show="usingCache" class="cache-badge">
+                🟢 Mode éco - Données en cache
+            </div>
+    
+            <!-- Game Grid -->
+            <div class="grid" x-show="!isLoading">
+                <template x-for="game in games" :key="game.id_game">
+                    <a :href="`game-details.html?id=${game.id_game}`" id="game-card-link">
                         <div class="game-card">
                             <img :src="game.thumbnail || 'https://via.placeholder.com/100'" :alt="game.name_game" />
                             <h4 x-text="game.name_game"></h4>
@@ -144,16 +153,17 @@
                             <div class="full-rate">
                                 <span x-text="game.average + '/10'"></span>
                             </div>
-                            <h4 x-text="formatRating(game.users_rated) + ' ratings'" style="color: blue;"></h3>
+                            <h4 x-text="formatRating(game.users_rated) + ' avis'" style="color: blue;"></h3>
                         </div>
-                    </template>
-                </div>
+                    </a>
+                </template>
+            </div>
 
-                <!-- Message si aucun jeu trouvé -->
-                <div x-show="!isLoading && games.length === 0" class="no-results">
-                    Aucun jeu trouvé avec les critères de recherche.
-                </div>
-            </section>
-        </main>
-    </body>
+            <!-- Message si aucun jeu trouvé -->
+            <div x-show="!isLoading && games.length === 0" class="no-results">
+                Aucun jeu trouvé avec les critères de recherche.
+            </div>
+        </section>
+    </main>
+</body>
 </html>
