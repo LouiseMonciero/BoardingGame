@@ -42,7 +42,8 @@
                         <span x-text="'Année: ' + game.year_game"></span>
                         <span x-text="'Âge minimum: ' + game.minage + '+'"></span>
                         <span x-text="'Joueurs: ' + game.minplayers + '-' + game.maxplayers"></span>
-                        <span x-text="'Durée: ' + game.minplaytime + '-' + game.maxplaytime + ' min'"></span>
+                        <span x-show="game.minplaytime != game.maxplaytime" x-text="'Durée: ' + game.minplaytime + '-' + game.maxplaytime + ' min'"></span>
+                        <span x-show="game.minplaytime == game.maxplaytime" x-text="'Durée: ' + game.minplaytime + ' min'"></span>
                     </div>
                     
                     <div class="game-rating">
