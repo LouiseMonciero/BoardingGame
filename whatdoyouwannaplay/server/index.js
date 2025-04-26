@@ -1,16 +1,21 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, '../client')));
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
+// Connexion MySQL
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -23,9 +28,7 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
-app.use(cors());
-
-// Routes pour les jeux
+// Routes API
 const gamesRoutes = require('./routes/games');
 const usersRoutes = require('./routes/users');
 const logsRoutes = require('./routes/logs');
@@ -42,5 +45,12 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
 
+// Génération dynamique de config.js pour le front
+app.get('/config.js', (req, res) => {
+    res.type('application/javascript');
+    res.send(`window.SERVER_PORT = ${process.env.PORT || 3000};`);
+});
+
+// Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT || 3000, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));

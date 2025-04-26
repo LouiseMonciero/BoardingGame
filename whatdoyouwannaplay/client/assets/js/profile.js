@@ -9,7 +9,7 @@
     };
     if (!username) {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/check", {
+            const response = await fetch(`http://localhost:${window.SERVER_PORT}/api/auth/check`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -54,7 +54,7 @@ async function delete_account() {
             window.location.href = "accueil.html";
         };
         try {
-            const response = await fetch(`http://localhost:3000/api/users/${id_user}`, {
+            const response = await fetch(`http://localhost:${window.SERVER_PORT}/api/users/${id_user}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

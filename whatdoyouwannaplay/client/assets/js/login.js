@@ -5,7 +5,7 @@ async function login(event) {
     const username = document.getElementById("id_user").value.trim();
     const password = document.getElementById("user_password").value.trim();
 
-    const response = await fetch("http://localhost:3000/api/auth/login", {
+    const response = await fetch(`http://localhost:${window.SERVER_PORT}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

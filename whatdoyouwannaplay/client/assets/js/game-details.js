@@ -14,7 +14,7 @@ document.addEventListener('alpine:init', () => {
             }
             
             try {
-                const response = await fetch(`http://localhost:5500/api/games/${gameId}`);
+                const response = await fetch(`http://localhost:${window.SERVER_PORT}/api/games/${gameId}`);
                 if (!response.ok) throw new Error('Jeu non trouvé');
                 
                 this.game = await response.json();
