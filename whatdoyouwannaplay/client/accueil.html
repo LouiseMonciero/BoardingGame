@@ -12,34 +12,6 @@
         <script defer scr="./assets/js/alpine-components/quizApp.js"></script>
         <script src="./assets/js/alpine-components/header.js"></script>
     </head>
-    <style>
-        /* ---- Layout ---- */
-
-        main {
-            display: flex;
-            justify-content: space-between;
-            padding: 2rem;
-            gap: 2rem;
-        }
-        h3{
-            text-align: center;
-        }
-
-        /* ---- Left side ---- */
-
-        #left-side {
-            width: 40%;
-        }
-
-        /* ---- Right side ---- */
-
-        #right-side {
-            width: 30%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-    </style>
     <body>
         <div class="header" x-data="header">
             <div class="header-logo">
@@ -69,54 +41,63 @@
                 class="content"
                 style="margin: 2rem auto; padding: 0 1rem"
             >
-                <h1>Why Green</h1>
-                <p>
-                    Nous avons conçu cette application avec une approche
-                    GreenIT, en intégrant dès le départ des choix techniques qui
+                <h1>Bienvenue sur "What should I Play !"</h1>
+                <p class="PAccueil">  
+                    Nous avons conçu cette application afin d'aider les personnes à choisir un jeu de société à jouer, 
+                    avec une approche GreenIT, en intégrant dès le départ des choix techniques qui
                     réduisent l’empreinte environnementale :
                 </p>
 
                 <h2>Conception sobre</h2>
-                <ul>
-                    <li>
-                        Interface simple, centrée sur les besoins essentiels.
-                    </li>
-                    <li>Webdesign minimaliste et réfléchi.</li>
-                </ul>
+                <p class="PAccueil">
+                    • Nous avons opté pour une conception sobre et efficace, en
+                    évitant les éléments superflus et en nous concentrant sur
+                    l'essentiel.
+                    <br>
+                    • Notre Webdesign est minimaliste et réfléchi, ce qui permet de
+                    réduire la consommation de ressources. Nous utilisons un panel léger de couleurs, sans surcharger
+                    le design avec des éléments inutiles.
+                    <br><br>
+                </p>
 
                 <h2>Technos légères</h2>
-                <ul>
-                    <li>
-                        Utilisation de <strong>Alpine.js</strong> uniquement,
-                        sans frameworks lourds.
-                    </li>
-                    <li>
-                        Images limitées et optimisées (logo en SVG, un seul
-                        avatar).
-                    </li>
-                </ul>
+                <p class="PAccueil">
+                    • Nous utilisons de <strong>Alpine.js</strong> uniquement,
+                    sans frameworks lourds.
+                    <br>
+                    • Les images sont limitées et optimisées (logo en SVG, un seul avatar).
+                    <br>
+                    • Nous avons choisi de ne pas utiliser de bibliothèques CSS, conformément à notre volonté de créer un design sobre et léger. 
+                    <br><br>
+                </p>
 
                 <h2>Backend optimisé</h2>
-                <ul>
-                    <li>
-                        Choix de <strong>Node.js + Express</strong> pour sa
-                        légèreté et simplicité.
-                    </li>
-                    <li>
-                        Middleware personnalisé au lieu de bibliothèques
-                        lourdes.
-                    </li>
-                    <li>Code factorisé, sans redondance.</li>
-                </ul>
+                <p class="PAccueil">
+                    • Nous avons choisi d'utiliser <strong>Node.js + Express</strong> pour leur
+                    légèreté et leur simplicité.
+                    <br>
+                    • Nous avons opté pour un Middleware personnalisé au lieu de bibliothèques lourdes.
+                    <br>
+                    • Nous avons mis en place un système de cache pour les requêtes fréquentes, afin de réduire la charge sur le serveur et d'améliorer les temps de réponse.
+                    <br>
+                    • Nous avons optimisé les requêtes SQL pour réduire le temps de réponse et la charge sur la base de données.
+                    <br>
+                    • Enfin, notre code est factorisé, sans redondance. Nous n'utilisons pas de balises inutiles (comme ici, nous rajoutons des caractères '•' plutôt que les balises ul et li).
+                    <br><br>
+                </p>
 
                 <h2>Base de données et logs</h2>
-                <ul>
-                    <li>Utilisation d’index sur les champs clés.</li>
-                    <li>Résultats mis en cache lorsque possible.</li>
-                    <li>Logs allégés avec Morgan.</li>
-                </ul>
+                <p class="PAccueil">
+                    • Nous avons utilisé des index sur les champs clés de la base de données.
+                    <br>
+                    • Nos résultats sont mis en cache lorsque cela est possible.
+                    <br>
+                    • Nous avons mis en place un système de logs allégés avec <strong>Morgan</strong>, afin de réduire la charge sur le serveur et d'améliorer les performances.
+                    <br><br>
 
-                <p>
+                </p>
+
+                <p class="PAccueil">
                     Cette démarche nous permet d’avoir une application
                     performante, claire pour l’utilisateur et respectueuse des
                     ressources matérielles et énergétiques.
@@ -131,7 +112,7 @@
                 </div>
                 <div class="bordered">
                     <div class="actualities">
-                        <h3>Actualités du site</h3>
+                        <h3 class="h3Accueil">Actualités du site</h3>
                         <p>
                             ➤ De nouveaux jeux sont disponibles sur le site, tels que [Mettre des noms de jeux ici] ! 
                             <br>
