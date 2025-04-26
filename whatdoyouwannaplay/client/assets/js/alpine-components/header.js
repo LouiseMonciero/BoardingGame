@@ -5,7 +5,7 @@ document.addEventListener('alpine:init', () => {
             const isLoggedIn = localStorage.getItem("token") !== null;
 
             this.links = [
-                { text: 'Accueil', href: './accueil.html' },
+                { text: 'Accueil', href: './index.html' },
                 { text: 'Bibliothèque', href: './library.html' },
             ];
 

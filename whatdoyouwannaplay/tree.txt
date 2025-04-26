@@ -1,12 +1,12 @@
 Structure du dossier pour le volume DATA
-Le num‚ro de s‚rie du volume est 3A75-8BE4
+Le numï¿½ro de sï¿½rie du volume est 3A75-8BE4
 D:.
 |   .DS_Store
 |   tree.txt
 |   
 +---client
 |   |   .env
-|   |   accueil.html
+|   |   index.html
 |   |   game-details.html
 |   |   library.html
 |   |   login.html
