@@ -1,4 +1,3 @@
--- === create_table.sql ===
 DROP DATABASE IF EXISTS BoardingGames;
 CREATE DATABASE BoardingGames;
 USE BoardingGames;
@@ -18,9 +17,9 @@ CREATE TABLE Categories(
 );
 
 CREATE TABLE Users(
-   id_user INT PRIMARY KEY,
+   id_user INT PRIMARY KEY AUTO_INCREMENT,
    username VARCHAR(50) UNIQUE,
-   password_user VARCHAR(50),
+   password_user VARCHAR(255) NOT NULL,
    level_permission VARCHAR(50)
 );
 
@@ -43,7 +42,6 @@ CREATE TABLE Games(
    CHECK (LENGTH(name_game) > 0)
 );
 
-
 CREATE TABLE Rates(
    id_game INT,
    id_rate INT,
@@ -64,16 +62,15 @@ CREATE TABLE Belongs(
 );
 
 CREATE TABLE Logs(
-   id_game INT,
-   id_user INT,
+   id_game INT NULL,
+   id_user INT NULL,
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
    PRIMARY KEY(id_log),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game),
-   FOREIGN KEY(id_user) REFERENCES Users(id_user)
+   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
+   FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
-
 
 CREATE TABLE Favorites(
    id_game INT, 
@@ -85,14 +82,22 @@ CREATE TABLE Favorites(
 -- Création des vues
 
 CREATE VIEW View_Games AS
-SELECT g.id_game, g.name_game, r.average, g.thumbnail
+SELECT g.id_game, g.name_game, r.average, r.users_rated, r.rank, g.thumbnail
 FROM Games g
 LEFT JOIN Rates r ON g.id_game = r.id_game;
 
 CREATE VIEW View_GameDetails AS
-SELECT g.*, r.minplayers, r.maxplayers, r.minplaytime, r.maxplaytime, r.minage
+SELECT
+  g.id_game, g.name_game, g.year_game, g.thumbnail, g.description, g.boardgamemechanic, g.boardgamepublisher, g.boardgameartist, g.boardgamedesigner,
+  r.minplayers, r.maxplayers, r.minplaytime, r.maxplaytime, r.minage,
+  rt.average, rt.users_rated, rt.rank,
+  GROUP_CONCAT(DISTINCT c.category SEPARATOR ', ') AS categories
 FROM Games g
-JOIN Rules r ON g.id_rules = r.id_rules;
+JOIN Rules r ON g.id_rules = r.id_rules
+LEFT JOIN Rates rt ON g.id_game = rt.id_game
+LEFT JOIN Belongs b ON g.id_game = b.id_game
+LEFT JOIN Categories c ON b.id_category = c.id_category
+GROUP BY g.id_game;
 
 CREATE VIEW View_Logs_Users AS
 SELECT l.*, u.username
@@ -127,7 +132,7 @@ BEGIN
   VALUES (NEW.id_game, NULL, 'Update game', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_Game_Delete
+CREATE TRIGGER Trigger_Log_Game_Delete -- PAS OK !!!!
 AFTER DELETE ON Games
 FOR EACH ROW
 BEGIN
@@ -143,7 +148,7 @@ BEGIN
   VALUES (NEW.id_user, NULL, 'Create user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_Delete
+CREATE TRIGGER Trigger_Log_User_Delete -- PAS OK !!!
 AFTER DELETE ON Users
 FOR EACH ROW
 BEGIN
@@ -151,7 +156,7 @@ BEGIN
   VALUES (OLD.id_user, NULL, 'Delete user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_PermissionChange
+CREATE TRIGGER Trigger_Log_User_PermissionChange -- PAS OK !!!!
 AFTER UPDATE ON Users
 FOR EACH ROW
 BEGIN
@@ -201,33 +206,74 @@ CREATE PROCEDURE Procedure_Delete_Game(
   IN p_id_game INT
 )
 BEGIN
+  SET FOREIGN_KEY_CHECKS = 0;
   DELETE FROM Favorites WHERE id_game = p_id_game;
   DELETE FROM Belongs WHERE id_game = p_id_game;
   DELETE FROM Rates WHERE id_game = p_id_game;
   DELETE FROM Logs WHERE id_game = p_id_game;
   DELETE FROM Games WHERE id_game = p_id_game;
+  SET FOREIGN_KEY_CHECKS = 1;
 END//
 
 CREATE PROCEDURE Procedure_Search_Games(
+  IN p_search_term VARCHAR(100),
   IN p_category VARCHAR(100),
   IN p_min_rating DECIMAL(15,2),
-  IN p_rank_max INT
+  IN p_min_rank INT,
+  IN p_max_rank INT,
+  IN p_min_players INT,
+  IN p_max_players INT,
+  IN p_min_playtime INT,
+  IN p_max_playtime INT,
+  IN p_min_age INT,
+  IN p_min_year INT,
+  IN p_max_year INT,
+  IN p_min_reviews INT
 )
 BEGIN
-  SELECT g.* FROM Games g
-  JOIN Belongs b ON g.id_game = b.id_game
-  JOIN Categories c ON b.id_category = c.id_category
+  -- Debug: Affiche les paramètres reçus
+  SELECT CONCAT('Search term: ', IFNULL(p_search_term, 'NULL')) AS debug;
+  SELECT 
+    g.id_game,
+    g.name_game,
+    g.year_game,
+    g.thumbnail,
+    r.average,
+    r.rank,
+    r.users_rated,
+    rules.minplayers,
+    rules.maxplayers,
+    rules.minplaytime,
+    rules.maxplaytime,
+    rules.minage,
+    GROUP_CONCAT(DISTINCT c.category SEPARATOR ', ') AS categories
+  FROM Games g
   JOIN Rates r ON g.id_game = r.id_game
-  WHERE c.category LIKE CONCAT('%', p_category, '%')
-    AND r.average >= p_min_rating
-    AND r.rank <= p_rank_max;
+  JOIN Rules rules ON g.id_rules = rules.id_rules
+  LEFT JOIN Belongs b ON g.id_game = b.id_game
+  LEFT JOIN Categories c ON b.id_category = c.id_category
+  WHERE (p_search_term IS NULL OR g.name_game LIKE CONCAT('%', p_search_term, '%'))
+    AND (p_category IS NULL OR c.category LIKE CONCAT('%', p_category, '%'))
+    AND (p_min_rating IS NULL OR r.average >= p_min_rating)
+    AND (p_min_rank IS NULL OR r.rank >= p_min_rank)
+    AND (p_max_rank IS NULL OR r.rank <= p_max_rank)
+    AND (p_min_players IS NULL OR rules.minplayers >= p_min_players)
+    AND (p_max_players IS NULL OR rules.maxplayers <= p_max_players)
+    AND (p_min_playtime IS NULL OR rules.minplaytime >= p_min_playtime)
+    AND (p_max_playtime IS NULL OR rules.maxplaytime <= p_max_playtime)
+    AND (p_min_age IS NULL OR rules.minage >= p_min_age)
+    AND (p_min_year IS NULL OR g.year_game >= p_min_year)
+    AND (p_max_year IS NULL OR g.year_game <= p_max_year)
+    AND (p_min_reviews IS NULL OR r.users_rated >= p_min_reviews)
+  GROUP BY g.id_game
+  ORDER BY r.rank ASC;
 END//
 
 CREATE PROCEDURE Procedure_Get_Game_Info(
   IN p_id_game INT
 )
 BEGIN
-  SELECT * FROM Games WHERE id_game = p_id_game;
+  SELECT * FROM View_GameDetails WHERE id_game = p_id_game;
 END//
 
 CREATE PROCEDURE Procedure_User_Library(
@@ -240,22 +286,23 @@ BEGIN
 END//
 
 CREATE PROCEDURE Procedure_Create_User(
-  IN p_id_user INT,
   IN p_username VARCHAR(50),
-  IN p_password_user VARCHAR(50),
+  IN p_password_user VARCHAR(255),
   IN p_level_permission VARCHAR(50)
 )
 BEGIN
-  INSERT INTO Users VALUES (p_id_user, p_username, p_password_user, p_level_permission);
+  INSERT INTO Users(username, password_user, level_permission) VALUES (p_username, p_password_user, p_level_permission);
 END//
 
 CREATE PROCEDURE Procedure_Delete_User(
   IN p_id_user INT
 )
 BEGIN
+  SET FOREIGN_KEY_CHECKS = 0;
   DELETE FROM Favorites WHERE id_user = p_id_user;
-  DELETE FROM Logs WHERE id_user = p_id_user;
+  -- DELETE FROM Logs WHERE id_user = p_id_user;
   DELETE FROM Users WHERE id_user = p_id_user;
+  SET FOREIGN_KEY_CHECKS = 1;
 END//
 
 CREATE PROCEDURE Procedure_Change_User_Permission(
@@ -286,7 +333,7 @@ DELIMITER ;
 -- Création des transactions
 
 DELIMITER //
-CREATE PROCEDURE Transactions_Rate_Game(
+CREATE PROCEDURE Transactions_Rate_Game( -- TO TESTTTTTT
   IN p_id_game INT,
   IN p_id_rate INT,
   IN p_rank INT
@@ -315,7 +362,7 @@ BEGIN
   RETURN role;
 END//
 
-CREATE FUNCTION Ft_Get_Average_Rating(gid INT) RETURNS DECIMAL(15,2)
+CREATE FUNCTION Ft_Get_Average_Rating(gid INT) RETURNS DECIMAL(15,2) -- used in Transactions_Rate_Game
 DETERMINISTIC
 BEGIN
   DECLARE avg_rating DECIMAL(15,2);
@@ -324,8 +371,19 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Création des indexes
+CREATE INDEX idx_name_game ON Games(name_game);
+CREATE INDEX idx_year_game ON Games(year_game);
 
--- === insert_rules.sql ===
+CREATE INDEX idx_rate_game ON Rates(id_game);
+CREATE INDEX idx_rate_rank ON Rates(`rank`);
+CREATE INDEX idx_rate_avg ON Rates(average);
+
+CREATE INDEX idx_belongs_category ON Belongs(id_category);
+
+CREATE INDEX idx_users_permission ON Users(level_permission);
+
+CREATE INDEX idx_logs_date ON Logs(date_log);
 INSERT INTO Rules (id_rules, minplayers, maxplayers, minplaytime, maxplaytime, minage) VALUES
 (0, 2, 4, 45, 45, 8),
 (1, 2, 5, 30, 45, 7),
@@ -1327,9 +1385,7 @@ INSERT INTO Rules (id_rules, minplayers, maxplayers, minplaytime, maxplaytime, m
 (997, 2, 4, 60, 75, 13),
 (998, 2, 2, 20, 20, 10),
 (999, 2, 5, 15, 15, 8);
-
-
--- === insert_games.sql ===
+-- SQLBook: Code
 
 INSERT INTO Games (id_game, name_game, year_game, url, thumbnail, description, boardgamemechanic, boardgamefamily, boardgameexpansion, boardgameimplementation, boardgamepublisher, boardgameartist, boardgamedesigner, id_rules) VALUES
 (30549, 'Pandemic', 2008, '/boardgame/30549/pandemic', 'https://cf.geekdo-images.com/S3ybV1LAp-8SnHIXLLjVqA__micro/img/S4tXI3Yo7BtqmBoKINLLVUFsaJ0=/fit-in/64x64/filters:strip_icc()/pic1534148.jpg', 'In Pandemic, several virulent diseases have broken out simultaneously all over the world! The players are disease-fighting specialists whose mission is to treat disease hotspots while researching cures for each of four plagues before they get out of hand.&#10;&#10;The game board depicts several major population centers on Earth. On each turn, a player can use up to four actions to travel between cities, treat infected populaces, discover a cure, or build a research station. A deck of cards provides the players with these abilities, but sprinkled throughout this deck are Epidemic! cards that accelerate and intensify the diseases'' activity. A second, separate deck of cards controls the &quot;normal&quot; spread of the infections.&#10;&#10;Taking a unique role within the team, players must plan their strategy to mesh with their specialists'' strengths in order to conquer the diseases. For example, the Operations Expert can build research stations which are needed to find cures for the diseases and which allow for greater mobility between cities; the Scientist needs only four cards of a particular disease to cure it instead of the normal five&mdash;but the diseases are spreading quickly and time is running out. If one or more diseases spreads beyond recovery or if too much time elapses, the players all lose. If they cure the four diseases, they all win!&#10;&#10;The 2013 edition of Pandemic includes two new characters&mdash;the Contingency Planner and the Quarantine Specialist&mdash;not available in earlier editions of the game.&#10;&#10;Pandemic is the first game in the Pandemic series.&#10;&#10;', '[''Action Points'', ''Cooperative Game'', ''Hand Management'', ''Point to Point Movement'', ''Set Collection'', ''Trading'', ''Variable Player Powers'']', '[''Components: Map (Global Scale)'', ''Components: Multi-Use Cards'', ''Digital Implementations: Board Game Arena'', ''Game: Pandemic'', ''Medical: Diseases'', ''Occupation: Dispatcher'', ''Occupation: Medic / Doctor / Nurses'', ''Occupation: Researcher / Scientist'', ''Region: The World'']', '[''Pandemic: Gen Con 2016 Promos – Z-Force Team Member/Game Convention'', ''Pandemic: In the Lab'', ''Pandemic: On the Brink'', ''Pandemic: Promo Roles'', ''Pandemic: State of Emergency'', ''Pandemic: Survival Promos – Crisis Mitigator/Relocation Specialist'', ''Pandemie: Uitbreiding -De Generalist-'']', '[''Pandemic Legacy: Season 0'', ''Pandemic Legacy: Season 1'', ''Pandemic Legacy: Season 2'', ''Pandemic: Fall of Rome'', ''Pandemic: Hot Zone – Europe'', ''Pandemic: Hot Zone – North America'', ''Pandemic: Iberia'', ''Pandemic: Reign of Cthulhu'', ''Pandemic: Rising Tide'', ''Pandemic: The Cure'', ''World of Warcraft: Wrath of the Lich King'']', '[''Z-Man Games'', ''Albi'', ''Asmodee'', ''Asmodee Italia'', ''Asterion Press'', ''Bergsala Enigma (Enigma)'', ''Brain Games'', ''Devir'', ''Filosofia Éditions'', ''Galápagos Jogos'', ''Gém Klub Kft.'', ''HaKubia'', ''Hobby Japan'', ''HomoLudicus'', ''Jolly Thinkers'', ''Kaissa Chess & Games'', ''Korea Boardgames Co., Ltd.'', ''Lacerta'', ''Lautapelit.fi'', ''Lifestyle Boardgames Ltd'', ''MINDOK'', ''Nordic Games GmbH'', ''Paladium Games'', ''Pegasus Spiele'', ''Quined White Goblin Games'', ''Rebel Sp. z o.o.'', ''Siam Board Games'', ''Stratelibri'', ''Wargames Club Publishing'', ''White Goblin Games'', ''Zhiyanjia'', ''Ігромаг'', ''Взрослые дети'']', '[''Josh Cappel'', ''Christian Hanisch'', ''Régis Moulun'', ''Chris Quilliams'', ''Tom Thiel'']', '[''Matt Leacock'']', 0),
@@ -2352,10 +2408,11 @@ INSERT INTO Games (id_game, name_game, year_game, url, thumbnail, description, b
 
 INSERT INTO Games (id_game, name_game, year_game, url, thumbnail, description, boardgamemechanic, boardgamefamily, boardgameexpansion, boardgameimplementation, boardgamepublisher, boardgameartist, boardgamedesigner, id_rules) VALUES
 (244995, 'Illusion', 2018, '/boardgame/244995/illusion', 'https://cf.geekdo-images.com/jcFaI9hr6iXwpwCZT-ifHA__micro/img/2iXyZqhZ_ZShCcdOFv-FS89e3kw=/fit-in/64x64/filters:strip_icc()/pic3979771.png', 'Can you trust your eyes? How much color do you really see? These questions are what drive gameplay in Illusion, with rules that allow for gameplay to start immediately. Who has the right perspective not to be fooled?&#10;&#10;', '[''Pattern Recognition'']', '[''Admin: Better Description Needed!'', ''Series: NSV Middys (Nürnberger Spielkartenverlag)'']', NULL, NULL, '[''Nürnberger-Spielkarten-Verlag'', ''Arclight'', ''Brädspel.se'', ''Brain Games'', ''FoxGames'', ''Fractal Juegos'', ''Maldón'', ''Oya'', ''Pandasaurus Games'', ''Pravi Junak'', ''Swan Panasia Co., Ltd.'', ''White Goblin Games'', ''YellowBOX'']', '[''Oliver Freudenreich'', ''Sandra Freudenreich'']', '[''Wolfgang Warsch'']', 999);
-
-
--- === insert_rates.sql ===
-INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES
+INSERT INTO Users (username, password_user, level_permission) VALUES 
+('Louise', '12345678', 'user'),
+('Fafou', '12345678', 'admin'),
+('Parpaing', '12345678', 'user'),
+('Tiph', '12345678', 'admin');INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES
 (30549, 105, 106, 7.59, 108975),
 (822, 189, 190, 7.42, 108738),
 (13, 428, 429, 7.14, 108024),
@@ -3356,9 +3413,6 @@ INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES
 (162286, 673, 674, 7.38, 3554),
 (264241, 453, 454, 7.66, 3553),
 (244995, 1338, 1339, 6.77, 3546);
-
-
--- === insert_categories.sql ===
 INSERT INTO Categories (id_category, category) VALUES
 (0, 'Medical'),
 (1, 'City Building'),
@@ -3439,16 +3493,6 @@ INSERT INTO Categories (id_category, category) VALUES
 (76, 'Game System'),
 (77, 'American Civil War'),
 (78, 'American Revolutionary War');
-
-
--- === insert_user.sql ===
-INSERT INTO Users (id_user, username, password_user, level_permission) VALUES 
-(0, 'Louise', '12345678', 'user'),
-(1, 'Fafou', '12345678', 'admin'),
-(2, 'Parpaing', '12345678', 'user'),
-(3, 'Tiph', '12345678', 'admin');
-
--- === insert_belongs.sql ===
 INSERT INTO Belongs (id_game, id_category) VALUES
 (30549, 0),
 (822, 1),
@@ -6594,5 +6638,3 @@ INSERT INTO Belongs (id_game, id_category) VALUES
 (264241, 24),
 (264241, 7),
 (244995, 7);
-
-
