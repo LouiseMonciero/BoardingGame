@@ -1,19 +1,13 @@
 #!/bin/bash
 
-# Consignes d'execution :
-
-# utiliser un invite de commande bash
-# git bash ou WSL sur Windows, sinon celui par défaut sur Linux et MaxOs
-# Placez vous dans le répertoir avec les fichier sql : cd <votre chemin d'acces>
-
-# executer ces commandes en retirant le signe '$':
-
-# $chmod +x create-init_all.sh
+# Consignes d'exécution :
+# Utiliser un invite de commande bash
+# Git Bash ou WSL sur Windows, sinon celui par défaut sur Linux et MacOS
+# Placez-vous dans le répertoire avec les fichiers SQL : cd <votre chemin d'accès>
+# Exécuter ces commandes en retirant le signe '$' :
+# $ chmod +x create-init_all.sh
 # $ ./create-init_all.sh
-
-# exectuer le fichier init_all.sql afin de créer et remplir la base de donnée
-
-
+# Exécuter le fichier init_all.sql afin de créer et remplir la base de données
 
 # Liste des fichiers SQL à compiler
 sql_files=(
@@ -34,11 +28,16 @@ if [ -f "$output_file" ]; then
     rm "$output_file"
 fi
 
-# Compiler les fichiers SQL dans l'ordre
+# Compiler les fichiers SQL dans l'ordre avec des commentaires
 for file in "${sql_files[@]}"; do
     if [ -f "$file" ]; then
+        # Ajouter un commentaire pour indiquer le début du fichier
+        echo "--------------------------------------------------" >> "$output_file"
+        echo "-- Contenu du fichier : $file" >> "$output_file"
+        echo "--------------------------------------------------" >> "$output_file"
+        # Ajouter le contenu du fichier
         cat "$file" >> "$output_file"
-        echo "Ajouté $file à $output_file"
+        echo "Ajout de $file à $output_file"
     else
         echo "Fichier $file non trouvé"
     fi

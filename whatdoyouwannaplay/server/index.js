@@ -53,4 +53,4 @@ app.get('/config.js', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}\nPour accéder à la page d'accueil, ouvrez http://localhost:${PORT}/accueil.html`));

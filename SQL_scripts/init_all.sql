@@ -1,3 +1,6 @@
+--------------------------------------------------
+-- Contenu du fichier : create_table.sql
+--------------------------------------------------
 DROP DATABASE IF EXISTS BoardingGames;
 CREATE DATABASE BoardingGames;
 USE BoardingGames;
@@ -384,6 +387,9 @@ CREATE INDEX idx_belongs_category ON Belongs(id_category);
 CREATE INDEX idx_users_permission ON Users(level_permission);
 
 CREATE INDEX idx_logs_date ON Logs(date_log);
+--------------------------------------------------
+-- Contenu du fichier : insert_rules.sql
+--------------------------------------------------
 INSERT INTO Rules (id_rules, minplayers, maxplayers, minplaytime, maxplaytime, minage) VALUES
 (0, 2, 4, 45, 45, 8),
 (1, 2, 5, 30, 45, 7),
@@ -1385,6 +1391,9 @@ INSERT INTO Rules (id_rules, minplayers, maxplayers, minplaytime, maxplaytime, m
 (997, 2, 4, 60, 75, 13),
 (998, 2, 2, 20, 20, 10),
 (999, 2, 5, 15, 15, 8);
+--------------------------------------------------
+-- Contenu du fichier : insert_games.sql
+--------------------------------------------------
 -- SQLBook: Code
 
 INSERT INTO Games (id_game, name_game, year_game, url, thumbnail, description, boardgamemechanic, boardgamefamily, boardgameexpansion, boardgameimplementation, boardgamepublisher, boardgameartist, boardgamedesigner, id_rules) VALUES
@@ -2408,11 +2417,22 @@ INSERT INTO Games (id_game, name_game, year_game, url, thumbnail, description, b
 
 INSERT INTO Games (id_game, name_game, year_game, url, thumbnail, description, boardgamemechanic, boardgamefamily, boardgameexpansion, boardgameimplementation, boardgamepublisher, boardgameartist, boardgamedesigner, id_rules) VALUES
 (244995, 'Illusion', 2018, '/boardgame/244995/illusion', 'https://cf.geekdo-images.com/jcFaI9hr6iXwpwCZT-ifHA__micro/img/2iXyZqhZ_ZShCcdOFv-FS89e3kw=/fit-in/64x64/filters:strip_icc()/pic3979771.png', 'Can you trust your eyes? How much color do you really see? These questions are what drive gameplay in Illusion, with rules that allow for gameplay to start immediately. Who has the right perspective not to be fooled?&#10;&#10;', '[''Pattern Recognition'']', '[''Admin: Better Description Needed!'', ''Series: NSV Middys (Nürnberger Spielkartenverlag)'']', NULL, NULL, '[''Nürnberger-Spielkarten-Verlag'', ''Arclight'', ''Brädspel.se'', ''Brain Games'', ''FoxGames'', ''Fractal Juegos'', ''Maldón'', ''Oya'', ''Pandasaurus Games'', ''Pravi Junak'', ''Swan Panasia Co., Ltd.'', ''White Goblin Games'', ''YellowBOX'']', '[''Oliver Freudenreich'', ''Sandra Freudenreich'']', '[''Wolfgang Warsch'']', 999);
+--------------------------------------------------
+-- Contenu du fichier : insert_user.sql
+--------------------------------------------------
 INSERT INTO Users (username, password_user, level_permission) VALUES 
-('Louise', '12345678', 'user'),
-('Fafou', '12345678', 'admin'),
-('Parpaing', '12345678', 'user'),
-('Tiph', '12345678', 'admin');INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES
+-- ('Louise', '12345678', 'user'),
+-- ('Fafou', '12345678', 'admin'),
+-- ('Parpaing', '12345678', 'user'),
+-- ('Tiph', '12345678', 'admin');
+
+('Louise', '$2b$10$nxi8Ol.UhdWrvtI0jBYrpe.Qf/OxMpPM2Uyi89gtff6sug444IT7a', 'user'),
+('Fafou', '$2b$10$fg4xl7oZzEpwFzjbttsGwu2X.bEoMSpX55.9F5Jb0Bys4.amciSwG', 'admin'),
+('Parpaing', '$2b$10$Zh.GXg4NQh1JiRoLcF7dIOSfN2DtWp2zEq1pPsRZ4UES4U6yz5GBK', 'user'),
+('Tiph', '$2b$10$PhqN6H4gHPYircL0J0aF4.lXt1YsFJmHva4vIHJrcPuN1vcpQLZKO', 'admin');--------------------------------------------------
+-- Contenu du fichier : insert_rates.sql
+--------------------------------------------------
+INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES
 (30549, 105, 106, 7.59, 108975),
 (822, 189, 190, 7.42, 108738),
 (13, 428, 429, 7.14, 108024),
@@ -3413,6 +3433,9 @@ INSERT INTO Users (username, password_user, level_permission) VALUES
 (162286, 673, 674, 7.38, 3554),
 (264241, 453, 454, 7.66, 3553),
 (244995, 1338, 1339, 6.77, 3546);
+--------------------------------------------------
+-- Contenu du fichier : insert_categories.sql
+--------------------------------------------------
 INSERT INTO Categories (id_category, category) VALUES
 (0, 'Medical'),
 (1, 'City Building'),
@@ -3493,6 +3516,9 @@ INSERT INTO Categories (id_category, category) VALUES
 (76, 'Game System'),
 (77, 'American Civil War'),
 (78, 'American Revolutionary War');
+--------------------------------------------------
+-- Contenu du fichier : insert_belongs.sql
+--------------------------------------------------
 INSERT INTO Belongs (id_game, id_category) VALUES
 (30549, 0),
 (822, 1),

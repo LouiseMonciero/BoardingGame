@@ -408,3 +408,7 @@ FodyWeavers.xsd
 # Ignore dataset folder 
 dataset/
 whatdoyouwannaplay/server/.env
+
+# hashes for the generated files
+generate_hashes.js
+
