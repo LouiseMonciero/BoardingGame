@@ -11,7 +11,7 @@ async function signin(event) {
     };
 
     try {
-        const response = await fetch(`http://localhost:${window.SERVER_PORT}/api/auth/signup`, {
+        const response = await fetch(`${window.SERVER_URL}/api/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

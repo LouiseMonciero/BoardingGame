@@ -45,12 +45,12 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
 
-// Génération dynamique de config.js pour le front
+// Génération dynamique de config.js pour le front et le deployement
 app.get('/config.js', (req, res) => {
     res.type('application/javascript');
-    res.send(`window.SERVER_PORT = ${process.env.PORT || 3000};`);
+    res.send(`window.SERVER_URL = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
 });
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur http://localhost:${PORT}\nPour accéder à la page d'accueil, ouvrez http://localhost:${PORT}/accueil.html`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nPour accéder à la page d'accueil, ouvrez ${process.env.SERVER_URL || `http://localhost:${PORT}`}/accueil.html`));
