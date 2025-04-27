@@ -1,5 +1,4 @@
-import { server_url } from "./assets/js/config.js";
-
+const server_url = 'https://boarding-games-server-6cm09k5s7-louisemoncieros-projects.vercel.app';
 
 async function login(event) {
     event.preventDefault();

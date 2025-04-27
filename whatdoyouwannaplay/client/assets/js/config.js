@@ -1,1 +1,0 @@
-export const server_url = 'https://boarding-games-server-6cm09k5s7-louisemoncieros-projects.vercel.app';
