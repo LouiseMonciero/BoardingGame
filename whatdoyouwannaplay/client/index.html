@@ -6,18 +6,21 @@
         <title>Accueil</title>
         <link rel="stylesheet" href="./assets/css/common.css" />
         <link rel="stylesheet" href="./assets/css/accueil.css" />
-    
+
         <script defer src="./assets/js/alpine-components/quizApp.js"></script>
         <script defer src="./assets/js/alpine-components/header.js"></script>
 
         <script src="/config.js"></script>
-        <script>window.SERVER_URL = window.SERVER_URL || 'https://boarding-game.vercel.app';</script>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        
-
+        <script>
+            window.SERVER_URL =
+                window.SERVER_URL || "https://boarding-game.vercel.app";
+        </script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
     </head>
-    
-    
+
     <body>
         <div class="header" x-data="header">
             <div class="header-logo">
@@ -42,16 +45,14 @@
         </div>
         <main>
             <!-- louise ici -->
-            
-            <div
-                class="content"
-                style="margin: 2rem auto; padding: 0 1rem"
-            >
+
+            <div class="content" style="margin: 2rem auto; padding: 0 1rem">
                 <h1>Bienvenue sur "What should I Play !"</h1>
-                <p class="PAccueil">  
-                    Nous avons conçu cette application afin d'aider les personnes à choisir un jeu de société à jouer, 
-                    avec une approche GreenIT, en intégrant dès le départ des choix techniques qui
-                    réduisent l’empreinte environnementale :
+                <p class="PAccueil">
+                    Nous avons conçu cette application afin d'aider les
+                    personnes à choisir un jeu de société à jouer, avec une
+                    approche GreenIT, en intégrant dès le départ des choix
+                    techniques qui réduisent l’empreinte environnementale :
                 </p>
 
                 <h2>Conception sobre</h2>
@@ -59,48 +60,61 @@
                     • Nous avons opté pour une conception sobre et efficace, en
                     évitant les éléments superflus et en nous concentrant sur
                     l'essentiel.
-                    <br>
-                    • Notre Webdesign est minimaliste et réfléchi, ce qui permet de
-                    réduire la consommation de ressources. Nous utilisons un panel léger de couleurs, sans surcharger
-                    le design avec des éléments inutiles.
-                    <br><br>
+                    <br />
+                    • Notre Webdesign est minimaliste et réfléchi, ce qui permet
+                    de réduire la consommation de ressources. Nous utilisons un
+                    panel léger de couleurs, sans surcharger le design avec des
+                    éléments inutiles.
+                    <br /><br />
                 </p>
 
                 <h2>Technos légères</h2>
                 <p class="PAccueil">
                     • Nous utilisons de <strong>Alpine.js</strong> uniquement,
                     sans frameworks lourds.
-                    <br>
-                    • Les images sont limitées et optimisées (logo en SVG, un seul avatar).
-                    <br>
-                    • Nous avons choisi de ne pas utiliser de bibliothèques CSS, conformément à notre volonté de créer un design sobre et léger. 
-                    <br><br>
+                    <br />
+                    • Les images sont limitées et optimisées (logo en SVG, un
+                    seul avatar).
+                    <br />
+                    • Nous avons choisi de ne pas utiliser de bibliothèques CSS,
+                    conformément à notre volonté de créer un design sobre et
+                    léger.
+                    <br /><br />
                 </p>
 
                 <h2>Backend optimisé</h2>
                 <p class="PAccueil">
-                    • Nous avons choisi d'utiliser <strong>Node.js + Express</strong> pour leur
-                    légèreté et leur simplicité.
-                    <br>
-                    • Nous avons opté pour un Middleware personnalisé au lieu de bibliothèques lourdes.
-                    <br>
-                    • Nous avons mis en place un système de cache pour les requêtes fréquentes, afin de réduire la charge sur le serveur et d'améliorer les temps de réponse.
-                    <br>
-                    • Nous avons optimisé les requêtes SQL pour réduire le temps de réponse et la charge sur la base de données.
-                    <br>
-                    • Enfin, notre code est factorisé, sans redondance. Nous n'utilisons pas de balises inutiles (comme ici, nous rajoutons des caractères '•' plutôt que les balises ul et li).
-                    <br><br>
+                    • Nous avons choisi d'utiliser
+                    <strong>Node.js + Express</strong> pour leur légèreté et
+                    leur simplicité.
+                    <br />
+                    • Nous avons opté pour un Middleware personnalisé au lieu de
+                    bibliothèques lourdes.
+                    <br />
+                    • Nous avons mis en place un système de cache pour les
+                    requêtes fréquentes, afin de réduire la charge sur le
+                    serveur et d'améliorer les temps de réponse.
+                    <br />
+                    • Nous avons optimisé les requêtes SQL pour réduire le temps
+                    de réponse et la charge sur la base de données.
+                    <br />
+                    • Enfin, notre code est factorisé, sans redondance. Nous
+                    n'utilisons pas de balises inutiles (comme ici, nous
+                    rajoutons des caractères '•' plutôt que les balises ul et
+                    li).
+                    <br /><br />
                 </p>
 
                 <h2>Base de données et logs</h2>
                 <p class="PAccueil">
-                    • Nous avons utilisé des index sur les champs clés de la base de données.
-                    <br>
+                    • Nous avons utilisé des index sur les champs clés de la
+                    base de données.
+                    <br />
                     • Nos résultats sont mis en cache lorsque cela est possible.
-                    <br>
-                    • Nous avons mis en place un système de logs allégés avec <strong>Morgan</strong>, afin de réduire la charge sur le serveur et d'améliorer les performances.
-                    <br><br>
-
+                    <br />
+                    • Nous avons mis en place un système de logs allégés avec
+                    <strong>Morgan</strong>, afin de réduire la charge sur le
+                    serveur et d'améliorer les performances. <br /><br />
                 </p>
 
                 <p class="PAccueil">
@@ -120,25 +134,35 @@
                     <div class="actualities">
                         <h3 class="h3Accueil">Actualités du site</h3>
                         <p>
-                            ➤ De nouveaux jeux sont disponibles sur le site, tels que "Vinci", "Paths of Glory" ou encore "Titan" ! 
-                            <br><br>
-                            ➤ Vous pouvez également consulter les jeux les plus populaires du moment, tels que "7 wonders duel", "Scythe" ou encore "Arkham Horror: The Card Game" dans notre bibliothèque !
-                            <br><br>
-                            ➤ N'oubliez pas de vérifier les mises à jour régulières pour découvrir de nouveaux contenus et fonctionnalités.
-                            <br>
+                            ➤ De nouveaux jeux sont disponibles sur le site,
+                            tels que "Vinci", "Paths of Glory" ou encore "Titan"
+                            !
+                            <br /><br />
+                            ➤ Vous pouvez également consulter les jeux les plus
+                            populaires du moment, tels que "7 wonders duel",
+                            "Scythe" ou encore "Arkham Horror: The Card Game"
+                            dans notre bibliothèque !
+                            <br /><br />
+                            ➤ N'oubliez pas de vérifier les mises à jour
+                            régulières pour découvrir de nouveaux contenus et
+                            fonctionnalités.
+                            <br />
                         </p>
                     </div>
                     <div class="actualities">
                         <h3 class="h3Accueil">Jeu en vogue</h3>
                         <p>
                             ★ Le jeu en vogue du moment est "GloomHaven" !
-                            <br><br>
-                            ★ Rejoignez la communauté de joueurs et partagez vos expériences sur ce jeu passionnant !
-                            <br><br>
+                            <br /><br />
+                            ★ Rejoignez la communauté de joueurs et partagez vos
+                            expériences sur ce jeu passionnant !
+                            <br /><br />
                             ★ Ce jeu est noté 8.74/10 sur 47827 avis.
-                            <br><br>
-                            ★ N'hésitez pas à consulter les avis et les détails pour en savoir plus sur ce jeu.
-                            <br>
+                            <br /><br />
+                            ★ N'hésitez pas à consulter les avis et les détails
+                            pour en savoir plus sur ce jeu.
+                            <br />
+                        </p>
                     </div>
                 </div>
             </div>
