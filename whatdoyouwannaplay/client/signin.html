@@ -10,20 +10,19 @@
         ></script>
         <script src="./assets/js/signup.js"></script>
         <script src="./assets/js/alpine-components/header.js"></script>
-        <script src="/config.js"></script>
         <title>SignIn</title>
     </head>
     <style>
         .header-links a:nth-child(4)::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 4px;
-    bottom: 0;
-    left: 0;
-    background-color: #fff;
-    border-radius: 2px;
-    }
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            border-radius: 2px;
+        }
     </style>
     <body>
         <div class="header" x-data="header">
@@ -57,16 +56,16 @@
                         placeholder="Nouvel identifiant"
                         required
                     />
-                    <br><br><br>
+                    <br /><br /><br />
                     <input
                         id="password"
                         type="password"
                         placeholder="Créer un mot de passe"
                         required
                     />
-                    <br><br><br>
+                    <br /><br /><br />
                     <div class="content">
-                       <button type="submit">Créer le profil</button> 
+                        <button type="submit">Créer le profil</button>
                     </div>
                 </div>
                 <div id="formMessage"></div>
