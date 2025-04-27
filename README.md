@@ -2,45 +2,45 @@
 
 A website to have boarding games
 
-## Running the project localy
 
-## Installation Front-end
+## Main Sections of the Website
+Home Page: Site presentation, news, and trending games.
 
--   npm install alpinjs
-    ou
--   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+Library: List of games with filters; eco mode activated on reload.
 
-## Install/Run Back-end
+Game Details: Game description, rating, image, and categories.
 
-Dans le sous dossier whatdoyouwannaplay/server/
+Login: User authentication.
 
-```
-cd .\whatdoyouwannaplay\server\
-```
+Profile: User account management (account deletion possible).
 
-1. Exécuter les commandes suivantes :
+## Accessing the webpage
+The project is deployed on [vercel](https://vercel.com/) and accessible at the following adresses : 
+- https://boarding-game-zeta.vercel.app/ for the webpage
+- https://boarding-games-server.vercel.app/ for the backend api
 
--   npm init -y
--   npm install express mysql2 cors dotenv bcrypt jsonwebtoken morgan
--   npm install --save-dev nodemon
+## Contributing to the Project
+Fork the repository.
 
-2. Modifier les scripts de lancement dans package.json situé dans .\whatdoyouwannaplay\server\
+Create a branch with a clear name: feature/new-feature or fix/bug-x.
 
-```
-"scripts": {
-  "start": "node app.js",
-  "dev": "nodemon app.js"
-},
-```
+Follow commit message conventions (type: short message), for example:
 
-3. Lancer le serveur avec :
+feat: add a filter by number of players
 
--   npm run dev (en mode developpement)
--   npm run start (sinon)
+fix: fix caching issue on the library page
 
-## DataBase Usage
+Submit your pull requests with a clear description of the changes.
 
-Number of entry : 21630
+## Run the project locally
+This project has been created for production only but if you want to run it locally follow the instruction below
+
+### 1. Clone the repository
+Run the following command to clone the repository
+`git clone 'https://github.com/LouiseMonciero/BoardingGame.git'`
+
+### 2. Generate the Database
+Number of entries : 21630
 
 The sql srcipts to build the database can be found in SQL_scripts. They can be run in this order :
 
@@ -52,4 +52,35 @@ The sql srcipts to build the database can be found in SQL_scripts. They can be r
 6. insert_categories.sql
 7. insert_belongs.sql
 
-Or run ```init_all.sql```
+### 3. Run the server
+Acess the directory of the server
+`cd whatdoyouwannaplay/server`
+
+Run the following command to install all dependencies
+`npm i` or `npm install`
+
+Configure your .env file (your .env should be looking as below)
+```
+# Database configuration
+DB_HOST=...
+DB_USER=...
+DB_PASSWORD=...
+DB_NAME=...
+SECRET_KEY=...
+
+# Server port
+PORT=...
+```
+
+Start the server using the following command 
+`npm run start` or `npm run dev`
+
+Those logs should appear : 
+```
+Serveur Node en écoute sur [PORT]
+Accès front: https://boarding-game.vercel.app
+Connected to MySQL
+```
+
+### Configure the front-end :
+To configure the front-end for your purpose you can change the variable `serveur_url`
