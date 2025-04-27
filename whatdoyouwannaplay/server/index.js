@@ -10,14 +10,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.use(cors({
-    origin: [
-        'https://boarding-game.vercel.app',
-        'http://localhost:3000' // Exemple d'URL autorisée supplémentaire, peut être remplacée par d'autres URL d'hebergeurs frontend
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
+app.use(cors());
 
 
 app.use(express.json());
