@@ -10,7 +10,16 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        'https://boarding-game-8ewqmtk38-alexandre-mariottes-projects.vercel.app',
+        'http://localhost:3000' // Exemple d'URL autorisée supplémentaire, peut être remplacée par d'autres URL d'hebergeurs frontend
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(logger('dev'));
@@ -45,7 +54,7 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
 
-// Génération dynamique de config.js pour le front et le deployement
+// Génération dynamique de config.js pour le front
 app.get('/config.js', (req, res) => {
     res.type('application/javascript');
     res.send(`window.SERVER_URL = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
@@ -53,4 +62,4 @@ app.get('/config.js', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nPour accéder à la page d'accueil, ouvrez ${process.env.SERVER_URL || `http://localhost:${PORT}`}/index.html`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: ${process.env.SERVER_URL || `http://localhost:${PORT}`}/index.html`));
