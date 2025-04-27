@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 app.use(cors({
     origin: [
-        'https://boarding-game.vercel.app/',
+        'https://boarding-game.vercel.app',
         'http://localhost:3000' // Exemple d'URL autorisée supplémentaire, peut être remplacée par d'autres URL d'hebergeurs frontend
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -66,4 +66,4 @@ app.get('/', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: https://boarding-game-8ewqmtk38-alexandre-mariottes-projects.vercel.app`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: https://boarding-game.vercel.app`));
