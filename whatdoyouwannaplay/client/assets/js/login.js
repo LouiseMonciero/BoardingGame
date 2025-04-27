@@ -1,4 +1,4 @@
-const server_url = 'https://boarding-games-server.vercel.app/';
+const server_url = 'https://boarding-games-server.vercel.app';
 
 async function login(event) {
     event.preventDefault();
