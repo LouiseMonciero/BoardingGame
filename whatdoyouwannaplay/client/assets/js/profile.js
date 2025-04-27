@@ -1,4 +1,5 @@
-import { server_url } from "./config";
+import { server_url } from "./assets/js/config.js";
+
 
 (async function checkUser() {
     const token = localStorage.getItem("token");

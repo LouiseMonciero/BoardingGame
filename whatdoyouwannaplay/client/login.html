@@ -9,21 +9,21 @@
         ></script>
         <script src="./assets/js/alpine-components/header.js"></script>
         <script src="./assets/js/login.js"></script>
-        <script src="/config.js"></script>
+        <script src="./assets/js/config.js"></script>
         <link rel="stylesheet" href="./assets/css/common.css" />
         <title>Login</title>
     </head>
     <style>
         .header-links a:nth-child(4)::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 4px;
-    bottom: 0;
-    left: 0;
-    background-color: #fff;
-    border-radius: 2px;
-    }
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            border-radius: 2px;
+        }
     </style>
     <body>
         <div class="header" x-data="header">
@@ -61,14 +61,14 @@
                         id="id_user"
                         required
                     />
-                    <br><br><br>
+                    <br /><br /><br />
                     <input
                         type="password"
                         placeholder="Mot de passe"
                         id="user_password"
                         required
                     />
-                    <br><br><br>
+                    <br /><br /><br />
                     <div class="content">
                         <button type="submit">Connexion</button>
                     </div>

@@ -1,4 +1,4 @@
-import { server_url } from "./config";
+import { server_url } from "./assets/js/config.js";
 
 async function signin(event) {
     event.preventDefault();

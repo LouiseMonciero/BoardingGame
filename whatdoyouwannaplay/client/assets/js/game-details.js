@@ -1,4 +1,5 @@
-import { server_url } from "./config";
+import { server_url } from "./assets/js/config.js";
+
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('gameDetails', () => ({

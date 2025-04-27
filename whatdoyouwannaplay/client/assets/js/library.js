@@ -1,4 +1,4 @@
-import { server_url } from "./config";
+import { server_url } from "./assets/js/config.js";
 
 document.addEventListener("alpine:init", () => {
   // Créez un store global pour le cache avec localStorage
