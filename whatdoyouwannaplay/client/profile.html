@@ -18,6 +18,17 @@
             padding: 2rem;
         }
 
+        .header-links a:nth-child(4)::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            border-radius: 2px;
+        }
+
         #top {
             display: flex;
             justify-content: space-between;
@@ -74,12 +85,16 @@
                     <h4 id="username"></h4>
                 </div>
             </div>
-            <div class="content">
-                <h5>vos</h5>
-                <h3>Jeux</h3>
+            <div class="content" style=" margin: 0">
+                <h1>Mes jeux</h1>
+                <p class="content" style="text-align: center">
+                    Vous n'avez pas encore de jeux dans votre bibliothèque.
+                    <br>
+                    Restez à l'affût pour pouvoir ajouter prochainement vos jeux préférés !
+                </p>
             </div>
             <div id="bottom">
-                <div>
+                <div class="content">
                     <button onclick="delete_account()">
                         Supprimer mon compte
                     </button>
