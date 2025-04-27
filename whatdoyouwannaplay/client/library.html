@@ -7,11 +7,11 @@
         defer
         src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
+    
     <script src="./assets/js/alpine-components/header.js"></script>
-    <script src="./assets/js/library.js"></script>
-    <script src="/config.js"></script>
-    <link rel="stylesheet" href="./assets/css/common.css"/>
-    <link rel="stylesheet" href="./assets/css/library.css"/>
+    <script src="./assets/js/library.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/common.min.css"/>
+    <link rel="stylesheet" href="./assets/css/library.min.css"/>
     <title>Bibliothèque</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
         <div class="header-logo">
             <a href="./index.html"
                 ><img
-                    src="./assets/img/logo.png"
+                    src="./assets/img/logo.svg"
                     alt="logo"
                     width="64px"
                     height="64px"
@@ -144,7 +144,7 @@
                 <template x-for="game in games" :key="game.id_game">
                     <a :href="`game-details.html?id=${game.id_game}`" id="game-card-link">
                         <div class="game-card">
-                            <img :src="game.thumbnail || 'https://via.placeholder.com/100'" :alt="game.name_game" />
+                            <img :src="game.thumbnail || 'https://via.placeholder.com/100'" :alt="game.name_game" loading="lazy"/>
                             <h4 x-text="game.name_game"></h4>
                             <div class="stars">
                                 <template x-for="n in formatRating(game.average/2)" :key="n">

@@ -11,12 +11,9 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.use(cors({
-    origin: [
-        'https://boarding-game.vercel.app',
-        'http://localhost:3000' // Exemple d'URL autorisée supplémentaire, peut être remplacée par d'autres URL d'hebergeurs frontend
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+    origin: 'https://boarding-game-zeta.vercel.app', // URL de votre site client
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],       // Méthodes HTTP autorisées
+    credentials: true                                // Autoriser les cookies et autres credentials
 }));
 
 
@@ -53,12 +50,6 @@ app.use('/api/rates', ratesRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
-
-// Génération dynamique de config.js pour le front
-app.get('/config.js', (req, res) => {
-    res.type('application/javascript');
-    res.send(`window.SERVER_URL = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
-});
 
 app.get('/', (req, res) => {
     res.send("Connected and deployed !!")
