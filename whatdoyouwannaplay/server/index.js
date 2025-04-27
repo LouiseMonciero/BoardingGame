@@ -54,12 +54,6 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/userslibrary', usersLibraryRoutes);
 app.use('/api/auth', authRoutes);
 
-// Génération dynamique de config.js pour le front
-app.get('/config.js', (req, res) => {
-    res.type('application/javascript');
-    res.send(`server_url = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
-});
-
 app.get('/', (req, res) => {
     res.send("Connected and deployed !!")
 })
