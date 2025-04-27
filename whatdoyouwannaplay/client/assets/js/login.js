@@ -22,6 +22,6 @@ async function login(event) {
     localStorage.setItem("id_user", userId);
     localStorage.setItem("username", username);
     localStorage.setItem("level_permission", level_permission);
-    window.location.href = "accueil.html";
+    window.location.href = "index.html";
 }
 

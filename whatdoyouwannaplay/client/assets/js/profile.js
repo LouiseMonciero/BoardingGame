@@ -5,7 +5,7 @@
 
     if (!token) {
         alert("Vous n'etes plus connecté, vous allez être redirigé(e) à l'accueil");
-        window.location.href = "accueil.html";
+        window.location.href = "index.html";
     };
     if (!username) {
         try {
@@ -51,7 +51,7 @@ async function delete_account() {
         console.log(id_user, "fdfd");
         if (!token) {
             alert("Vous n'etes plus connecté, vous allez être redirigé(e) à la page d'accueil");
-            window.location.href = "accueil.html";
+            window.location.href = "index.html";
         };
         try {
             const response = await fetch(`${window.SERVER_URL}/api/users/${id_user}`, {
@@ -72,7 +72,7 @@ async function delete_account() {
                 localStorage.removeItem("id_user");
                 localStorage.removeItem("level_permission");
 
-                window.location.href = "accueil.html";
+                window.location.href = "index.html";
             }
 
         } catch (error) {
