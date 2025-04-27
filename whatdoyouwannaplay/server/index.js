@@ -60,6 +60,10 @@ app.get('/config.js', (req, res) => {
     res.send(`window.SERVER_URL = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
 });
 
+app.get('/', (req, res) => {
+    res.send("Connected and deployed !!")
+})
+
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: https://boarding-game.vercel.app`));
