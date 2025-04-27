@@ -1,4 +1,4 @@
-const server_url = 'https://boarding-games-server-6cm09k5s7-louisemoncieros-projects.vercel.app';
+const server_url = 'https://boarding-games-server-8jvxuwyjy-louisemoncieros-projects.vercel.app/api/games';
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('gameDetails', () => ({
