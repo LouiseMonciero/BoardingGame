@@ -6,7 +6,6 @@ document.addEventListener('alpine:init', () => {
         isLoading: true,
 
         async init() {
-            // Récupère l'ID du jeu depuis l'URL
             const urlParams = new URLSearchParams(window.location.search);
             const gameId = urlParams.get('id');
 
