@@ -24,7 +24,7 @@ router.get('/check', (req, res) => {
             return res.status(status).json({ message });
         }
 
-        db.query('SELECT * FROM users WHERE id_user = ?', [payload.id], (err, results) => {
+        db.query('SELECT * FROM Users WHERE id_user = ?', [payload.id], (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
             if (!results || results.length === 0) return res.sendStatus(404);
             return res.status(200).json({ data: results[0] });
@@ -65,7 +65,7 @@ router.post('/signup', checkBody(['username', 'password']), async (req, res) => 
 router.post('/login', checkBody(['username', 'password']), (req, res) => {
     const { username, password } = req.body;
 
-    db.query('SELECT * FROM users WHERE username=?', [username], async (err, results) => {
+    db.query('SELECT * FROM Users WHERE username=?', [username], async (err, results) => {
         if (err) return res.status(500).json({ message: "DB error", error: err.message });
 
         if (results.length === 0) {
