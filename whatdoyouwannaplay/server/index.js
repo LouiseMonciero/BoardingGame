@@ -57,7 +57,7 @@ app.use('/api/auth', authRoutes);
 // Génération dynamique de config.js pour le front
 app.get('/config.js', (req, res) => {
     res.type('application/javascript');
-    res.send(`window.SERVER_URL = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
+    res.send(`server_url = "${process.env.SERVER_URL || `http://localhost:${process.env.PORT || 3000}`}";`);
 });
 
 app.get('/', (req, res) => {
