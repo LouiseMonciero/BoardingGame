@@ -62,4 +62,4 @@ app.get('/config.js', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: ${process.env.SERVER_URL || `http://localhost:${PORT}`}/index.html`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: https://boarding-game-8ewqmtk38-alexandre-mariottes-projects.vercel.app`));
