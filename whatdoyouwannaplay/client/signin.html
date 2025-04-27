@@ -13,6 +13,18 @@
         <script src="/config.js"></script>
         <title>SignIn</title>
     </head>
+    <style>
+        .header-links a:nth-child(4)::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    border-radius: 2px;
+    }
+    </style>
     <body>
         <div class="header" x-data="header">
             <div class="header-logo">
@@ -42,16 +54,20 @@
                     <input
                         id="username"
                         type="text"
-                        placeholder="Identifiant"
+                        placeholder="Nouvel identifiant"
                         required
                     />
+                    <br><br><br>
                     <input
                         id="password"
                         type="password"
-                        placeholder="Mot de passe"
+                        placeholder="Créer un mot de passe"
                         required
                     />
-                    <button type="submit">Connexion</button>
+                    <br><br><br>
+                    <div class="content">
+                       <button type="submit">Créer le profil</button> 
+                    </div>
                 </div>
                 <div id="formMessage"></div>
             </form>
