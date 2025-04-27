@@ -1,5 +1,3 @@
-import { server_url } from "./config";
-
 (async function checkUser() {
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
@@ -11,7 +9,7 @@ import { server_url } from "./config";
     };
     if (!username) {
         try {
-            const response = await fetch(`${server_url}/api/auth/check`, {
+            const response = await fetch(`${window.SERVER_URL}/api/auth/check`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -56,7 +54,7 @@ async function delete_account() {
             window.location.href = "index.html";
         };
         try {
-            const response = await fetch(`${server_url}/api/users/${id_user}`, {
+            const response = await fetch(`${window.SERVER_URL}/api/users/${id_user}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

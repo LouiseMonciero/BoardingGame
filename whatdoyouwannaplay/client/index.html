@@ -7,13 +7,10 @@
         <link rel="stylesheet" href="./assets/css/common.css" />
         <link rel="stylesheet" href="./assets/css/accueil.css" />
 
+        <script src="/config.js"></script>
         <script>
-<<<<<<< HEAD
             window.SERVER_URL =
                 "https://boarding-games-server-6cm09k5s7-louisemoncieros-projects.vercel.app/";
-=======
-            window.SERVER_URL = 'https://boarding-games-server-6cm09k5s7-louisemoncieros-projects.vercel.app';
->>>>>>> ea94c84c1ff085df1567a6787fc2a7861224a90e
             window.deferAlpineLoading = function (callback) {
                 if (document.readyState === "loading") {
                     document.addEventListener("DOMContentLoaded", callback);
@@ -26,6 +23,11 @@
         <script defer src="./assets/js/alpine-components/quizApp.js"></script>
         <script defer src="./assets/js/alpine-components/header.js"></script>
 
+        <script src="/config.js"></script>
+        <script>
+            window.SERVER_URL =
+                window.SERVER_URL || "https://boarding-game.vercel.app";
+        </script>
         <script
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
@@ -55,6 +57,7 @@
             </div>
         </div>
         <main>
+            <!-- louise ici -->
 
             <div class="content" style="margin: 2rem auto; padding: 0 1rem">
                 <h1>Bienvenue sur "What should I Play !"</h1>

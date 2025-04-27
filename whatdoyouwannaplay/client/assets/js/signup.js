@@ -1,5 +1,3 @@
-import { server_url } from "./config";
-
 async function signin(event) {
     event.preventDefault();
     console.log("eze");
@@ -13,7 +11,7 @@ async function signin(event) {
     };
 
     try {
-        const response = await fetch(`${server_url}/api/auth/signup`, {
+        const response = await fetch(`${window.SERVER_URL}/api/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

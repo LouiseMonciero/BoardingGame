@@ -1,189 +1,124 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        ></script>
-        <script src="./assets/js/alpine-components/header.js"></script>
-        <script src="./assets/js/game-details.js"></script>
-        <link rel="stylesheet" href="./assets/css/common.css" />
-        <link rel="stylesheet" href="./assets/css/game-details.css" />
-        <title>Détails du jeu</title>
-    </head>
-    <body>
-        <div class="header" x-data="header">
-            <div class="header-logo">
-                <a href="./index.html">
-                    <img
-                        src="./assets/img/logo.png"
-                        alt="logo"
-                        width="64px"
-                        height="64px"
-                        style="border-radius: 15px"
-                    />
-                </a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="./assets/js/alpine-components/header.js"></script>
+    <script src="./assets/js/game-details.js"></script>
+    <script src="/config.js"></script>
+    <link rel="stylesheet" href="./assets/css/common.css">
+    <link rel="stylesheet" href="./assets/css/game-details.css">
+    <title>Détails du jeu</title>
+</head>
+<body>
+    <div class="header" x-data="header">
+        <div class="header-logo">
+            <a href="./index.html">
+                <img src="./assets/img/logo.png" alt="logo" width="64px" height="64px" style="border-radius: 15px">
+            </a>
+        </div>
+        <div class="header-links">
+            <template x-for="link in links" :key="link.text">
+                <a :href="link.href" x-text="link.text" x-bind:onclick="link.onclick || null"></a>
+            </template>
+        </div>
+    </div>
+
+    <main x-data="gameDetails" class="game-details-container">
+        <!-- Indicateur de chargement -->
+        <div x-show="isLoading" class="loading-indicator">
+            Chargement en cours...
+        </div>
+
+        <!-- Contenu principal -->
+        <div x-show="!isLoading && game" class="game-content">
+            <!-- Section en-tête avec image et infos de base -->
+            <div class="game-header">
+                <img :src="game.thumbnail || 'https://via.placeholder.com/300x200'" :alt="game.name_game" class="game-thumbnail">
+                
+                <div class="game-info">
+                    <h1 x-text="game.name_game"></h1>
+                    <div class="game-meta">
+                        <span x-text="'Année: ' + game.year_game"></span>
+                        <span x-text="'Âge minimum: ' + game.minage + '+'"></span>
+                        <span x-text="'Joueurs: ' + game.minplayers + '-' + game.maxplayers"></span>
+                        <span x-show="game.minplaytime != game.maxplaytime" x-text="'Durée: ' + game.minplaytime + '-' + game.maxplaytime + ' min'"></span>
+                        <span x-show="game.minplaytime == game.maxplaytime" x-text="'Durée: ' + game.minplaytime + ' min'"></span>
+                    </div>
+                    
+                    <div class="game-rating">
+                        <div class="stars">
+                            <template x-for="n in Math.round(game.average/2)" :key="n">
+                                <span>⭐</span>
+                            </template>
+                            <span x-text="'(' + game.average + '/10)'"></span>
+                        </div>
+                        <div x-text="'Classement: #' + game.rank"></div>
+                        <div x-text="Math.round(game.users_rated) + ' avis'"></div>
+                    </div>
+                </div>
             </div>
-            <div class="header-links">
-                <template x-for="link in links" :key="link.text">
-                    <a
-                        :href="link.href"
-                        x-text="link.text"
-                        x-bind:onclick="link.onclick || null"
-                    ></a>
-                </template>
+
+            <!-- Section description -->
+            <section class="game-section">
+                <h2>Description</h2>
+                <p x-text="game.description || 'Aucune description disponible'"></p>
+            </section>
+
+            <!-- Sections listes -->
+            <div class="game-lists">
+                <section class="game-section" x-show="game.categories && game.categories.length">
+                    <h2>Catégories</h2>
+                    <ul>
+                        <template x-for="category in game.categories" :key="category">
+                            <li x-text="category"></li>
+                        </template>
+                    </ul>
+                </section>
+
+                <section class="game-section" x-show="game.mechanics && game.mechanics.length">
+                    <h2>Mécaniques de jeu</h2>
+                    <ul>
+                        <template x-for="mechanic in game.mechanics" :key="mechanic">
+                            <li x-text="mechanic"></li>
+                        </template>
+                    </ul>
+                </section>
+
+                <section class="game-section" x-show="game.publishers && game.publishers.length">
+                    <h2>Éditeurs</h2>
+                    <ul>
+                        <template x-for="publisher in game.publishers" :key="publisher">
+                            <li x-text="publisher"></li>
+                        </template>
+                    </ul>
+                </section>
+
+                <section class="game-section" x-show="game.artists && game.artists.length">
+                    <h2>Artistes</h2>
+                    <ul>
+                        <template x-for="artist in game.artists" :key="artist">
+                            <li x-text="artist"></li>
+                        </template>
+                    </ul>
+                </section>
+
+                <section class="game-section" x-show="game.designers && game.designers.length">
+                    <h2>Designers</h2>
+                    <ul>
+                        <template x-for="designer in game.designers" :key="designer">
+                            <li x-text="designer"></li>
+                        </template>
+                    </ul>
+                </section>
             </div>
         </div>
 
-        <main x-data="gameDetails" class="game-details-container">
-            <!-- Indicateur de chargement -->
-            <div x-show="isLoading" class="loading-indicator">
-                Chargement en cours...
-            </div>
-
-            <!-- Contenu principal -->
-            <div x-show="!isLoading && game" class="game-content">
-                <!-- Section en-tête avec image et infos de base -->
-                <div class="game-header">
-                    <img
-                        :src="game.thumbnail || 'https://via.placeholder.com/300x200'"
-                        :alt="game.name_game"
-                        class="game-thumbnail"
-                    />
-
-                    <div class="game-info">
-                        <h1 x-text="game.name_game"></h1>
-                        <div class="game-meta">
-                            <span x-text="'Année: ' + game.year_game"></span>
-                            <span
-                                x-text="'Âge minimum: ' + game.minage + '+'"
-                            ></span>
-                            <span
-                                x-text="'Joueurs: ' + game.minplayers + '-' + game.maxplayers"
-                            ></span>
-                            <span
-                                x-show="game.minplaytime != game.maxplaytime"
-                                x-text="'Durée: ' + game.minplaytime + '-' + game.maxplaytime + ' min'"
-                            ></span>
-                            <span
-                                x-show="game.minplaytime == game.maxplaytime"
-                                x-text="'Durée: ' + game.minplaytime + ' min'"
-                            ></span>
-                        </div>
-
-                        <div class="game-rating">
-                            <div class="stars">
-                                <template
-                                    x-for="n in Math.round(game.average/2)"
-                                    :key="n"
-                                >
-                                    <span>⭐</span>
-                                </template>
-                                <span
-                                    x-text="'(' + game.average + '/10)'"
-                                ></span>
-                            </div>
-                            <div x-text="'Classement: #' + game.rank"></div>
-                            <div
-                                x-text="Math.round(game.users_rated) + ' avis'"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section description -->
-                <section class="game-section">
-                    <h2>Description</h2>
-                    <p
-                        x-text="game.description || 'Aucune description disponible'"
-                    ></p>
-                </section>
-
-                <!-- Sections listes -->
-                <div class="game-lists">
-                    <section
-                        class="game-section"
-                        x-show="game.categories && game.categories.length"
-                    >
-                        <h2>Catégories</h2>
-                        <ul>
-                            <template
-                                x-for="category in game.categories"
-                                :key="category"
-                            >
-                                <li x-text="category"></li>
-                            </template>
-                        </ul>
-                    </section>
-
-                    <section
-                        class="game-section"
-                        x-show="game.mechanics && game.mechanics.length"
-                    >
-                        <h2>Mécaniques de jeu</h2>
-                        <ul>
-                            <template
-                                x-for="mechanic in game.mechanics"
-                                :key="mechanic"
-                            >
-                                <li x-text="mechanic"></li>
-                            </template>
-                        </ul>
-                    </section>
-
-                    <section
-                        class="game-section"
-                        x-show="game.publishers && game.publishers.length"
-                    >
-                        <h2>Éditeurs</h2>
-                        <ul>
-                            <template
-                                x-for="publisher in game.publishers"
-                                :key="publisher"
-                            >
-                                <li x-text="publisher"></li>
-                            </template>
-                        </ul>
-                    </section>
-
-                    <section
-                        class="game-section"
-                        x-show="game.artists && game.artists.length"
-                    >
-                        <h2>Artistes</h2>
-                        <ul>
-                            <template
-                                x-for="artist in game.artists"
-                                :key="artist"
-                            >
-                                <li x-text="artist"></li>
-                            </template>
-                        </ul>
-                    </section>
-
-                    <section
-                        class="game-section"
-                        x-show="game.designers && game.designers.length"
-                    >
-                        <h2>Designers</h2>
-                        <ul>
-                            <template
-                                x-for="designer in game.designers"
-                                :key="designer"
-                            >
-                                <li x-text="designer"></li>
-                            </template>
-                        </ul>
-                    </section>
-                </div>
-            </div>
-
-            <!-- Message si jeu non trouvé -->
-            <div x-show="!isLoading && !game" class="no-results">
-                Jeu non trouvé
-            </div>
-        </main>
-    </body>
+        <!-- Message si jeu non trouvé -->
+        <div x-show="!isLoading && !game" class="no-results">
+            Jeu non trouvé
+        </div>
+    </main>
+</body>
 </html>
