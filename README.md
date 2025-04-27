@@ -2,10 +2,35 @@
 
 A website to have boarding games
 
-## Deployement
+
+## Main Sections of the Website
+Home Page: Site presentation, news, and trending games.
+
+Library: List of games with filters; eco mode activated on reload.
+
+Game Details: Game description, rating, image, and categories.
+
+Login: User authentication.
+
+Profile: User account management (account deletion possible).
+
+## Accessing the webpage
 The project is deployed on [vercel](https://vercel.com/) and accessible at the following adresses : 
 - https://boarding-game-zeta.vercel.app/ for the webpage
 - https://boarding-games-server.vercel.app/ for the backend api
+
+## Contributing to the Project
+Fork the repository.
+
+Create a branch with a clear name: feature/new-feature or fix/bug-x.
+
+Follow commit message conventions (type: short message), for example:
+
+feat: add a filter by number of players
+
+fix: fix caching issue on the library page
+
+Submit your pull requests with a clear description of the changes.
 
 ## Run the project locally
 This project has been created for production only but if you want to run it locally follow the instruction below
