@@ -81,4 +81,65 @@ async function delete_account() {
             console.error("Erreur réseau ou serveur :", error);
         }
     };
-}
+};
+
+(async function fetchFavoriteGames() {
+    const token = localStorage.getItem("token");
+    const id_user = localStorage.getItem("id_user");
+
+    if (!token || !id_user) {
+        console.error("Token ou ID utilisateur manquant");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${server_url}/api/userslibrary/${id_user}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            console.error("Erreur lors de la récupération des jeux favoris", response.status);
+            return;
+        }
+
+        const favoriteGames = await response.json();
+        displayFavoriteGames(favoriteGames);
+
+    } catch (error) {
+        console.error("Erreur réseau ou serveur :", error);
+    }
+})();
+
+function displayFavoriteGames(games) {
+    const contentDiv = document.querySelector('main .content');
+
+    if (!games || games.length === 0) {
+        console.log("Aucun jeu en favoris.");
+        return;
+    }
+
+    // Nettoyer l'ancien contenu (le message "vous n'avez pas de jeux")
+    contentDiv.innerHTML = `
+        <h1>Mes jeux favoris</h1>
+        <div class="grid-favorites"></div>
+    `;
+
+    const grid = contentDiv.querySelector('.grid-favorites');
+
+    games.forEach(game => {
+        const gameCard = document.createElement('div');
+        gameCard.classList.add('favorite-game-card');
+        gameCard.innerHTML = `
+            <a href="./game-details.html?id=${game.id_game}">
+                <img src="${game.thumbnail || 'https://via.placeholder.com/100'}" alt="${game.name_game}" loading="lazy" />
+                <h4>${game.name_game}</h4>
+            </a>
+        `;
+        grid.appendChild(gameCard);
+    });
+};
+
