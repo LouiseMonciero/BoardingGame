@@ -315,7 +315,8 @@ document.addEventListener("alpine:init", () => {
 
     async fetchFavorites() {
       try {
-        const response = await fetch(`${server_url}/api/userslibrary/`, {
+        const id_user = localStorage.getItem("id_user");
+        const response = await fetch(`${server_url}/api/userslibrary/${id_user}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem("token")}` // si tu utilises un token
           }
@@ -334,7 +335,8 @@ document.addEventListener("alpine:init", () => {
 
     async toggleFavorite(id_game) {
       try {
-        const response = await fetch(`${server_url}/api/userslibrary/`, {
+        const id_user = localStorage.getItem("id_user");
+        const response = await fetch(`${server_url}/api/userslibrary/${id_user}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
