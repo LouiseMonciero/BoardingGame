@@ -44,7 +44,7 @@ body {
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 15px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .filter-group h3 {
@@ -74,7 +74,7 @@ body {
     top: 0;
     height: 100%;
     width: 0;
-    background-color: #D19B4A;
+    background-color: #d19b4a;
     border-radius: 7px;
     pointer-events: none;
 }
@@ -197,13 +197,14 @@ body {
     border-radius: 8px;
 }
 
-.filter input, .filter select {
+.filter input,
+.filter select {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ced4da;
     border-radius: 4px;
     font-size: 0.9rem;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 .range-inputs {
@@ -222,7 +223,8 @@ body {
     margin-top: 1rem;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
@@ -247,16 +249,29 @@ body {
     color: #6c757d;
 }
 
+.favorite-icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    z-index: 5;
+}
+.game-card {
+    position: relative; /* Pour placer le coeur correctement */
+}
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
     }
-    
+
     .filters {
         width: 100%;
         margin-bottom: 20px;
     }
-    
+
     .grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }

@@ -46,7 +46,6 @@ document.addEventListener("alpine:init", () => {
     }
   });
 
-  // Initialise le cache
   Alpine.store('gameCache').init();
 
   Alpine.data("library", () => ({
@@ -68,18 +67,23 @@ document.addEventListener("alpine:init", () => {
     categories: [],
     isLoading: false,
     usingCache: false,
+    isConnected: false,
+    favorites: [],
 
-    // Initialisation
     async init() {
       await this.fetchCategories();
 
-      // Vérifie d'abord le cache avant de faire une requête
       if (Alpine.store('gameCache').isValid()) {
         this.games = Alpine.store('gameCache').games;
         this.usingCache = true;
-        console.log("Utilisation des jeux en cache");
       } else {
         await this.fetchAllGames();
+      }
+
+      // Vérifie si l'utilisateur est connecté (tu peux modifier ce check)
+      this.isConnected = !!localStorage.getItem("token"); // ou comme tu veux
+      if (this.isConnected) {
+        await this.fetchFavorites();
       }
 
       this.$nextTick(() => {
@@ -91,7 +95,6 @@ document.addEventListener("alpine:init", () => {
     initSliders() {
       this.updateDualSlider(null, 'minRank', 'maxRank', 'rank-slider', 'rank-bar');
       this.updateDualSlider(null, 'minPlayers', 'maxPlayers', 'players-slider', 'players-bar');
-      // Ajoutez les autres sliders ici
     },
 
     // Méthode générique pour gérer les dual sliders
@@ -308,6 +311,51 @@ document.addEventListener("alpine:init", () => {
     // Formatage des étoiles pour l'affichage
     formatRating(rating) {
       return Math.round(rating || 0);
-    }
+    },
+
+    async fetchFavorites() {
+      try {
+        const response = await fetch(`${server_url}/api/userslibrary/`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}` // si tu utilises un token
+          }
+        });
+        if (!response.ok) throw new Error("Erreur chargement favoris");
+        const data = await response.json();
+        this.favorites = data.map(fav => fav.id_game);
+      } catch (error) {
+        console.error("Erreur chargement favoris:", error);
+      }
+    },
+
+    isFavorite(id_game) {
+      return this.favorites.includes(id_game);
+    },
+
+    async toggleFavorite(id_game) {
+      try {
+        const response = await fetch(`${server_url}/api/userslibrary/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify({ id_game })
+        });
+
+        if (!response.ok) throw new Error("Erreur ajout/suppression favori");
+
+        // Si succès, ajoute ou retire localement
+        if (this.isFavorite(id_game)) {
+          this.favorites = this.favorites.filter(id => id !== id_game);
+        } else {
+          this.favorites.push(id_game);
+        }
+
+      } catch (error) {
+        console.error("Erreur ajout/suppression favori:", error);
+      }
+    },
+
   }));
 });
