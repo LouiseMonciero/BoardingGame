@@ -39,14 +39,11 @@
         </div>
 
         <main x-data="gameDetails" class="game-details-container">
-            <!-- Indicateur de chargement -->
             <div x-show="isLoading" class="loading-indicator">
                 Chargement en cours...
             </div>
 
-            <!-- Contenu principal -->
             <div x-show="!isLoading && game" class="game-content">
-                <!-- Section en-tête avec image et infos de base -->
                 <div class="game-header">
                     <img
                         :src="game.thumbnail || 'https://via.placeholder.com/300x200'"
@@ -94,7 +91,6 @@
                     </div>
                 </div>
 
-                <!-- Section description -->
                 <section class="game-section">
                     <h2>Description</h2>
                     <p
@@ -102,7 +98,6 @@
                     ></p>
                 </section>
 
-                <!-- Sections listes -->
                 <div class="game-lists">
                     <section
                         class="game-section"
@@ -181,7 +176,6 @@
                 </div>
             </div>
 
-            <!-- Message si jeu non trouvé -->
             <div x-show="!isLoading && !game" class="no-results">
                 Jeu non trouvé
             </div>

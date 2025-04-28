@@ -38,15 +38,12 @@
     </div>
 
     <main x-data="library" class="container">
-        <!-- Sidebar Filters -->
         <aside class="filters">
-            <!-- Filtre de recherche par nom -->
             <div class="filter">
                 <h3>Recherche</h3>
                 <input type="text" x-model="searchTerm" placeholder="Nom du jeu...">
             </div>
             
-            <!-- Filtre par catégorie -->
             <div class="filter">
                 <h3>Catégorie</h3>
                 <select x-model="selectedCategory">
@@ -57,7 +54,6 @@
                 </select>
             </div>
             
-            <!-- Remplacez les inputs min/max par des dual sliders -->
             <div class="filter-group">
                 <h3>Classement (entre <span x-text="minRank"></span> et <span x-text="maxRank"></span>)</h3>
                 <div class="dual-container" id="rank-slider">
@@ -110,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Autres filtres -->
             <div class="filter">
                 <h3>Âge minimum</h3>
                 <input type="number" x-model="minAge" min="0" placeholder="0">
@@ -121,16 +116,13 @@
                 <input type="number" x-model="minReviews" min="0" placeholder="0">
             </div>
             
-            <!-- Boutons d'action -->
             <div class="filter-actions">
                 <button @click="applyFilters" class="btn-primary">Appliquer</button>
                 <button @click="resetFilters" class="btn-secondary">Réinitialiser</button>
             </div> 
         </aside>
 
-        <!-- Main Section -->
         <section class="content">
-            <!-- Indicateur de chargement -->
             <div x-show="isLoading" class="loading-indicator">
                 Chargement en cours...
             </div>
@@ -139,7 +131,6 @@
                 🟢 Mode éco - Données en cache
             </div>
     
-            <!-- Game Grid -->
             <div class="grid" x-show="!isLoading">
                 <template x-for="game in games" :key="game.id_game">
                     <a :href="`game-details.html?id=${game.id_game}`" id="game-card-link">
@@ -160,7 +151,6 @@
                 </template>
             </div>
 
-            <!-- Message si aucun jeu trouvé -->
             <div x-show="!isLoading && games.length === 0" class="no-results">
                 Aucun jeu trouvé avec les critères de recherche.
             </div>
