@@ -227,7 +227,7 @@
                             <div class="game-card">
                                 <template x-if="isConnected">
                                     <img
-                                        :src="isFavorite(game.id_game) ? './assets/heart_filled.webp' : './assets/heart_unfilled.webp'"
+                                        :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
                                         alt="Favorite"
                                         class="favorite-icon"
                                         @click.prevent="toggleFavorite(game.id_game)"
