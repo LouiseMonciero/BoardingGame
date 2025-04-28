@@ -225,14 +225,17 @@
                             id="game-card-link"
                         >
                             <div class="game-card">
-                                <template x-if="isConnected">
+                                <div
+                                    class="favorite-container"
+                                    x-show="isConnected"
+                                    @click.prevent="toggleFavorite(game.id_game)"
+                                >
                                     <img
-                                        :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
-                                        alt="Favorite"
+                                        :src="isFavorite(game.id_game) ? './assets/heart_filled.webp' : './assets/heart_unfilled.webp'"
+                                        alt="Favori"
                                         class="favorite-icon"
-                                        @click.prevent="toggleFavorite(game.id_game)"
                                     />
-                                </template>
+                                </div>
                                 <img
                                     :src="game.thumbnail || 'https://via.placeholder.com/100'"
                                     :alt="game.name_game"
