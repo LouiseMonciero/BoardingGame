@@ -226,34 +226,45 @@
                         >
                             <div class="game-card">
                                 <template x-if="isConnected">
-                                    <img
-                                        :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
-                                        alt="Favorite"
-                                        class="favorite-icon"
+                                    <div
+                                        class="favorite-container"
                                         @click.prevent="toggleFavorite(game.id_game)"
-                                    />
-                                </template>
-                                <img
-                                    :src="game.thumbnail || 'https://via.placeholder.com/100'"
-                                    :alt="game.name_game"
-                                    loading="lazy"
-                                />
-                                <h4 x-text="game.name_game"></h4>
-                                <div class="stars">
-                                    <template
-                                        x-for="n in formatRating(game.average/2)"
-                                        :key="n"
                                     >
-                                        <span>⭐</span>
-                                    </template>
-                                </div>
-                                <div class="full-rate">
-                                    <span x-text="game.average + '/10'"></span>
-                                </div>
-                                <h4
-                                    x-text="formatRating(game.users_rated) + ' avis'"
-                                    style="color: blue"
-                                ></h4>
+                                        <img
+                                            :src="isFavorite(game.id_game) ? './assets/heart_filled.webp' : './assets/heart_unfilled.webp'"
+                                            alt="Favorite"
+                                            class="favorite-icon"
+                                        />
+                                    </div>
+                                </template>
+                                <a
+                                    :href="`game-details.html?id=${game.id_game}`"
+                                    id="game-card-link"
+                                >
+                                    <img
+                                        :src="game.thumbnail || 'https://via.placeholder.com/100'"
+                                        :alt="game.name_game"
+                                        loading="lazy"
+                                    />
+                                    <h4 x-text="game.name_game"></h4>
+                                    <div class="stars">
+                                        <template
+                                            x-for="n in formatRating(game.average/2)"
+                                            :key="n"
+                                        >
+                                            <span>⭐</span>
+                                        </template>
+                                    </div>
+                                    <div class="full-rate">
+                                        <span
+                                            x-text="game.average + '/10'"
+                                        ></span>
+                                    </div>
+                                    <h4
+                                        x-text="formatRating(game.users_rated) + ' avis'"
+                                        style="color: blue"
+                                    ></h4>
+                                </a>
                             </div>
                         </a>
                     </template>
