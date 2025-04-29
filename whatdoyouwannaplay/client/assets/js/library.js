@@ -335,25 +335,26 @@ document.addEventListener("alpine:init", () => {
 
     async toggleFavorite(id_game) {
       try {
-        const id_user = localStorage.getItem("id_user");
-        const response = await fetch(`${server_url}/api/userslibrary/${id_user}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem("token")}`
-          },
-          body: JSON.stringify({ id_game })
-        });
+        if (!this.isFavorite(id_game)) {
+          const id_user = localStorage.getItem("id_user");
+          const response = await fetch(`${server_url}/api/userslibrary/${id_user}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify({ id_game })
+          });
 
-        if (!response.ok) throw new Error("Erreur ajout/suppression favori");
+          if (!response.ok) throw new Error("Erreur ajout/suppression favori");
 
-        // Si succès, ajoute ou retire localement
-        if (this.isFavorite(id_game)) {
-          this.favorites = this.favorites.filter(id => id !== id_game);
-        } else {
-          this.favorites.push(id_game);
+          // Si succès, ajoute ou retire localement
+          if (this.isFavorite(id_game)) {
+            this.favorites = this.favorites.filter(id => id !== id_game);
+          } else {
+            this.favorites.push(id_game);
+          }
         }
-
       } catch (error) {
         console.error("Erreur ajout/suppression favori:", error);
       }
