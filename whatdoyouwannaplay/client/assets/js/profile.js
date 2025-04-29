@@ -134,7 +134,7 @@ function displayFavoriteGames(games) {
         const gameCard = document.createElement('div');
         gameCard.classList.add('favorite-game-card');
         gameCard.innerHTML = `
-            <a href="./game-details.html?id=${game.id_game}">
+            <a href="./game-details.html?id=${game.id_game}" id="game-card-link">
                 <img src="${game.thumbnail || 'https://via.placeholder.com/100'}" alt="${game.name_game}" loading="lazy" />
                 <h4>${game.name_game}</h4>
             </a>
