@@ -138,9 +138,9 @@ document.addEventListener("alpine:init", () => {
       }
 
       // Déclenche la recherche si c'est une interaction utilisateur
-      if (event) {
-        this.applyFilters();
-      }
+      // if (event) {
+      //   this.applyFilters();
+      // }
     },
 
     // Helper pour obtenir les valeurs max
