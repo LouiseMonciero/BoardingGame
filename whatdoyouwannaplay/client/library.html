@@ -223,6 +223,7 @@
                         <a
                             :href="`game-details.html?id=${game.id_game}`"
                             id="game-card-link"
+                            loading="lazy"
                         >
                             <div class="game-card">
                                 <div
@@ -240,7 +241,6 @@
                                     class="game-img"
                                     :src="game.thumbnail || 'https://via.placeholder.com/100'"
                                     :alt="game.name_game"
-                                    loading="lazy"
                                 />
                                 <h4 x-text="game.name_game"></h4>
                                 <div class="stars">
