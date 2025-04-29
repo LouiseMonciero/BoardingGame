@@ -13,7 +13,7 @@ async function signin(event) {
     };
 
     try {
-        const response = await fetch(`${server_url}/api/auth/signup`, {
+        const signup_response = await fetch(`${server_url}/api/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -21,11 +21,30 @@ async function signin(event) {
             body: JSON.stringify(credentials)
         });
 
-        if (response.status === 201) {
+        if (signup_response.status === 201) {
             document.getElementById("formMessage").innerHTML = "Création du compte réussi.";
             // login automatiquement
-            const data = await response.json();
+            const data = await signup_response.json();
             //localStorage.setItem("token", data);
+            // Connexion automatique
+            const login_response = await fetch(`${server_url}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(credentials)
+            });
+        
+            if (!(login_response.status === 200)) {
+                const error = await login_response.json();
+                alert(`Erreur : ${error.message || login_response.statusText}`);
+                return;
+            }
+        
+            const { sessionToken: token, userId, level_permission } = await login_response.json();
+            localStorage.setItem("token", token);
+            localStorage.setItem("id_user", userId);
+            localStorage.setItem("username", username);
+            localStorage.setItem("level_permission", level_permission);
+            window.location.href = "index.html";
         } else {
             document.getElementById("formMessage").innerHTML = "<p><strong>Cet identifiant est déjà pris.</strong><p>";
         }
