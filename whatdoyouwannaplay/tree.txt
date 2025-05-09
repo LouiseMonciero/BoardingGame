@@ -15,7 +15,7 @@ D:.
 |   |   
 |   +---assets
 |   |   +---css
-|   |   |       common.min.css
+|   |   |       common.css
 |   |   |       game-details.css
 |   |   |       library.css
 |   |   |       style.css
