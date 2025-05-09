@@ -17,7 +17,7 @@ Profile: User account management (account deletion possible).
 ## Accessing the webpage
 The project is deployed on [vercel](https://vercel.com/) and accessible at the following adresses : 
 - https://boarding-game-zeta.vercel.app/ for the webpage
-- https://boarding-games-server.vercel.app/ for the backend api
+- http://localhost:3000/ for the backend api
 
 ## Contributing to the Project
 Fork the repository.

@@ -1,4 +1,4 @@
-const server_url = 'https://boarding-games-server.vercel.app';
+const server_url = 'http://localhost:3000';
 
 (async function checkUser() {
     const token = localStorage.getItem("token");

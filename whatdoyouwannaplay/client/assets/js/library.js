@@ -1,4 +1,4 @@
-const server_url = 'https://boarding-games-server.vercel.app';
+const server_url = 'http://localhost:3000';
 
 document.addEventListener("alpine:init", () => {
   // Créez un store global pour le cache avec localStorage
