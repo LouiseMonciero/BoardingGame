@@ -225,39 +225,46 @@
                             id="game-card-link"
                         >
                             <div class="game-card">
-                                <div
-                                    class="favorite-container"
-                                    x-show="isConnected"
-                                    @click.prevent="toggleFavorite(game.id_game)"
-                                >
+                                <div class="game-rate-fav">
+                                    <div class="rate-it">
+                                        <div x-show="isConnected" class="rate-button-container">
+                                            <button @click.prevent="rateGame(game.id_game)" class="btn-rate">
+                                                Noter
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="favorite-container" x-show="isConnected" @click.prevent="toggleFavorite(game.id_game)">
+                                        <img
+                                            :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
+                                            alt="Favori"
+                                            class="favorite-icon"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="game-info">
                                     <img
-                                        :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
-                                        alt="Favori"
-                                        class="favorite-icon"
+                                        class="game-img"
+                                        :src="game.thumbnail || 'https://via.placeholder.com/100'"
+                                        :alt="game.name_game"
+                                        loading="lazy"
                                     />
+                                    <h4 x-text="game.name_game"></h4>
+                                    <div class="stars">
+                                        <template
+                                            x-for="n in formatRating(game.average/2)"
+                                            :key="n"
+                                        >
+                                            <span>⭐</span>
+                                        </template>
+                                    </div>
+                                    <div class="full-rate">
+                                        <span x-text="game.average + '/10'"></span>
+                                    </div>
+                                    <h4
+                                        x-text="formatRating(game.users_rated) + ' avis'"
+                                        style="color: blue"
+                                    ></h4>
                                 </div>
-                                <img
-                                    class="game-img"
-                                    :src="game.thumbnail || 'https://via.placeholder.com/100'"
-                                    :alt="game.name_game"
-                                    loading="lazy"
-                                />
-                                <h4 x-text="game.name_game"></h4>
-                                <div class="stars">
-                                    <template
-                                        x-for="n in formatRating(game.average/2)"
-                                        :key="n"
-                                    >
-                                        <span>⭐</span>
-                                    </template>
-                                </div>
-                                <div class="full-rate">
-                                    <span x-text="game.average + '/10'"></span>
-                                </div>
-                                <h4
-                                    x-text="formatRating(game.users_rated) + ' avis'"
-                                    style="color: blue"
-                                ></h4>
                             </div>
                         </a>
                     </template>

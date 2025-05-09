@@ -51,6 +51,7 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.data("library", () => ({
     // Valeurs initiales
+    isLoading: false,
     minRank: 1,
     maxRank: 100,
     minPlayers: 1,
@@ -66,7 +67,6 @@ document.addEventListener("alpine:init", () => {
     selectedCategory: "",
     games: [],
     categories: [],
-    isLoading: false,
     usingCache: false,
     isConnected: false,
     favorites: [],

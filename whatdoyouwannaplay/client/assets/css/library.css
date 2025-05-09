@@ -157,6 +157,49 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+.game-rate-fav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.rate-it {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.rate-button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.btn-rate {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-rate:hover {
+    background-color: #d19b4a;
+    color: white;
+}
+
+.favorite-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .favorite-icon {
     width: 24px;
     height: 24px;
