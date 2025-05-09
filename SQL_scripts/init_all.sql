@@ -78,9 +78,20 @@ CREATE TABLE Logs(
 CREATE TABLE Favorites(
    id_game INT, 
    id_user INT,
+   PRIMARY KEY(id_game, id_user),
    FOREIGN KEY(id_game) REFERENCES Games(id_game),
    FOREIGN KEY(id_user) REFERENCES Users(id_user)
 );
+
+CREATE TABLE Raters(
+   id_game INT,
+   id_rate INT,
+   id_user INT,
+   PRIMARY KEY(id_game, id_rate, id_user),
+   FOREIGN KEY(id_game, id_rate) REFERENCES Rates(id_game, id_rate),
+   FOREIGN KEY(id_user) REFERENCES Users(id_user)
+);
+
 
 -- Création des vues
 
@@ -336,23 +347,37 @@ DELIMITER ;
 -- Création des transactions
 
 DELIMITER //
-CREATE PROCEDURE Transactions_Rate_Game( -- TO TESTTTTTT
+CREATE PROCEDURE Transactions_Rate_Game(
   IN p_id_game INT,
   IN p_id_rate INT,
-  IN p_rank INT
+  IN p_id_user INT,
+  IN p_rate DECIMAL(15,2)
 )
 BEGIN
-  START TRANSACTION;
-    INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated)
-    VALUES (p_id_game, p_id_rate, p_rank, p_rank, 1)
-    ON DUPLICATE KEY UPDATE `rank` = p_rank;
+  DECLARE already_rated INT DEFAULT 0;
 
-    UPDATE Rates
-    SET average = (SELECT Ft_Get_Average_Rating(p_id_game))
-    WHERE id_game = p_id_game;
+  START TRANSACTION;
+
+    -- Vérifie si l'utilisateur a déjà noté ce jeu
+    SELECT COUNT(*) INTO already_rated
+    FROM Raters
+    WHERE id_game = p_id_game AND id_rate = p_id_rate AND id_user = p_id_user;
+
+    -- S’il n’a pas encore noté, on insère dans Raters
+    IF already_rated = 0 THEN
+      INSERT INTO Raters (id_game, id_rate, id_user)
+      VALUES (p_id_game, p_id_rate, p_id_user);
+
+      -- Met à jour la moyenne pondérée et le nombre d’utilisateurs ayant noté
+      UPDATE Rates
+      SET average = (average * users_rated + p_rate) / (users_rated + 1),
+          users_rated = users_rated + 1
+      WHERE id_game = p_id_game AND id_rate = p_id_rate;
+    END IF;
   COMMIT;
 END//
 DELIMITER ;
+
 
 -- Création des fonctions stockées
 
