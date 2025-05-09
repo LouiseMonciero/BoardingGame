@@ -11,7 +11,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.use(cors({
-    origin: 'https://boarding-game-zeta.vercel.app', // URL de votre site client
+    origin: ['https://boarding-game-zeta.vercel.app','http://localhost:3000'], // URL de votre site client
     methods: ['GET', 'POST', 'PUT', 'DELETE'],       // Méthodes HTTP autorisées
     credentials: true                                // Autoriser les cookies et autres credentials
 }));
