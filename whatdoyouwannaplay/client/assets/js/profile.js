@@ -1,4 +1,5 @@
-const server_url = 'https://boarding-games-server.vercel.app';
+//const server_url = 'https://boarding-games-server.vercel.app';
+import { server_url } from './config.js';
 
 (async function checkUser() {
     const token = localStorage.getItem("token");
