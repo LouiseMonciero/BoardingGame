@@ -7,18 +7,30 @@ const { checkBody, isAdmin } = require('../middlewares');
 router.post('/:id_game', checkBody(['id_user', 'rating']), (req, res) => {
     const id_game = req.params.id_game;
     const { id_user, rating } = req.body;
-    db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        if (results.length === 0) return res.status(404).json({ error: 'Jeu introuvable' });
 
-        db.query('CALL Transactions_Rate_Game(?, ?, ?)', [id_game, id_user, rating], (err) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(201).json({ message: 'Évaluation enregistrée' });
+    // Étape 1 : Vérifier que le jeu existe
+    db.query('SELECT * FROM View_Games WHERE id_game = ?', [id_game], (err, gameResults) => {
+        if (err) return res.status(500).json({ error: err });
+        if (gameResults.length === 0) return res.status(404).json({ error: 'Jeu introuvable' });
+
+        // Étape 2 : Récupérer id_rate depuis la vue View_Rates_id
+        db.query('SELECT id_rate FROM View_Rates_id WHERE id_game = ?', [id_game], (err, rateResults) => {
+            if (err) return res.status(500).json({ error: err });
+            if (rateResults.length === 0) return res.status(404).json({ error: 'Évaluation non trouvée pour ce jeu' });
+
+            const id_rate = rateResults[0].id_rate;
+
+            // Étape 3 : Appeler la procédure stockée avec les bons paramètres
+            db.query('CALL Transactions_Rate_Game(?, ?, ?, ?)', [id_game, id_rate, id_user, rating], (err) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                res.status(201).json({ message: 'Évaluation enregistrée' });
+            });
         });
     });
 });
+
 
 // DELETE /api/rates/:id_game => procédure stockée Procedure_Delete_Rate
 router.delete('/:id_game', isAdmin, (req, res) => {

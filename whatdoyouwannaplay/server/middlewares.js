@@ -71,7 +71,7 @@ function checkBody(keys = []) {
         }
 
         for (const key of keys) {
-            if (!req.body[key]) {
+            if (req.body[key] == null) {
                 return res.status(400).json({ error: `${key} requis` });
             }
         }

@@ -124,6 +124,9 @@ SELECT id_user, username, level_permission FROM Users;
 CREATE VIEW View_Users_Admins AS
 SELECT * FROM Users WHERE level_permission = 'admin';
 
+CREATE VIEW View_Rates_id AS
+SELECT id_rate, id_game FROM Rates;
+
 -- Création des triggers
 
 DELIMITER //
