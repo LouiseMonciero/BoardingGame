@@ -43,4 +43,7 @@ for file in "${sql_files[@]}"; do
     fi
 done
 
+echo "-- Script exécuté avec succès" >> "$output_file"
+echo "SELECT 'Tout s''est exécuté correctement.' AS Message;" >> "$output_file"
+
 echo "Compilation terminée. Le fichier $output_file a été créé."

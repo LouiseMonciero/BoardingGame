@@ -70,9 +70,9 @@ CREATE TABLE Logs(
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
-   PRIMARY KEY(id_log),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
-   FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
+   PRIMARY KEY(id_log)
+   -- FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
+   -- FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
 
 CREATE TABLE Favorites(
@@ -6689,3 +6689,5 @@ INSERT INTO Belongs (id_game, id_category) VALUES
 (264241, 24),
 (264241, 7),
 (244995, 7);
+-- Script exécuté avec succès
+SELECT 'Tout s''est exécuté correctement.' AS Message;

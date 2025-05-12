@@ -412,3 +412,5 @@ whatdoyouwannaplay/server/.env
 # hashes for the generated files
 generate_hashes.js
 
+test_fix_triggers.sql
+
