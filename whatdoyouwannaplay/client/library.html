@@ -228,7 +228,7 @@
                                 <div class="game-rate-fav">
                                     <div class="rate-it">
                                         <div x-show="isConnected" class="rate-button-container">
-                                            <button @click.prevent="rateGame(game.id_game)" class="btn-rate">
+                                            <button @click.prevent="openRatingModal(game.id_game)" class="btn-rate">
                                                 Noter
                                             </button>
                                         </div>
@@ -277,6 +277,34 @@
                     Aucun jeu trouvé avec les critères de recherche.
                 </div>
             </section>
+            <!-- Modale de notation -->
+            <div 
+                x-show="ratingModalOpen" 
+                class="modal-overlay" 
+                x-transition
+                x-cloak
+            >
+                <div 
+                    class="modal-content" 
+                    @click.away="closeRatingModal" 
+                    x-transition
+                >
+                    <h3>Noter ce jeu</h3>
+                    <div class="numeric-rating">
+                        <template x-for="i in 10" :key="i">
+                            <button
+                                @click="setRating(i)"
+                                :class="{ 'selected': userRating === i }"
+                                x-text="i"
+                            ></button>
+                        </template>
+                    </div>
+                    <div class="modal-actions">
+                        <button @click="closeRatingModal" class="btn-secondary">Annuler</button>
+                        <button @click="submitRating" class="btn-primary">Valider</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </body>
 </html>
