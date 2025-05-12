@@ -67,9 +67,9 @@ CREATE TABLE Logs(
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
-   PRIMARY KEY(id_log),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
-   FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
+   PRIMARY KEY(id_log)
+   -- FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
+   -- FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
 
 CREATE TABLE Favorites(

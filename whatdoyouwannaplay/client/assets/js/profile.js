@@ -46,6 +46,109 @@ const server_url = 'http://localhost:3000';
     }
 })();
 
+(async function admin_mode() {
+    const level_permission = localStorage.getItem("level_permission");
+    const token = localStorage.getItem("token");
+
+    if (level_permission === "admin") {
+        const adminDiv = document.querySelector(".div-admin");
+
+        // Création des boutons
+        const btnLogs = document.createElement("button");
+        btnLogs.id = "btn-logs";
+        btnLogs.textContent = "Consulter les logs";
+
+        const btnUsers = document.createElement("button");
+        btnUsers.id = "btn-users";
+        btnUsers.textContent = "Liste des utilisateurs";
+
+        const btnChangePermission = document.createElement("button");
+        btnChangePermission.id = "btn-change-permission";
+        btnChangePermission.textContent = "Changer permissions";
+
+        // Ajout des boutons à la div
+        adminDiv.appendChild(btnLogs);
+        adminDiv.appendChild(btnUsers);
+        adminDiv.appendChild(btnChangePermission);
+
+        // Boutons d'action
+        const logsButton = document.getElementById("btn-logs");
+        const usersButton = document.getElementById("btn-users");
+        const permissionsButton = document.getElementById("btn-change-permission");
+
+        // 1. Consulter les logs
+        logsButton.addEventListener("click", async () => {
+            try {
+                const response = await fetch(`${server_url}/api/logs`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                const logs = await response.json();
+                console.table(logs); // à adapter pour affichage dans ta page
+                alert("Logs récupérés avec succès. Voir console.");
+            } catch (error) {
+                console.error("Erreur lors de la récupération des logs :", error);
+            }
+        });
+
+        // 2. Consulter la liste des utilisateurs
+        usersButton.addEventListener("click", async () => {
+            try {
+                const response = await fetch(`${server_url}/api/users`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                const users = await response.json();
+                console.table(users); // à adapter pour affichage dans ta page
+                alert("Liste des utilisateurs récupérée. Voir console.");
+            } catch (error) {
+                console.error("Erreur lors de la récupération des utilisateurs :", error);
+            }
+        });
+
+        // 3. Changer la permission d’un utilisateur
+        permissionsButton.addEventListener("click", async () => {
+            const id_user = prompt("Entrez l’ID de l’utilisateur :");
+            const new_permission = prompt("Nouvelle permission (ex : user, admin) :");
+
+            if (!id_user || !new_permission) {
+                alert("Champs requis manquants");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/users/${id_user}/permission`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ new_permission })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                } else {
+                    alert("Erreur : " + result.error);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la modification :", error);
+            }
+        });
+
+    } else {
+        return;
+    }
+})();
+
+
 async function delete_account() {
     if (confirm("Etes vous sur(e) de vouloir supprimer ce compte ?")) {
         const token = localStorage.getItem("token");
