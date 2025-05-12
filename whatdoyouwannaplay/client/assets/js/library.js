@@ -70,6 +70,12 @@ document.addEventListener("alpine:init", () => {
     isConnected: false,
     favorites: [],
 
+    // États pour la modale de notation
+    ratingModalOpen: false,
+    currentGameId: null,
+    userRating: 0,
+    hoverRating: 0,
+
     async init() {
       await this.fetchCategories();
 
@@ -89,6 +95,66 @@ document.addEventListener("alpine:init", () => {
       this.$nextTick(() => {
         this.initSliders();
       });
+    },
+
+    // Méthodes pour la notation
+    openRatingModal(gameId) {
+      this.currentGameId = gameId;
+      this.userRating = 0;
+      this.hoverRating = 0;
+      this.ratingModalOpen = true;
+    },
+
+    closeRatingModal() {
+      this.ratingModalOpen = false;
+    },
+
+    async submitRating() {
+      if (!this.userRating || !this.currentGameId) return;
+    
+      const id_user = localStorage.getItem("id_user");
+      const token = localStorage.getItem("token");
+    
+      if (!id_user || !token) {
+        alert("Utilisateur non authentifié");
+        return;
+      }
+    
+      try {
+        const response = await fetch(`${server_url}/api/rates/${this.currentGameId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            id_user: parseInt(id_user),
+            rating: this.userRating
+          })
+        });
+    
+        if (!response.ok) throw new Error("Erreur lors de l'envoi de la note");
+    
+        await this.applyFilters();
+        this.closeRatingModal();
+        alert("Merci pour votre note !");
+    
+      } catch (error) {
+        console.error("Erreur:", error);
+        alert("Une erreur est survenue lors de l'envoi de votre note");
+      }
+    },
+
+    setRating(rating) {
+      this.userRating = rating;
+    },
+
+    setHoverRating(rating) {
+      this.hoverRating = rating;
+    },
+
+    resetHoverRating() {
+      this.hoverRating = this.userRating;
     },
 
     // Méthode pour initialiser les sliders
