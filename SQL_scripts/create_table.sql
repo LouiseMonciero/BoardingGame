@@ -146,7 +146,7 @@ BEGIN
   VALUES (NEW.id_game, NULL, 'Update game', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_Game_Delete -- PAS OK !!!!
+CREATE TRIGGER Trigger_Log_Game_Delete -- FIX // Suppression des clées étrangères dans TALBE Logs
 AFTER DELETE ON Games
 FOR EACH ROW
 BEGIN
