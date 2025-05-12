@@ -10,11 +10,12 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.use(cors({
-    origin: ['https://boarding-game-zeta.vercel.app','http://localhost:3000'], // URL de votre site client
+/*app.use(cors({
+    origin: ['https://boarding-game-zeta.vercel.app', 'http://localhost:3000'], // URL de votre site client
     methods: ['GET', 'POST', 'PUT', 'DELETE'],       // Méthodes HTTP autorisées
     credentials: true                                // Autoriser les cookies et autres credentials
-}));
+}));*/
+app.use(cors());
 
 
 app.use(express.json());
@@ -57,4 +58,4 @@ app.get('/', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nAccès front: https://boarding-game.vercel.app`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\n`));
