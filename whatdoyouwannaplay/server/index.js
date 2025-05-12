@@ -58,4 +58,4 @@ app.get('/', (req, res) => {
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\n`));
+app.listen(PORT, () => console.log(`Serveur Node en écoute sur ${PORT}\nLocal Host: http://localhost:${PORT}`));
