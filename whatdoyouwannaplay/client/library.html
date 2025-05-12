@@ -278,30 +278,26 @@
                 </div>
             </section>
             <!-- Modale de notation -->
-            <div 
-                x-show="ratingModalOpen" 
-                class="modal-overlay" 
-                x-transition
-                x-cloak
-            >
-                <div 
-                    class="modal-content" 
-                    @click.away="closeRatingModal" 
-                    x-transition
-                >
+            <div x-show="ratingModalOpen" class="modal-overlay" x-transition x-cloak>
+                <div class="modal-content" @click.away="closeRatingModal" x-transition>
                     <h3>Noter ce jeu</h3>
-                    <div class="numeric-rating">
-                        <template x-for="i in 10" :key="i">
-                            <button
-                                @click="setRating(i)"
-                                :class="{ 'selected': userRating === i }"
-                                x-text="i"
-                            ></button>
-                        </template>
+                    <div x-show="!alreadyRated" class="can-rate">
+                        <div class="numeric-rating">
+                            <template x-for="i in 10" :key="i">
+                                <button
+                                    @click="setRating(i)"
+                                    :class="{ 'selected': userRating === i }"
+                                    x-text="i"
+                                ></button>
+                            </template>
+                        </div>
+                        <div class="modal-actions">
+                            <button @click="closeRatingModal" class="btn-secondary">Annuler</button>
+                            <button @click="submitRating" class="btn-primary">Valider</button>
+                        </div>
                     </div>
-                    <div class="modal-actions">
-                        <button @click="closeRatingModal" class="btn-secondary">Annuler</button>
-                        <button @click="submitRating" class="btn-primary">Valider</button>
+                    <div x-show="alreadyRated" class="cant-rate">
+                        Vous avez déjà noté ce jeu.
                     </div>
                 </div>
             </div>
