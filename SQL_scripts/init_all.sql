@@ -127,6 +127,12 @@ SELECT id_user, username, level_permission FROM Users;
 CREATE VIEW View_Users_Admins AS
 SELECT * FROM Users WHERE level_permission = 'admin';
 
+CREATE VIEW View_Rates_id AS
+SELECT id_rate, id_game FROM Rates;
+
+CREATE VIEW View_Raters AS
+SELECT id_user, id_game FROM Raters;
+
 -- Création des triggers
 
 DELIMITER //
@@ -146,7 +152,7 @@ BEGIN
   VALUES (NEW.id_game, NULL, 'Update game', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_Game_Delete -- PAS OK !!!!
+CREATE TRIGGER Trigger_Log_Game_Delete -- FIX // Suppression des clées étrangères dans TALBE Logs
 AFTER DELETE ON Games
 FOR EACH ROW
 BEGIN
