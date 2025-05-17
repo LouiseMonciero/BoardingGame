@@ -3,6 +3,17 @@ const router = express.Router();
 const db = require('../config/db');
 const { checkBody, isAdmin } = require('../middlewares');
 
+// GET api/rates/:id_user => récupérer toutes les évaluations d'un utilisateur
+router.get('/:id_user', (req, res) => {
+    const id_user = req.params.id_user;
+
+    db.query('SELECT * FROM View_Raters WHERE id_user = ?', [id_user], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        if (results.length === 0) return res.status(404).json({ error: 'Aucune évaluation trouvée pour cet utilisateur' });
+        res.json(results);
+    });
+});
+
 // POST /api/rates/:id_game => transaction SQL Transactions_Rate_Game (id de game)
 router.post('/:id_game', checkBody(['id_user', 'rating']), (req, res) => {
     const id_game = req.params.id_game;
