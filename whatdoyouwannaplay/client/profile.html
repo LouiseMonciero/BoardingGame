@@ -192,8 +192,20 @@
                 <label for="designer">Auteur :</label>
                 <input id="designer" type="text" /><br /><br />
 
-                <label for="id_rules">ID des règles :</label>
-                <input id="id_rules" type="number" required /><br /><br />
+                <label for="minplayers">Nombre minimum de joueurs :</label>
+                <input id="minplayers" type="number" min="1" /><br /><br />
+                
+                <label for="maxplayers">Nombre maximum de joueurs :</label>
+                <input id="maxplayers" type="number" min="1" /><br /><br />
+                
+                <label for="minplaytime">Durée minimum (minutes) :</label>
+                <input id="minplaytime" type="number" min="1" /><br /><br />
+                
+                <label for="maxplaytime">Durée maximum (minutes) :</label>
+                <input id="maxplaytime" type="number" min="1" /><br /><br />
+                
+                <label for="minage">Âge minimum :</label>
+                <input id="minage" type="number" min="0" /><br /><br />
 
                 <button type="submit" id="gameButton">Créer le jeu</button>
             </form>

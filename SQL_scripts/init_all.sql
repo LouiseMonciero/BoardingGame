@@ -168,7 +168,7 @@ BEGIN
   VALUES (NEW.id_user, NULL, 'Create user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_Delete -- PAS OK !!!
+CREATE TRIGGER Trigger_Log_User_Delete -- FIX // Suppression des clées étrangères dans TALBE Logs
 AFTER DELETE ON Users
 FOR EACH ROW
 BEGIN
@@ -176,7 +176,7 @@ BEGIN
   VALUES (OLD.id_user, NULL, 'Delete user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_PermissionChange -- PAS OK !!!!
+CREATE TRIGGER Trigger_Log_User_PermissionChange -- DEJA FONCTIONNEL
 AFTER UPDATE ON Users
 FOR EACH ROW
 BEGIN
