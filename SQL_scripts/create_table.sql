@@ -3,13 +3,13 @@ CREATE DATABASE BoardingGames;
 USE BoardingGames;
 
 CREATE TABLE Rules(
-   id_rules INT PRIMARY KEY,
+   id_rules INT PRIMARY KEY AUTO_INCREMENT,
    minplayers INT,
    maxplayers INT,
    minplaytime INT,
    maxplaytime INT,
    minage INT CHECK (minage >= 0)
-);
+) AUTO_INCREMENT = 0;
 
 CREATE TABLE Categories(
    id_category INT PRIMARY KEY,

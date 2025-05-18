@@ -1,3 +1,4 @@
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 INSERT INTO Rules (id_rules, minplayers, maxplayers, minplaytime, maxplaytime, minage) VALUES
 (0, 2, 4, 45, 45, 8),
 (1, 2, 5, 30, 45, 7),

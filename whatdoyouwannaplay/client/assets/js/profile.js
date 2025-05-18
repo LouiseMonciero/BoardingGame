@@ -168,7 +168,7 @@ async function createGame(event) {
         boardgamepublisher: document.getElementById("publisher").value,
         boardgameartist: document.getElementById("artist").value,
         boardgamedesigner: document.getElementById("designer").value,
-        id_rules: parseInt(document.getElementById("id_rules").value)
+        //id_rules: parseInt(document.getElementById("id_rules").value)
     };
 
     try {
@@ -187,7 +187,7 @@ async function createGame(event) {
             alert("🎉 Jeu créé avec succès !");
             document.getElementById("game-form").reset();
         } else {
-            alert("❌ Erreur lors de la création : " + (result.error || "Erreur inconnue"));
+            alert("❌ Erreur lors de la création : " + (typeof result.error === "object" ? JSON.stringify(result.error) : result.error || "Erreur inconnue"));
             console.error(result);
         }
     } catch (error) {
