@@ -75,6 +75,8 @@ document.addEventListener("alpine:init", () => {
     currentGameId: null,
     userRating: 0,
     hoverRating: 0,
+    ratedGames: [],
+    alreadyRated: false,
 
     async init() {
       await this.fetchCategories();
@@ -90,6 +92,7 @@ document.addEventListener("alpine:init", () => {
       this.isConnected = !!localStorage.getItem("token"); // ou comme tu veux
       if (this.isConnected) {
         await this.fetchFavorites();
+        await this.fetchRatedGames();
       }
 
       this.$nextTick(() => {
@@ -101,13 +104,34 @@ document.addEventListener("alpine:init", () => {
     openRatingModal(gameId) {
       this.currentGameId = gameId;
       this.userRating = 0;
-      this.hoverRating = 0;
       this.ratingModalOpen = true;
+      this.alreadyRated = this.ratedGames.includes(gameId);
     },
 
     closeRatingModal() {
       this.ratingModalOpen = false;
     },
+
+    async fetchRatedGames() {
+      const id_user = localStorage.getItem("id_user");
+      const token = localStorage.getItem("token");
+    
+      if (!id_user || !token) return;
+    
+      try {
+        const res = await fetch(`${server_url}/api/rates/${id_user}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+    
+        if (!res.ok) throw new Error("Erreur récupération des jeux notés");
+        const data = await res.json();
+        this.ratedGames = data.map(g => g.id_game); // => tableau d'IDs des jeux déjà notés
+      } catch (err) {
+        console.error("Erreur lors du chargement des notes :", err);
+      }
+    },    
 
     async submitRating() {
       if (!this.userRating || !this.currentGameId) return;
@@ -136,6 +160,7 @@ document.addEventListener("alpine:init", () => {
         if (!response.ok) throw new Error("Erreur lors de l'envoi de la note");
     
         await this.applyFilters();
+        this.ratedGames.push(this.currentGameId);
         this.closeRatingModal();
         alert("Merci pour votre note !");
     
