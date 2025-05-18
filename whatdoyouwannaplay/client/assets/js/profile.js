@@ -81,8 +81,14 @@ const server_url = 'http://localhost:3000';
 
         // 1. Consulter les logs
         logsButton.addEventListener("click", async () => {
+            let nbLogs = prompt("Combien de logs souhaitez-vous afficher ?", "100");
+            nbLogs = parseInt(nbLogs);
+            if (isNaN(nbLogs) || nbLogs <= 0) {
+                alert("Veuillez entrer un nombre valide.");
+                return;
+            }
             try {
-                const response = await fetch(`${server_url}/api/logs`, {
+                const response = await fetch(`${server_url}/api/logs?limit=${nbLogs}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -90,8 +96,8 @@ const server_url = 'http://localhost:3000';
                     }
                 });
                 const logs = await response.json();
-                console.table(logs); // à adapter pour affichage dans ta page
-                alert("Logs récupérés avec succès. Voir console.");
+                console.table(logs);
+                alert(`Logs récupérés avec succès (${logs.length}). Voir console.`);
             } catch (error) {
                 console.error("Erreur lors de la récupération des logs :", error);
             }
