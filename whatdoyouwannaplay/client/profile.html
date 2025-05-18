@@ -107,6 +107,13 @@
             margin: 0;
             color: #333;
         }
+
+        .div-admin button {
+            margin: 5px;
+        }
+        button:hover {
+            cursor: pointer;
+        }
     </style>
     <body>
         <div class="header" x-data="header">
@@ -146,7 +153,60 @@
                     préférés !
                 </p>
             </div>
-            <div class="div-admin"></div>
+            <div class="div-admin" style="display: flex"></div>
+            <form id="game-form" display="none" onsubmit="createGame(event)">
+                <label for="name_game">Nom du jeu :</label>
+                <input id="name_game" type="text" required /><br /><br />
+
+                <label for="year_game">Année de sortie :</label>
+                <input id="year_game" type="number" required /><br /><br />
+
+                <label for="url">URL :</label>
+                <input id="url" type="text" required /><br /><br />
+
+                <label for="thumbnail">URL de l’image miniature :</label>
+                <input id="thumbnail" type="text" /><br /><br />
+
+                <label for="description">Description :</label><br />
+                <textarea id="description" rows="4" cols="50"></textarea
+                ><br /><br />
+
+                <label for="mechanic">Mécanique :</label>
+                <input id="mechanic" type="text" /><br /><br />
+
+                <label for="family">Famille :</label>
+                <input id="family" type="text" /><br /><br />
+
+                <label for="expansion">Extension :</label>
+                <input id="expansion" type="text" /><br /><br />
+
+                <label for="implementation">Implémentation :</label>
+                <input id="implementation" type="text" /><br /><br />
+
+                <label for="publisher">Éditeur :</label>
+                <input id="publisher" type="text" /><br /><br />
+
+                <label for="artist">Artiste :</label>
+                <input id="artist" type="text" /><br /><br />
+
+                <label for="designer">Auteur :</label>
+                <input id="designer" type="text" /><br /><br />
+
+                <label for="id_rules">ID des règles :</label>
+                <input id="id_rules" type="number" required /><br /><br />
+
+                <button type="submit" id="gameButton">Créer le jeu</button>
+            </form>
+            <style>
+                #game-form {
+                    max-width: 500px;
+                    margin: 50px auto; /* centre horizontalement */
+                    padding: 30px;
+                    background-color: white;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                }
+            </style>
             <div id="bottom">
                 <div class="content">
                     <button onclick="delete_account()">
