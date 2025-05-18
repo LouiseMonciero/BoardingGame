@@ -53,6 +53,9 @@ const server_url = 'http://localhost:3000';
     if (level_permission === "admin") {
         const adminDiv = document.querySelector(".div-admin");
 
+        const formGame = document.getElementById("game-form");
+        console.log(formGame);
+        formGame.style.display = "block";
         // Création des boutons
         const btnLogs = document.createElement("button");
         btnLogs.id = "btn-logs";
@@ -147,6 +150,51 @@ const server_url = 'http://localhost:3000';
         return;
     }
 })();
+
+async function createGame(event) {
+    event.preventDefault(); // Empêche le rechargement du formulaire
+    const token = localStorage.getItem("token");
+
+    const data = {
+        name_game: document.getElementById("name_game").value,
+        year_game: parseInt(document.getElementById("year_game").value),
+        url: document.getElementById("url").value,
+        thumbnail: document.getElementById("thumbnail").value,
+        description: document.getElementById("description").value,
+        boardgamemechanic: document.getElementById("mechanic").value,
+        boardgamefamily: document.getElementById("family").value,
+        boardgameexpansion: document.getElementById("expansion").value,
+        boardgameimplementation: document.getElementById("implementation").value,
+        boardgamepublisher: document.getElementById("publisher").value,
+        boardgameartist: document.getElementById("artist").value,
+        boardgamedesigner: document.getElementById("designer").value,
+        id_rules: parseInt(document.getElementById("id_rules").value)
+    };
+
+    try {
+        const response = await fetch(`${server_url}/api/games`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // Si nécessaire
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("🎉 Jeu créé avec succès !");
+            document.getElementById("game-form").reset();
+        } else {
+            alert("❌ Erreur lors de la création : " + (result.error || "Erreur inconnue"));
+            console.error(result);
+        }
+    } catch (error) {
+        console.error("Erreur réseau ou serveur :", error);
+        alert("❌ Erreur réseau. Voir console.");
+    }
+};
 
 
 async function delete_account() {
