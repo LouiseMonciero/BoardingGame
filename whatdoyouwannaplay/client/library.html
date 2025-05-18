@@ -233,12 +233,17 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="favorite-container" x-show="isConnected" @click.prevent="toggleFavorite(game.id_game)">
-                                        <img
-                                            :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
-                                            alt="Favori"
-                                            class="favorite-icon"
-                                        />
+                                    <div class="delete-fav">
+                                        <div x-show="isAdmin" class="delete-game" @click.prevent="deleteGame(game.id_game)">
+                                            <img src="./assets/img/delete-red.webp" alt="Supprimer" class="delete-icon"/>
+                                        </div>
+                                        <div class="favorite-container" x-show="isConnected" @click.prevent="toggleFavorite(game.id_game)">
+                                            <img
+                                                :src="isFavorite(game.id_game) ? './assets/img/heart_filled.webp' : './assets/img/heart_unfilled.webp'"
+                                                alt="Favori"
+                                                class="favorite-icon"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="game-info">

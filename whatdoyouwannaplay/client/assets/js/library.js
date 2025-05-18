@@ -68,6 +68,7 @@ document.addEventListener("alpine:init", () => {
     categories: [],
     usingCache: false,
     isConnected: false,
+    isAdmin: false,
     favorites: [],
 
     // États pour la modale de notation
@@ -88,16 +89,80 @@ document.addEventListener("alpine:init", () => {
         await this.fetchAllGames();
       }
 
-      // Vérifie si l'utilisateur est connecté (tu peux modifier ce check)
-      this.isConnected = !!localStorage.getItem("token"); // ou comme tu veux
+      // Vérifie si l'utilisateur est connecté
+      this.isConnected = !!localStorage.getItem("token");
       if (this.isConnected) {
         await this.fetchFavorites();
         await this.fetchRatedGames();
+        await this.checkAdminStatus(); // Nouvelle méthode pour vérifier le statut admin
       }
 
       this.$nextTick(() => {
         this.initSliders();
       });
+    },
+
+    // Méthode pour vérifier le statut admin
+    async checkAdminStatus() {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("id_user");
+      
+      if (!token || !userId) {
+        this.isAdmin = false;
+        return;
+      }
+
+      try {
+        const response = await fetch(`${server_url}/api/users/${userId}/permission`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Vérifie si la permission est "admin" ou autre valeur selon votre logique
+          this.isAdmin = data.permission === 'admin'; 
+        } else {
+          console.error("Erreur lors de la vérification du statut admin");
+          this.isAdmin = false;
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification du statut admin:", error);
+        this.isAdmin = false;
+      }
+    },
+
+    // Méthode pour supprimer un jeu
+    async deleteGame(id_game) {
+      if (!confirm("Êtes-vous sûr de vouloir supprimer ce jeu ?")) return;
+      
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Vous devez être connecté pour effectuer cette action");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${server_url}/api/games/${id_game}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) throw new Error("Erreur lors de la suppression du jeu");
+
+        // Supprime le jeu de la liste locale
+        this.games = this.games.filter(game => game.id_game !== id_game);
+        // Met à jour le cache
+        Alpine.store('gameCache').save(this.games);
+        
+        alert("Jeu supprimé avec succès");
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+        alert("Une erreur est survenue lors de la suppression du jeu");
+      }
     },
 
     // Méthodes pour la notation

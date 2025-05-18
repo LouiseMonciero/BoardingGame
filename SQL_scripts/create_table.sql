@@ -229,13 +229,20 @@ CREATE PROCEDURE Procedure_Delete_Game(
   IN p_id_game INT
 )
 BEGIN
-  SET FOREIGN_KEY_CHECKS = 0;
-  DELETE FROM Favorites WHERE id_game = p_id_game;
-  DELETE FROM Belongs WHERE id_game = p_id_game;
+  -- Supprimer les évaluations d'utilisateurs liées à ce jeu
+  DELETE FROM Raters WHERE id_game = p_id_game;
+  -- Supprimer les notes du jeu
   DELETE FROM Rates WHERE id_game = p_id_game;
+  -- Supprimer les catégories auxquelles le jeu appartient
+  DELETE FROM Belongs WHERE id_game = p_id_game;
+  -- Supprimer les favoris de ce jeu
+  DELETE FROM Favorites WHERE id_game = p_id_game;
+  -- Supprimer les logs associés à ce jeu (si la clé étrangère est activée plus tard)
   DELETE FROM Logs WHERE id_game = p_id_game;
+  -- Supprimer le jeu lui-même
   DELETE FROM Games WHERE id_game = p_id_game;
-  SET FOREIGN_KEY_CHECKS = 1;
+  -- Supprimer les règles associées si elles ne sont plus utilisées
+  DELETE FROM Rules WHERE id_rules NOT IN (SELECT DISTINCT id_rules FROM Games);
 END//
 
 CREATE PROCEDURE Procedure_Search_Games(
