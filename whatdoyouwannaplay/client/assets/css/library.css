@@ -193,6 +193,20 @@ body {
     color: white;
 }
 
+.delete-fav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.delete-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
 .favorite-container {
     position: relative;
     display: flex;
@@ -203,9 +217,6 @@ body {
 .favorite-icon {
     width: 24px;
     height: 24px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
     cursor: pointer;
     z-index: 5;
 }
