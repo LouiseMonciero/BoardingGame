@@ -46,15 +46,14 @@ CREATE TABLE Games(
 );
 
 CREATE TABLE Rates(
+   id_rate INT AUTO_INCREMENT PRIMARY KEY,
    id_game INT,
-   id_rate INT,
    `rank` INT,
    average DECIMAL(15,2),
    users_rated DECIMAL(15,2),
-   PRIMARY KEY(id_game, id_rate),
-   UNIQUE(id_game),
    FOREIGN KEY(id_game) REFERENCES Games(id_game)
 );
+CREATE INDEX idx_rates_id_game ON Rates(id_game);
 
 CREATE TABLE Belongs(
    id_game INT,
@@ -84,11 +83,12 @@ CREATE TABLE Favorites(
 );
 
 CREATE TABLE Raters(
-   id_game INT,
    id_rate INT,
+   id_game INT,
    id_user INT,
-   PRIMARY KEY(id_game, id_rate, id_user),
-   FOREIGN KEY(id_game, id_rate) REFERENCES Rates(id_game, id_rate),
+   PRIMARY KEY(id_rate, id_user),
+   FOREIGN KEY(id_rate) REFERENCES Rates(id_rate),
+   FOREIGN KEY(id_game) REFERENCES Games(id_game),
    FOREIGN KEY(id_user) REFERENCES Users(id_user)
 );
 
@@ -187,7 +187,6 @@ BEGIN
 END//
 DELIMITER ;
 -- Création des procédures stockées
-
 DELIMITER //
 CREATE PROCEDURE Procedure_Create_Game(
   IN p_name_game VARCHAR(100),
@@ -205,6 +204,7 @@ CREATE PROCEDURE Procedure_Create_Game(
   IN p_id_rules INT
 )
 BEGIN
+  -- 1. Crée le jeu
   INSERT INTO Games (
     name_game, year_game, url, thumbnail, description,
     boardgamemechanic, boardgamefamily, boardgameexpansion,
@@ -215,6 +215,10 @@ BEGIN
     p_mechanic, p_family, p_expansion, p_implementation, p_publisher,
     p_artist, p_designer, p_id_rules
   );
+
+  -- 2. Crée l'entrée Rates associée (id_rate auto-incrémenté)
+  INSERT INTO Rates (id_game, average, users_rated, `rank`)
+  VALUES (LAST_INSERT_ID(), 0, 0, 9999);
 END//
 
 CREATE PROCEDURE Procedure_Update_Game(
@@ -232,13 +236,20 @@ CREATE PROCEDURE Procedure_Delete_Game(
   IN p_id_game INT
 )
 BEGIN
-  SET FOREIGN_KEY_CHECKS = 0;
-  DELETE FROM Favorites WHERE id_game = p_id_game;
-  DELETE FROM Belongs WHERE id_game = p_id_game;
+  -- Supprimer les évaluations d'utilisateurs liées à ce jeu
+  DELETE FROM Raters WHERE id_game = p_id_game;
+  -- Supprimer les notes du jeu
   DELETE FROM Rates WHERE id_game = p_id_game;
+  -- Supprimer les catégories auxquelles le jeu appartient
+  DELETE FROM Belongs WHERE id_game = p_id_game;
+  -- Supprimer les favoris de ce jeu
+  DELETE FROM Favorites WHERE id_game = p_id_game;
+  -- Supprimer les logs associés à ce jeu (si la clé étrangère est activée plus tard)
   DELETE FROM Logs WHERE id_game = p_id_game;
+  -- Supprimer le jeu lui-même
   DELETE FROM Games WHERE id_game = p_id_game;
-  SET FOREIGN_KEY_CHECKS = 1;
+  -- Supprimer les règles associées si elles ne sont plus utilisées
+  DELETE FROM Rules WHERE id_rules NOT IN (SELECT DISTINCT id_rules FROM Games);
 END//
 
 CREATE PROCEDURE Procedure_Search_Games(
