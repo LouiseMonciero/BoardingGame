@@ -3,13 +3,13 @@ CREATE DATABASE BoardingGames;
 USE BoardingGames;
 
 CREATE TABLE Rules(
-   id_rules INT PRIMARY KEY,
+   id_rules INT PRIMARY KEY AUTO_INCREMENT,
    minplayers INT,
    maxplayers INT,
    minplaytime INT,
    maxplaytime INT,
    minage INT CHECK (minage >= 0)
-);
+) AUTO_INCREMENT = 0;
 
 CREATE TABLE Categories(
    id_category INT PRIMARY KEY,
@@ -24,7 +24,7 @@ CREATE TABLE Users(
 );
 
 CREATE TABLE Games(
-   id_game INT PRIMARY KEY,
+   id_game INT PRIMARY KEY AUTO_INCREMENT,
    name_game VARCHAR(100) NOT NULL,
    year_game INT,
    url VARCHAR(100),
@@ -187,7 +187,6 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE Procedure_Create_Game(
-  IN p_id_game INT,
   IN p_name_game VARCHAR(100),
   IN p_year_game INT,
   IN p_url VARCHAR(100),
@@ -203,9 +202,16 @@ CREATE PROCEDURE Procedure_Create_Game(
   IN p_id_rules INT
 )
 BEGIN
-  INSERT INTO Games VALUES (p_id_game, p_name_game, p_year_game, p_url, p_thumbnail, p_description,
-                            p_mechanic, p_family, p_expansion, p_implementation,
-                            p_publisher, p_artist, p_designer, p_id_rules);
+  INSERT INTO Games (
+    name_game, year_game, url, thumbnail, description,
+    boardgamemechanic, boardgamefamily, boardgameexpansion,
+    boardgameimplementation, boardgamepublisher, boardgameartist,
+    boardgamedesigner, id_rules
+  ) VALUES (
+    p_name_game, p_year_game, p_url, p_thumbnail, p_description,
+    p_mechanic, p_family, p_expansion, p_implementation, p_publisher,
+    p_artist, p_designer, p_id_rules
+  );
 END//
 
 CREATE PROCEDURE Procedure_Update_Game(

@@ -6,13 +6,13 @@ CREATE DATABASE BoardingGames;
 USE BoardingGames;
 
 CREATE TABLE Rules(
-   id_rules INT PRIMARY KEY,
+   id_rules INT PRIMARY KEY AUTO_INCREMENT,
    minplayers INT,
    maxplayers INT,
    minplaytime INT,
    maxplaytime INT,
    minage INT CHECK (minage >= 0)
-);
+) AUTO_INCREMENT = 0;
 
 CREATE TABLE Categories(
    id_category INT PRIMARY KEY,
@@ -27,7 +27,7 @@ CREATE TABLE Users(
 );
 
 CREATE TABLE Games(
-   id_game INT PRIMARY KEY,
+   id_game INT PRIMARY KEY AUTO_INCREMENT,
    name_game VARCHAR(100) NOT NULL,
    year_game INT,
    url VARCHAR(100),
@@ -168,7 +168,7 @@ BEGIN
   VALUES (NEW.id_user, NULL, 'Create user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_Delete -- PAS OK !!!
+CREATE TRIGGER Trigger_Log_User_Delete -- FIX // Suppression des clées étrangères dans TALBE Logs
 AFTER DELETE ON Users
 FOR EACH ROW
 BEGIN
@@ -176,7 +176,7 @@ BEGIN
   VALUES (OLD.id_user, NULL, 'Delete user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_PermissionChange -- PAS OK !!!!
+CREATE TRIGGER Trigger_Log_User_PermissionChange -- DEJA FONCTIONNEL
 AFTER UPDATE ON Users
 FOR EACH ROW
 BEGIN
@@ -190,7 +190,6 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE Procedure_Create_Game(
-  IN p_id_game INT,
   IN p_name_game VARCHAR(100),
   IN p_year_game INT,
   IN p_url VARCHAR(100),
@@ -206,9 +205,16 @@ CREATE PROCEDURE Procedure_Create_Game(
   IN p_id_rules INT
 )
 BEGIN
-  INSERT INTO Games VALUES (p_id_game, p_name_game, p_year_game, p_url, p_thumbnail, p_description,
-                            p_mechanic, p_family, p_expansion, p_implementation,
-                            p_publisher, p_artist, p_designer, p_id_rules);
+  INSERT INTO Games (
+    name_game, year_game, url, thumbnail, description,
+    boardgamemechanic, boardgamefamily, boardgameexpansion,
+    boardgameimplementation, boardgamepublisher, boardgameartist,
+    boardgamedesigner, id_rules
+  ) VALUES (
+    p_name_game, p_year_game, p_url, p_thumbnail, p_description,
+    p_mechanic, p_family, p_expansion, p_implementation, p_publisher,
+    p_artist, p_designer, p_id_rules
+  );
 END//
 
 CREATE PROCEDURE Procedure_Update_Game(
@@ -421,6 +427,7 @@ CREATE INDEX idx_logs_date ON Logs(date_log);
 --------------------------------------------------
 -- Contenu du fichier : insert_rules.sql
 --------------------------------------------------
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 INSERT INTO Rules (id_rules, minplayers, maxplayers, minplaytime, maxplaytime, minage) VALUES
 (0, 2, 4, 45, 45, 8),
 (1, 2, 5, 30, 45, 7),
@@ -2460,7 +2467,8 @@ INSERT INTO Users (username, password_user, level_permission) VALUES
 ('Louise', '$2b$10$nxi8Ol.UhdWrvtI0jBYrpe.Qf/OxMpPM2Uyi89gtff6sug444IT7a', 'user'),
 ('Fafou', '$2b$10$fg4xl7oZzEpwFzjbttsGwu2X.bEoMSpX55.9F5Jb0Bys4.amciSwG', 'admin'),
 ('Parpaing', '$2b$10$Zh.GXg4NQh1JiRoLcF7dIOSfN2DtWp2zEq1pPsRZ4UES4U6yz5GBK', 'user'),
-('Tiph', '$2b$10$PhqN6H4gHPYircL0J0aF4.lXt1YsFJmHva4vIHJrcPuN1vcpQLZKO', 'admin');--------------------------------------------------
+('Tiph', '$2b$10$PhqN6H4gHPYircL0J0aF4.lXt1YsFJmHva4vIHJrcPuN1vcpQLZKO', 'admin');
+--------------------------------------------------
 -- Contenu du fichier : insert_rates.sql
 --------------------------------------------------
 INSERT INTO Rates (id_game, id_rate, `rank`, average, users_rated) VALUES

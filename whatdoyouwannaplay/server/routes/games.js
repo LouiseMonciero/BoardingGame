@@ -79,30 +79,84 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/games => Procedure_Create_Game (à adapter selon les paramètres que tu choisis)
-router.post('/', checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'description',
-    'boardgamemechanic', 'boardgamefamily', 'boardgameexpansion',
-    'boardgameimplementation', 'boardgamepublisher', 'boardgameartist',
-    'boardgamedesigner', 'id_rules']), (req, res) => {
-        const {
-            name_game, year_game, url, thumbnail, description,
-            boardgamemechanic, boardgamefamily, boardgameexpansion,
-            boardgameimplementation, boardgamepublisher, boardgameartist,
-            boardgamedesigner, id_rules
-        } = req.body;
+router.post(
+  '/',
+  checkBody(['name_game', 'year_game']),
+  (req, res) => {
+    let {
+      name_game,
+      year_game,
+      url,
+      thumbnail,
+      description,
+      boardgamemechanic,
+      boardgamefamily,
+      boardgameexpansion,
+      boardgameimplementation,
+      boardgamepublisher,
+      boardgameartist,
+      boardgamedesigner,
+      minplayers,
+      maxplayers,
+      minplaytime,
+      maxplaytime,
+      minage
+    } = req.body;
 
-        const sql = 'CALL Procedure_Create_Game(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    // Valeurs par défaut
+    url = url?.trim() || '/assets/img/logo.svg';
+    thumbnail = thumbnail?.trim() || '/assets/img/logo.svg'; 
+    description = description?.trim() || 'None';
+    boardgamemechanic = boardgamemechanic?.trim() || 'None';
+    boardgamefamily = boardgamefamily?.trim() || 'None';
+    boardgameexpansion = boardgameexpansion?.trim() || 'None';
+    boardgameimplementation = boardgameimplementation?.trim() || 'None';
+    boardgamepublisher = boardgamepublisher?.trim() || 'None';
+    boardgameartist = boardgameartist?.trim() || 'None';
+    boardgamedesigner = boardgamedesigner?.trim() || 'None';
+    minplayers = minplayers || 1;
+    maxplayers = maxplayers || 4;
+    minplaytime = minplaytime || 30;
+    maxplaytime = maxplaytime || 60;
+    minage = minage || 8;
+
+    // 1. Créer la règle
+    db.query(
+      'INSERT INTO Rules (minplayers, maxplayers, minplaytime, maxplaytime, minage) VALUES (?, ?, ?, ?, ?)',
+      [minplayers, maxplayers, minplaytime, maxplaytime, minage],
+      (err, result) => {
+        if (err) return res.status(500).json({ error: err });
+
+        const id_rules = result.insertId;
+
+        // 2. Créer le jeu
+        const sql =
+          'CALL Procedure_Create_Game(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const values = [
-            name_game, year_game, url, thumbnail, description,
-            boardgamemechanic, boardgamefamily, boardgameexpansion,
-            boardgameimplementation, boardgamepublisher, boardgameartist,
-            boardgamedesigner, id_rules
+          name_game,
+          year_game,
+          url,
+          thumbnail,
+          description,
+          boardgamemechanic,
+          boardgamefamily,
+          boardgameexpansion,
+          boardgameimplementation,
+          boardgamepublisher,
+          boardgameartist,
+          boardgamedesigner,
+          id_rules
         ];
 
-        db.query(sql, values, (err, results) => {
-            if (err) return res.status(500).json({ error: err });
-            res.json({ message: 'Jeu créé avec succès' });
+        db.query(sql, values, (err2) => {
+          if (err2) return res.status(500).json({ error: err2 });
+          res.json({ message: 'Jeu créé avec succès' });
         });
-    });
+      }
+    );
+  }
+);
+
 
 // PUT /api/games/:id => Procedure_Update_Game
 router.put('/:id', isAdmin, checkBody(['name_game', 'year_game', 'url', 'thumbnail', 'description',
