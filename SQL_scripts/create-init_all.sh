@@ -18,6 +18,7 @@ sql_files=(
     "insert_rates.sql"
     "insert_categories.sql"
     "insert_belongs.sql"
+    "create_table2.sql"
 )
 
 # Nom du fichier de sortie

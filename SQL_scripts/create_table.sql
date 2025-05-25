@@ -66,9 +66,9 @@ CREATE TABLE Logs(
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
-   PRIMARY KEY(id_log),
+   PRIMARY KEY(id_log)
    -- Les clés etrangeres sont supprimé pour ne pas entrainer la suppression des logs à la suppression des jeux ou des utilisateurs
-   -- FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL, 
+   -- FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL
    -- FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
 
@@ -183,11 +183,27 @@ BEGIN
     VALUES (NEW.id_user, NULL, 'Permission changed', CURDATE());
   END IF;
 END//
-DELIMITER ;
+
+DELIMITER;
 
 
 -- Création des procédures stockées
 DELIMITER //
+
+CREATE PROCEDURE UpdateRanks()
+BEGIN
+    SET @cur_rank := 0;
+
+    UPDATE Rates r
+    JOIN (
+        SELECT id_rate, @cur_rank := @cur_rank + 1 AS new_rank
+        FROM Rates
+        ORDER BY average DESC
+    ) ranked
+    ON r.id_rate = ranked.id_rate
+    SET r.rank = ranked.new_rank;
+END//
+
 CREATE PROCEDURE Procedure_Create_Game(
   IN p_name_game VARCHAR(100),
   IN p_year_game INT,
@@ -236,7 +252,7 @@ CREATE PROCEDURE Procedure_Delete_Game(
   IN p_id_game INT
 )
 BEGIN
-  -- les diverse delete on cascade permette de faciliter les instructions de deletions
+  -- les diverses DELETE ON CASCADE permettent de faciliter les instructions de deletions
   DELETE FROM Games WHERE id_game = p_id_game;
 END//
 
@@ -387,7 +403,7 @@ BEGIN
     END IF;
   COMMIT;
 END//
-DELIMITER ;
+DELIMITER;
 
 
 -- Création des fonctions stockées
