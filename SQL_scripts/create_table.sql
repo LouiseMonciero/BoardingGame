@@ -38,7 +38,7 @@ CREATE TABLE Games(
    boardgameartist TEXT,
    boardgamedesigner TEXT,
    id_rules INT NOT NULL,
-   FOREIGN KEY(id_rules) REFERENCES Rules(id_rules),
+   FOREIGN KEY(id_rules) REFERENCES Rules(id_rules) ON DELETE CASCADE,
    CHECK (LENGTH(name_game) > 0)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE Rates(
    `rank` INT,
    average DECIMAL(15,2),
    users_rated DECIMAL(15,2),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game)
+   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE CASCADE
 );
 CREATE INDEX idx_rates_id_game ON Rates(id_game);
 
@@ -56,8 +56,8 @@ CREATE TABLE Belongs(
    id_game INT,
    id_category INT,
    PRIMARY KEY(id_game, id_category),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game),
-   FOREIGN KEY(id_category) REFERENCES Categories(id_category)
+   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE CASCADE,
+   FOREIGN KEY(id_category) REFERENCES Categories(id_category) ON DELETE CASCADE
 );
 
 CREATE TABLE Logs(
@@ -66,8 +66,9 @@ CREATE TABLE Logs(
    id_log INT AUTO_INCREMENT,
    description_log VARCHAR(50),
    date_log DATE,
-   PRIMARY KEY(id_log)
-   -- FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL,
+   PRIMARY KEY(id_log),
+   -- Les clés etrangeres sont supprimé pour ne pas entrainer la suppression des logs à la suppression des jeux ou des utilisateurs
+   -- FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE SET NULL, 
    -- FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE SET NULL
 );
 
@@ -75,8 +76,8 @@ CREATE TABLE Favorites(
    id_game INT, 
    id_user INT,
    PRIMARY KEY(id_game, id_user),
-   FOREIGN KEY(id_game) REFERENCES Games(id_game),
-   FOREIGN KEY(id_user) REFERENCES Users(id_user)
+   FOREIGN KEY(id_game) REFERENCES Games(id_game) ON DELETE CASCADE,
+   FOREIGN KEY(id_user) REFERENCES Users(id_user) ON DELETE CASCADE
 );
 
 CREATE TABLE Raters(
@@ -173,7 +174,7 @@ BEGIN
   VALUES (OLD.id_user, NULL, 'Delete user', CURDATE());
 END//
 
-CREATE TRIGGER Trigger_Log_User_PermissionChange -- DEJA FONCTIONNEL
+CREATE TRIGGER Trigger_Log_User_PermissionChange
 AFTER UPDATE ON Users
 FOR EACH ROW
 BEGIN
@@ -183,6 +184,8 @@ BEGIN
   END IF;
 END//
 DELIMITER ;
+
+
 -- Création des procédures stockées
 DELIMITER //
 CREATE PROCEDURE Procedure_Create_Game(
@@ -233,20 +236,8 @@ CREATE PROCEDURE Procedure_Delete_Game(
   IN p_id_game INT
 )
 BEGIN
-  -- Supprimer les évaluations d'utilisateurs liées à ce jeu
-  DELETE FROM Raters WHERE id_game = p_id_game;
-  -- Supprimer les notes du jeu
-  DELETE FROM Rates WHERE id_game = p_id_game;
-  -- Supprimer les catégories auxquelles le jeu appartient
-  DELETE FROM Belongs WHERE id_game = p_id_game;
-  -- Supprimer les favoris de ce jeu
-  DELETE FROM Favorites WHERE id_game = p_id_game;
-  -- Supprimer les logs associés à ce jeu (si la clé étrangère est activée plus tard)
-  DELETE FROM Logs WHERE id_game = p_id_game;
-  -- Supprimer le jeu lui-même
+  -- les diverse delete on cascade permette de faciliter les instructions de deletions
   DELETE FROM Games WHERE id_game = p_id_game;
-  -- Supprimer les règles associées si elles ne sont plus utilisées
-  DELETE FROM Rules WHERE id_rules NOT IN (SELECT DISTINCT id_rules FROM Games);
 END//
 
 CREATE PROCEDURE Procedure_Search_Games(
